@@ -1,0 +1,18 @@
+
+.income-card {
+    width: 200px;
+    background: var(--var-light-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+    cursor: pointer
+}
+
+    .income-card.selected {
+        box-shadow: 0px 0px 5px 1px var(--var-selected-highlight);
+    }

@@ -1,0 +1,39 @@
+
+.menu-container {
+    display: none;
+    position: fixed;
+}
+
+    .menu-container.active {
+        display: inline-block
+    }
+
+    .menu-container a {
+        display: block;
+        border: solid 1px var(--var-light-border);
+        background-color: white;
+        height: 30px;
+        min-width: 120px;
+        padding: 3px 12px;
+        text-align: left;
+    }
+
+        .menu-container a:hover {
+            background-color: #3333ff;
+            color: white;
+        }
+
+.dropdown-group {
+    position: relative
+}
+
+.dropdown-submenu {
+    position: absolute;
+    left: 100%;
+    top: -1px;
+    display: none
+}
+
+.dropdown-group:hover .dropdown-submenu {
+    display: block;
+}

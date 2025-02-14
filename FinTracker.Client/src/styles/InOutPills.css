@@ -1,0 +1,29 @@
+.dashboard-month-inout {
+    display: flex;
+    align-items: center;
+}
+
+
+.month-inout-pill {
+    color: white;
+    font-weight: bold;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    font-size: 80%;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 4px
+}
+
+.dashboard-month-out {
+    background-color: #800000
+}
+
+.dashboard-month-in {
+    background-color: #004d00
+}
+
+.dashboard-month-net {
+    background-color: #e9b82f;
+}

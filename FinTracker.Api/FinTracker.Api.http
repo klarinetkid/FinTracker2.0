@@ -1,0 +1,6 @@
+@FinTracker.Api_HostAddress = http://localhost:5029
+
+GET {{FinTracker.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

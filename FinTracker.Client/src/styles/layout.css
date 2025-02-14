@@ -1,0 +1,24 @@
+.nobreak {
+    white-space: nowrap
+}
+
+.ellipsis-overflow {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bold {
+    font-weight: bold
+}
+
+.lalign {
+    text-align: left;
+}
+
+.ralign {
+    text-align: right;
+}
+
+table {
+    width: 100%
+}

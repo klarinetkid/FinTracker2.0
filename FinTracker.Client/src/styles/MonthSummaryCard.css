@@ -1,0 +1,78 @@
+
+/************************ 
+    dashboard styles
+************************/
+.band-holder {
+    padding: 0px;
+    display: flex;
+    height: 26px;
+    width: 100%;
+    border: ridge 2px #444444;
+    border-radius: 6px;
+    /*overflow: hidden;*/
+}
+
+.band {
+    height: 100%;
+}
+
+.band {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+    .band:first-child {
+        border-radius: inherit;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .band .band-tooltip {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        /*white-space: nowrap;*/
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 10px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+        .band .band-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+        }
+
+    .band:hover .band-tooltip {
+        visibility: visible;
+    }
+
+.dashboard-month-row {
+    border-radius: 12px;
+    border: solid 1px white;
+    transition: all 0.1s ease-in;
+    cursor: pointer;
+}
+
+    .dashboard-month-row:hover {
+        border-color: #bfbfbf;
+        box-shadow: 0px 0px 5px 2px #cce6ff;
+    }
+
+.dashboard-month-row-header {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0;
+}

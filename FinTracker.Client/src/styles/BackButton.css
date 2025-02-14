@@ -1,0 +1,14 @@
+
+
+.back-button {
+    cursor: pointer;
+    background-color: white;
+    transition: all 0.1s ease 0s;
+    margin-right: 18px;
+    border-radius: 6px;
+    padding: 3px;
+}
+
+    .back-button:hover {
+        background-color: var(--var-light-bg);
+    }

@@ -1,0 +1,63 @@
+.breakdown-table table {
+    border-collapse: collapse
+}
+
+.breakdown-cat-bar-row {
+    height: 4px
+}
+
+.breakdown-cat-bar-start {
+    border-radius: 12px;
+    border-end-start-radius: 0;
+    height: 12px;
+}
+
+.breakdown-cat-bar {
+    border-radius: 12px;
+    height: 12px;
+}
+
+.breakdown-cat-value-row {
+    line-height: 0.8;
+}
+
+    .breakdown-cat-value-row td {
+        padding-bottom: 8px;
+    }
+
+    .breakdown-cat-value-row .category-pill {
+        border-start-end-radius: 0;
+        border-start-start-radius: 0;
+    }
+
+        .breakdown-cat-value-row .category-pill.uncategorized {
+            border-top: none;
+        }
+
+
+.breakdown-cat-spacer-row, .breakdown-table thead tr:last-child {
+    border-bottom: rgb(222, 226, 230) solid 1px;
+}
+
+.breakdown-cat-spacer-row {
+    height: 8px;
+    border-bottom: rgb(222, 226, 230) solid 1px;
+}
+
+.breakdown-table tbody.selected tr {
+    background-color: var(--var-selected-highlight)
+}
+
+.budget-dev-over {
+    color: var(--var-danger)
+}
+
+.budget-dev-under {
+    color: var(--var-success)
+}
+
+.budget-dev-yearly {
+    color: var(--var-warning)
+}
+
+/* TODO: same borders for rows in this table as the transaction table */

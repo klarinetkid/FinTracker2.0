@@ -1,0 +1,15 @@
+
+.category-pill {
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 80%;
+    user-select: none
+    /*text-transform: uppercase*/
+}
+
+    .category-pill.uncategorized {
+        font-style: italic;
+        border: solid 1px #333333;
+        color: #333333;
+    }

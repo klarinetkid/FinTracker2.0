@@ -1,0 +1,18 @@
+.breakdown-header {
+    display: flex;
+    align-items: center;
+}
+
+.breakdown-details-container {
+    display: flex
+}
+
+.breakdown-details-spending-table-holder {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.breakdown-details-income-column {
+    display: flex; 
+    flex-direction: column;
+}

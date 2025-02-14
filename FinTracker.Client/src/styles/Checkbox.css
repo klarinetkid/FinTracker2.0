@@ -1,0 +1,9 @@
+.checkbox {
+    cursor: pointer
+
+}
+
+    .checkbox:hover svg {
+        background-color: var(--var-light-bg);
+        border-radius: 50px
+    }
