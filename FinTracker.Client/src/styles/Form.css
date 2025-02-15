@@ -1,0 +1,43 @@
+form {
+    background-color: #fafafa;
+    border-radius: 12px;
+    width: calc(100% - 48px);
+    box-shadow: 2px 2px 3px 0px #bfbfbf;
+    border: solid 1px #eeeeee;
+    padding: 24px;
+}
+
+form > div {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+form > div > h2 {
+    margin: 0;
+}
+
+form input {
+    width: 100%;
+    line-height: 1.5;
+    font-size: 18px;
+    box-sizing: border-box;
+    padding: 6px 8px;
+}
+
+.btn {
+    border-radius: 6px;
+    background-color: var(--var-danger);
+    color: white;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    
+    cursor: pointer;
+    user-select: none;
+}
+
+form .validation-error {
+    color: var(--var-danger);
+    font-weight: bold;
+}

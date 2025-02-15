@@ -1,11 +1,10 @@
 
 import moment from 'moment'
-import { createSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import '../styles/MonthSummaryCard.css'
 import Breakdown from '../types/Breakdown.js'
-import Pages from '../types/Pages.js'
+import { toBreakdown } from '../utils/BreakdownHelper.js'
 import { addToColour } from '../utils/ColourHelper.js'
-import { dateOnly } from '../utils/DateHelper.js'
 import { formatCurrency, toFixed } from '../utils/NumberHelper.js'
 import InOutPills from './InOutPills.js'
 
@@ -50,13 +49,7 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
     )
 
     function openBreakdown() {
-        navigate({
-            pathname: Pages.Breakdown,
-            search: createSearchParams({
-                start: dateOnly(props.breakdown.start),
-                end: dateOnly(props.breakdown.end)
-            }).toString()
-        })
+        navigate(toBreakdown(props.breakdown.start, props.breakdown.end))
     }
 }
 

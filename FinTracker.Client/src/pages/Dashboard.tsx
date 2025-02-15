@@ -29,7 +29,7 @@ function Dashboard() {
     useEffect(() => {
         if (!year && globalDataCache.availableYears.value.length > 0)
             setYear(globalDataCache.availableYears.value[0])
-    }, [globalDataCache.availableYears.value, year])
+    }, [globalDataCache.availableYears.value, year, defaultYear])
 
     // load breakdowns
     useEffect(() => {

@@ -16,6 +16,7 @@
     .transaction-table tbody td {
         padding: 3px 6px;
         border: 1px solid #f0f0f0;
+        transition: background-color ease-in 0.1s
     }
 
 .transaction-table-holder {

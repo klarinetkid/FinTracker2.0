@@ -21,7 +21,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
 
 
     return (
-        <tbody className={isSelected ? "selected" : ""} style={{visibility: props.visible !== false ? "visible" : "hidden"}} >
+        <tbody className={isSelected ? "selected" : ""} style={{opacity: props.visible === false ? 0: 100}} >
             <tr>
                 <td rowSpan={2}>
                     {props.noSelect ? "" :

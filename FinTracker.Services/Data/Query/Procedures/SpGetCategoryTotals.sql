@@ -4,6 +4,10 @@
 --drop procedure SpGetCategoryTotals
 create procedure SpGetCategoryTotals @start Date, @end Date as
 
+-- for testing
+--declare @start as Date = '2025-01-01'
+--declare @end as Date = '2025-02-01'
+
 select
 	CategoryId,
 	CategoryName,

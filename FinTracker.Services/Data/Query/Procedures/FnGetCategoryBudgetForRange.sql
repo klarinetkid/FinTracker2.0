@@ -3,6 +3,12 @@
 ----------------------------------
 --drop function FnGetCategoryBudgetForRange
 create function FnGetCategoryBudgetForRange(@categoryId int, @start Date, @end Date) returns int as begin return (
+
+-- for testing
+--declare @categoryId as int = 3
+--declare @start as Date = '2025-01-01'
+--declare @end as Date = '2025-02-01'
+
 	select
 		sum(Amount*12/365 * EffectiveDays) as Budget
 	from

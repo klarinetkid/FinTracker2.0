@@ -3,6 +3,7 @@ import GlobalDataCacheProvider from "./contexts/GlobalDataCacheProvider";
 import BreakdownPage from "./pages/BreakdownPage";
 import Dashboard from './pages/Dashboard';
 import Layout from './pages/_Layout';
+import "./styles/Form.css";
 import Pages from "./types/Pages";
 
 function App() {

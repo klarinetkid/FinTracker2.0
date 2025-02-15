@@ -1,24 +1,20 @@
-.nobreak {
-    white-space: nowrap
+.nav-buttons-holder {
+    float:right;
+    display: flex;
 }
 
-.ellipsis-overflow {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.bold {
-    font-weight: bold
-}
-
-.lalign {
-    text-align: left;
+.nav-buttons-holder a {
+    margin-left: 6px
 }
 
 .ralign {
     text-align: right;
 }
 
-table {
-    width: 100%
+.lalign {
+    text-align: left;
+}
+
+.bold {
+    font-weight: bold
 }

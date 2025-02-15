@@ -48,6 +48,10 @@
     background-color: var(--var-selected-highlight)
 }
 
+.breakdown-table tbody {
+    transition: opacity ease-in 0.1s
+}
+
 .budget-dev-over {
     color: var(--var-danger)
 }
@@ -60,4 +64,6 @@
     color: var(--var-warning)
 }
 
-/* TODO: same borders for rows in this table as the transaction table */
+.breakdown-table tbody tr {
+    transition: background-color ease-in 0.1s
+}

@@ -12,7 +12,7 @@ export const Uncategorized: Category = {
 }
 
 export const Total: Category = {
-    id: undefined,
+    id: -1,
     categoryName: "Total",
     colour: "330033"
 }
