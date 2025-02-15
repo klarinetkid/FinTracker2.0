@@ -35,11 +35,11 @@
         }
 
 
-.breakdown-cat-spacer-row, .breakdown-table thead tr:last-child {
+.breakdown-table thead tr:last-child {
     border-bottom: rgb(222, 226, 230) solid 1px;
 }
 
-.breakdown-cat-spacer-row {
+.breakdown-table tbody:not(:last-child) .breakdown-cat-spacer-row {
     height: 8px;
     border-bottom: rgb(222, 226, 230) solid 1px;
 }

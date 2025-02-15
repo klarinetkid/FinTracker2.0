@@ -1,6 +1,4 @@
-﻿using FinTracker.Services.Data;
-using FinTracker.Services.Data.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using FinTracker.Services.Data.Entities;
 
 namespace FinTracker.Api.Models
 {

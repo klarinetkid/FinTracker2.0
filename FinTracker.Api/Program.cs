@@ -1,4 +1,7 @@
 
+using FinTracker.Api.Common;
+using Microsoft.Identity.Client;
+
 namespace FinTracker.Api
 {
     public class Program
@@ -6,6 +9,9 @@ namespace FinTracker.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // init static app config
+            Helper.AppConfig = new AppConfig(builder.Configuration);
 
             // Add services to the container.
 

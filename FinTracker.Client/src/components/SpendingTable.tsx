@@ -1,11 +1,11 @@
+import useCategorySelection from '../hooks/useCategorySelection';
 import '../styles/SpendingTable.css';
 import Breakdown from "../types/Breakdown";
-import { getBreakdownBudgetMonthFactor, getTotalSpend } from '../utils/BreakdownHelper';
-import SpendingTableRow from './SpendingTableRow';
-import CategoryTotal from '../types/CategoryTotal';
 import { Total, Uncategorized } from '../types/Category';
-import useCategorySelection from '../hooks/useCategorySelection';
+import CategoryTotal from '../types/CategoryTotal';
+import { sum } from '../utils/ArrayHelper';
 import Checkbox from './Checkbox';
+import SpendingTableRow from './SpendingTableRow';
 
 interface SpendingTableProps {
     breakdown: Breakdown,
@@ -13,15 +13,11 @@ interface SpendingTableProps {
 
 function SpendingTable(props: SpendingTableProps) {
 
-    const totalSpend = getTotalSpend(props.breakdown)
+    const categorySelection = useCategorySelection()
 
     const spendingCategories = props.breakdown.categoryTotals
         .filter(c => c.total < 0)
-        .sort((a, b) => Math.abs(b.percentOfIncome) - Math.abs(a.percentOfIncome))
-
-    const budgetFactor = getBreakdownBudgetMonthFactor(props.breakdown)
-
-    const categorySelection = useCategorySelection()
+        .sort((a, b) => a.total - b.total)
 
     return (
         <div className="breakdown-table">
@@ -50,24 +46,17 @@ function SpendingTable(props: SpendingTableProps) {
                     <SpendingTableRow
                         key={i}
                         categoryTotal={c}
-                        budget={props.breakdown.effectiveBudgetItems.filter(b => b.category.id == c.category?.id)[0]}
-                        budgetFactor={budgetFactor}
-                        spendingCategories={spendingCategories}
-                        totalSpend={totalSpend}
+                        maxCategorySpend={spendingCategories[0].total}
                         />
                 )}
 
-
-                {/*TODO make a row here so transaction table doesn't jump up and down as selecting*/}
-                {selectedSpendingCategories().length == 0 ? "" :
-                    <SpendingTableRow
-                        key={-1}
-                        categoryTotal={aggregateSelectedCategoryTotals()}
-                        spendingCategories={spendingCategories}
-                        totalSpend={totalSpend}
-                        noSelect={true}
-                        />
-                }
+                <SpendingTableRow
+                    key={-1}
+                    categoryTotal={aggregateSelectedCategoryTotals()}
+                    maxCategorySpend={spendingCategories[0].total}
+                    noSelect={true}
+                    visible={selectedSpendingCategories().length != 0}
+                />
                         
             </table>
         </div>   
@@ -93,8 +82,9 @@ function SpendingTable(props: SpendingTableProps) {
 
         return {
             category: Total,
-            total: selectedCategoryTotals.map(c => c.total).reduce((sum, i) => sum + i),
-            percentOfIncome: selectedCategoryTotals.map(c => c.percentOfIncome).reduce((sum, i) => sum + i) // TODO: does this work?
+            total: sum(selectedCategoryTotals.map(c => c.total)),
+            percentOfIncome: sum(selectedCategoryTotals.map(c => c.percentOfIncome)),
+            percentOfSpend: sum(selectedCategoryTotals.map(c => c.percentOfSpend))
         }
     }
 }

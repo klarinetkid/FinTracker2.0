@@ -1,6 +1,4 @@
-﻿using FinTracker.Services;
-using FinTracker.Services.Data.Entities;
-using FinTracker.Services.Data;
+﻿using FinTracker.Services.Data.Entities;
 
 namespace FinTracker.Api.Models
 {
@@ -10,10 +8,9 @@ namespace FinTracker.Api.Models
         public DateOnly End { get; set; }
 
         public CategoryTotal[] CategoryTotals { get; set; }
-        public TblBudgetItem[] EffectiveBudgetItems { get; set; }
         public TblTransaction[] Transactions { get; set; }
         private IQueryable<TblTransaction> _transactions;
-        // TODO: figure out best way to include this calculation
+        
         public int TotalIn
         {
             get
@@ -68,18 +65,12 @@ namespace FinTracker.Api.Models
             _transactions = db.TransactionsInRange(Start, End);
 
             // to be requested explicitly
-            EffectiveBudgetItems = [];
             Transactions = [];
         }
 
         public static BreakdownViewModel GetMonthBreakdown(DateOnly monthStart)
         {
             return new BreakdownViewModel(monthStart, monthStart.AddMonths(1));
-        }
-
-        public void IncludeEffectiveBudgetItems()
-        {
-            EffectiveBudgetItems = db.GetBudgetItemsForDate(End).ToArray();
         }
 
         public void IncludeTransactions()

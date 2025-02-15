@@ -22,6 +22,7 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
         .filter(c => c.category != null && c.total < 0)
         .sort((a, b) => a.total - b.total)
 
+
     return (
         <div className="row dashboard-month-row" onClick={openBreakdown}>
             <div className="dashboard-month-row-header">
@@ -40,7 +41,7 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
                         }}>
                         
                         <div className="band-tooltip">
-                            {categoryTotal.category.categoryName}: {formatCurrency(categoryTotal.total, true)} ({toFixed(Math.abs(categoryTotal.percentOfIncome))}%)
+                            {categoryTotal.category.categoryName}: {formatCurrency(categoryTotal.total, true)} ({toFixed(Math.abs(categoryTotal.percentOfIncome), 1)}%)
                         </div>
                     </div>
                 )}

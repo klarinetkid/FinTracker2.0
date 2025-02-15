@@ -1,8 +1,4 @@
-﻿using FinTracker.Services.Data;
-using FinTracker.Services.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace FinTracker.Api.Models
+﻿namespace FinTracker.Api.Models
 {
     public class MetadataViewModel : BaseViewModel
     {

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using FinTracker.Api.Models;
+﻿using FinTracker.Api.Models;
 
 namespace FinTracker.Api.Services
 {
@@ -13,9 +12,6 @@ namespace FinTracker.Api.Services
 
             if (query.Includes != null)
             {
-                if (query.Includes.Contains(BreakdownIncludes.BudgetItems))
-                                model.IncludeEffectiveBudgetItems();
-
                 if (query.Includes.Contains(BreakdownIncludes.Transactions))
                     model.IncludeTransactions();
             }

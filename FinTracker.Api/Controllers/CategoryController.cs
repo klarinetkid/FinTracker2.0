@@ -1,5 +1,5 @@
-﻿using FinTracker.Services.Data.Entities;
-using FinTracker.Api.Models;
+﻿using FinTracker.Api.Models;
+using FinTracker.Services.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinTracker.Api.Controllers
