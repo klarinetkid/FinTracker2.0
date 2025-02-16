@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace FinTracker.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class TransactionController : Controller
     {
         private readonly TransactionService service = new ();
 
-        [HttpPatch]
-        public TblTransaction? PatchTransaction(TransactionViewModel model)
+        [HttpPatch("{id?}")]
+        public TblTransaction? PatchTransaction(int? id, TransactionViewModel model)
         {
-            return service.PatchTransaction(model);
+            if (id == null) throw new Exception("Id cannot be null");
+            return service.PatchTransaction(id.Value, model);
         }
     }
 }

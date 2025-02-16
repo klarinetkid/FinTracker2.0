@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace FinTracker.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class ImportFileFormatController : Controller
+    [Route("[controller]")]
+    public class ImportFileFormatsController : Controller
     {
         private readonly ImportFileFormatService service = new ();
 

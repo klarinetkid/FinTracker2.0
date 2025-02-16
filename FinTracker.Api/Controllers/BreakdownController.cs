@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FinTracker.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class BreakdownController : Controller
     {
         private readonly BreakdownService service = new ();
@@ -16,7 +16,7 @@ namespace FinTracker.Api.Controllers
             return service.GetBreakdown(query);
         }
 
-        [HttpGet]
+        [HttpGet("Monthly/{year?}")]
         public IEnumerable<BreakdownViewModel> GetMonthlyBreakdownsForYear(int? year)
         {
             if (year == null) throw new ArgumentNullException();

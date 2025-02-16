@@ -29,11 +29,11 @@ function TransactionTableRow(props: TransactionTableRowProps) {
 
     return (
         <tr className={categorySelection.isSelected(transaction.category ?? Uncategorized) ? "selected" : ""} title={transaction.category?.id?.toString()}>
-            <td className="bold" title={"Row ID: " + transaction.id}>{props.rowId}</td>
+            <td className="bold centre" title={"Row ID: " + transaction.id}>{props.rowId}</td>
             <td className="nobreak">{moment(transaction.date).format("yyyy-MM-DD")}</td>
             <td className="ellipsis-overflow lalign" style={{ maxWidth: "70%" }}>{transaction.memo}</td>
             <td className="ralign">{formatCurrency(transaction.amount)}</td>
-            <td onDoubleClick={() => setIsEditingCat(true)}>
+            <td className="centre" onDoubleClick={() => setIsEditingCat(true)}>
                 {isEditingCat ? (
                     <CategorySelector
                         onChange={setNewCategory}

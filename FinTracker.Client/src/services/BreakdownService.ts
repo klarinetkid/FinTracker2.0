@@ -10,12 +10,11 @@ class BreakdownService extends BaseService {
             end: moment(end).format("yyyy-MM-DD"),
             includes: ["BudgetItems", "Transactions"]
         }
-        return this.get<Breakdown>(`/Breakdown/GetBreakdown`, { params, paramsSerializer: { indexes: null } })
+        return this.get<Breakdown>(`/Breakdown`, { params, paramsSerializer: { indexes: null } })
     }
 
     getYearSummaries(year: number): Promise<Breakdown[]> {
-        const params = { year }
-        return this.get<Breakdown[]>(`/Breakdown/GetMonthlyBreakdownsForYear`, { params })
+        return this.get<Breakdown[]>(`/Breakdown/Monthly/${year}`)
     }
 }
 

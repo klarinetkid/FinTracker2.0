@@ -5,19 +5,23 @@ import BaseService from './baseService';
 class CategoryService extends BaseService {
 
     getCategories(): Promise<Category[]> {
-        return this.get<Category[]>("/Category/List")
+        return this.get<Category[]>("/Categories")
     }
 
     getCategoryTransactionCounts(): Promise<CategoryTransactionCount[]> {
-        return this.get<CategoryTransactionCount[]>("/Category/CategoryTransactionCounts")
+        return this.get<CategoryTransactionCount[]>("/Categories/WithCounts")
     }
 
     createCategory(category: Category): Promise<Category> {
-        return this.post<Category>("/Category/Create", category)
+        return this.post<Category>("/Categories", category)
     }
 
-    deleteCategory(categoryId: number): Promise<void> {
-        return this.delete("/Category/Delete?id="+categoryId)
+    patchCategory(category: Category): Promise<Category> {
+        return this.patch<Category>(`/Categories/${category.id}`, category)
+    }
+
+    deleteCategory(category: Category): Promise<void> {
+        return this.delete(`/Categories/${category.id}`)
     }
 }
 

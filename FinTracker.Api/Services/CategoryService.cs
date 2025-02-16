@@ -24,12 +24,25 @@ namespace FinTracker.Api.Services
             return tblCategory;
         }
 
-        public void DeleteCategory(CategoryViewModel model)
+        public TblCategory? PatchCategory(int categoryId, CategoryViewModel model)
         {
-            if (model.Id == null) throw new Exception("Id == null");
+            TblCategory? category = db.TblCategories.Find(categoryId);
+            if (category != null)
+            {
+                category.CategoryName = model.CategoryName ?? category.CategoryName;
+                category.Colour = model.Colour ?? category.Colour;
 
-            // TODO: custom exceptions if not found
-            TblCategory? category = db.TblCategories.Find(model.Id);
+                db.TblCategories.Entry(category).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return category;
+        }
+
+        public void DeleteCategory(int id)
+        {
+            // TODO: custom exception if not found
+            TblCategory? category = db.TblCategories.Find(id);
             if (category != null)
             {
                 db.TblCategories.Entry(category).State = EntityState.Deleted;

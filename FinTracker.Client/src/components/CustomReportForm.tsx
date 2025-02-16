@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toBreakdown } from "../utils/BreakdownHelper";
 import { useNavigate } from "react-router-dom";
 
+
 function CustomReportForm() {
 
     const [validationMessage, setValidationMessage] = useState("")
@@ -10,25 +11,35 @@ function CustomReportForm() {
     const navigate = useNavigate()
 
     return (
-        <div className="custom-report-form-holder">
-            <h2>Custom Report</h2>
-            <form onSubmit={formSubmit}>
+        <>
+            <div className="drawer-content-body">
+
+                <h2>Custom Report</h2>
+
+                <form className="form">
+                    <div>
+                        <h4>Start</h4>
+                        <input name="start" placeholder="yyyy-MM-dd" />
+                    </div>
+                    <div>
+                        <h4>End</h4>
+                        <input name="end" placeholder="yyyy-MM-dd" />
+                    </div>
+                    {validationMessage == "" ? "" :
+                        <p className="validation-error">{validationMessage}</p>
+                    }
+                </form>
+            </div>
+            <div className="drawer-content-foot" style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                    <h2>Start</h2>
-                    <input name="start" placeholder="yyyy-MM-dd" />
                 </div>
+
                 <div>
-                    <h2>End</h2>
-                    <input name="end" placeholder="yyyy-MM-dd" />
+                    <button className="button">Cancel</button>
+                    <button className="button-fill">Submit</button>
                 </div>
-                {validationMessage == "" ? "" :
-                    <p className="validation-error">{validationMessage}</p>    
-                }
-                <div>
-                    <input value="Submit" type="submit" className="btn" />
-                </div>
-            </form>
-        </div>
+            </div>
+        </>
     );
 
     function formSubmit(event: React.FormEvent<HTMLFormElement>) {

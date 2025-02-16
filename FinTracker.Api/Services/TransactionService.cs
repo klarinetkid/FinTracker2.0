@@ -6,11 +6,9 @@ namespace FinTracker.Api.Services
 {
     public class TransactionService : BaseService
     {
-        public TblTransaction? PatchTransaction(TransactionViewModel model)
+        public TblTransaction? PatchTransaction(int transactionId, TransactionViewModel model)
         {
-            if (!model.Id.HasValue) throw new Exception("id == null");
-
-            TblTransaction? tblTransaction = db.TblTransactions.Find(model.Id.Value);
+            TblTransaction? tblTransaction = db.TblTransactions.Find(transactionId);
             if (tblTransaction != null)
             {
                 tblTransaction.CategoryId = model.CategoryId;
@@ -18,7 +16,7 @@ namespace FinTracker.Api.Services
                 db.SaveChanges();
             }
 
-            return db.TblTransactions.Include(e => e.Category).FirstOrDefault(e => e.Id == model.Id.Value);
+            return db.TblTransactions.Include(e => e.Category).FirstOrDefault(e => e.Id == transactionId);
         }
     }
 }

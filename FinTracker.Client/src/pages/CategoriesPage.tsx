@@ -28,8 +28,6 @@ function CategoriesPage() {
         CategoryService.getCategoryTransactionCounts().then(setCategories)
     }, [isRefreshed])
 
-    // TODO: submit on form submit, think it needs input type submit for that
-
     return (
         <div className="page" style={{width:600}}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
@@ -45,9 +43,12 @@ function CategoriesPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <>
                     <div className="drawer-content-body">
+
                         <h2>{formValues.id === 0 ? "New" : "Edit"} Category</h2>
+
                         <CategoryPill category={{ id: 1, categoryName: formValues.categoryName || "New Category", colour: formValues.colour || Total.colour }} />
                         <Spacer height={24} />
+
                         <form className="form">
                             <input name="id" type="hidden" value={formValues.id} />
                             <div>
@@ -83,37 +84,33 @@ function CategoriesPage() {
         </div>
     )
 
-    async function deleteCategory() {
-        await CategoryService.deleteCategory(formValues.id)
-        setIsRefreshed(!isRefreshed)
-        setIsDrawerOpen(false)
-    }
-
-    async function submitCategory(e) {
-
-        if (formValues.id === 0) {
-            await CategoryService.createCategory(formValues)
-        } else {
-            // patch
-        }
-
-        setIsRefreshed(!isRefreshed)
-        setIsDrawerOpen(false)
-        e.preventDefault()
-    }
-
-    function editCategory(category: CategoryTransactionCount) {
-        setFormValues(category)
-        setIsDrawerOpen(true)
-    }
-
     function newCategory() {
         setFormValues({id: 0, categoryName: "", colour: "", transactionCount: -1})
         setIsDrawerOpen(true)
     }
+    function editCategory(category: CategoryTransactionCount) {
+        setFormValues(category)
+        setIsDrawerOpen(true)
+    }
+    async function submitCategory() {
 
-    function updateFormValues(e) {
-        const { name, value } = e.target;
+        if (formValues.id === 0) {
+            await CategoryService.createCategory(formValues)
+        } else {
+            await CategoryService.patchCategory(formValues)
+        }
+
+        setIsRefreshed(!isRefreshed)
+        setIsDrawerOpen(false)
+    }
+    async function deleteCategory() {
+        await CategoryService.deleteCategory(formValues)
+        setIsRefreshed(!isRefreshed)
+        setIsDrawerOpen(false)
+    }
+
+    function updateFormValues(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
         setFormValues({ 
             ...formValues,
             [name]: value
