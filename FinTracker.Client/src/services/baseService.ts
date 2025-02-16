@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const baseURL = "/api"
+const baseURL = "/api";
 
 class BaseService {
     protected axiosInstance: AxiosInstance;
@@ -9,7 +9,7 @@ class BaseService {
         this.axiosInstance = axios.create({
             baseURL,
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         });
 
@@ -32,15 +32,27 @@ class BaseService {
         return this.axiosInstance.get(url, config);
     }
 
-    protected post<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> {
+    protected post<T>(
+        url: string,
+        data: any,
+        config?: AxiosRequestConfig
+    ): Promise<T> {
         return this.axiosInstance.post(url, data, config);
     }
 
-    protected put<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> {
+    protected put<T>(
+        url: string,
+        data: any,
+        config?: AxiosRequestConfig
+    ): Promise<T> {
         return this.axiosInstance.put(url, data, config);
     }
 
-    protected patch<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> {
+    protected patch<T>(
+        url: string,
+        data: any,
+        config?: AxiosRequestConfig
+    ): Promise<T> {
         return this.axiosInstance.patch(url, data, config);
     }
 

@@ -1,50 +1,46 @@
 import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "../hooks/useClickOutisde";
 import useGlobalDataCache from "../hooks/useGlobalDataCache";
-import '../styles/CategorySelector.css';
+import "../styles/CategorySelector.css";
 import Category, { Uncategorized } from "../types/Category";
 import CategoryPill from "./CategoryPill";
 
 interface CategorySelectorProps {
-    onChange?: React.Dispatch<React.SetStateAction<Category | undefined>>,
-    onClose?: () => void,
-    value?: Category | undefined | null, // TODO: category needs to just be undefined, not null everywhere
-    isOpen?: boolean
+    onChange?: React.Dispatch<React.SetStateAction<Category | undefined>>;
+    onClose?: () => void;
+    value?: Category | undefined | null; // TODO: category needs to just be undefined, not null everywhere
+    isOpen?: boolean;
 }
 
 function CategorySelector(props: CategorySelectorProps) {
+    const ref = useRef<HTMLDivElement>(null);
+    useClickOutside(ref, () => setIsOpen(false));
 
-    const ref = useRef<HTMLDivElement>(null)
-    useClickOutside(ref, () => setIsOpen(false))
+    const [selectedValue, setSelectedValue] = useState<Category>(
+        props.value ?? Uncategorized
+    );
 
-    const [selectedValue, setSelectedValue] = useState<Category>(props.value ?? Uncategorized)
-    //const [categories, setCategories] = useState<Category[]>()
-    const [isOpen, setIsOpen] = useState(props.isOpen ?? false)
-
-    const globalDataCache = useGlobalDataCache()
-
+    const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
+    const globalDataCache = useGlobalDataCache();
+    const options = [...globalDataCache.categories.value, Uncategorized];
 
     useEffect(() => {
-        if (!isOpen && props.onClose)
-            props.onClose()
-    }, [isOpen, props])
-
-    //useEffect(() => {
-    //    (async () => {
-    //        const data = await CategoryService.getCategories()
-    //        const options = [...data, Uncategorized]
-    //        setCategories(options)
-    //    })()
-    //}, [])
-
-    const options = [...globalDataCache.categories.value, Uncategorized]
+        if (!isOpen && props.onClose) props.onClose();
+    }, [isOpen, props]);
 
     return (
-        <div ref={ref} className="category-selector" onClick={() => setIsOpen(!isOpen)}>
-
-            {!selectedValue ? <span className="category-selector-placeholder">Select category</span> : 
+        <div
+            ref={ref}
+            className="category-selector"
+            onClick={() => setIsOpen(!isOpen)}
+        >
+            {!selectedValue ? (
+                <span className="category-selector-placeholder">
+                    Select category
+                </span>
+            ) : (
                 <CategoryPill category={selectedValue} />
-            }
+            )}
 
             {/* clear selection button */}
             {/*{!selectedValue.id ? <div></div> :*/}
@@ -52,19 +48,23 @@ function CategorySelector(props: CategorySelectorProps) {
             {/*}*/}
 
             <div className={`category-selector-menu ${isOpen ? "open" : ""}`}>
-                {options.map((c, i) =>
-                    <div key={i} className="category-option" onClick={ () => optionClick(c) }>
+                {options.map((c, i) => (
+                    <div
+                        key={i}
+                        className="category-option"
+                        onClick={() => optionClick(c)}
+                    >
                         <CategoryPill category={c} />
                     </div>
-                )}
+                ))}
             </div>
         </div>
-    )
+    );
 
     function optionClick(c: Category) {
-        setSelectedValue(c)
-        if (props.onChange) props.onChange(c)
-        setIsOpen(false)
+        setSelectedValue(c);
+        if (props.onChange) props.onChange(c);
+        setIsOpen(false);
     }
 }
 

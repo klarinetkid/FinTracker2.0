@@ -7,22 +7,25 @@
     padding: 24px;
 }
 
-.form > div {
+.form .control-group {
     width: 100%;
     text-align: left;
     margin-bottom: 12px;
 }
 
-.form > div > h4 {
-    margin: 0;
-}
+    .form .control-group h4 {
+        margin: 0;
+    }
 
-.form input {
-    width: 100%;
+.form input, .form select {
     font-size: 14px;
     box-sizing: border-box;
     padding: 6px 8px;
 }
+
+    .form input:not([type="submit"]), .form select {
+        width: 100%;
+    }
 
 .btn {
     border-radius: 6px;
@@ -49,12 +52,7 @@
     margin: 0 3px;
     cursor: pointer;
 }
-
-    .button[disabled] {
-        cursor: not-allowed;
-        background-color: rgb(234, 234, 234)
-    }
-
+    
 .button-fill {
     background-color: rgb(0, 102, 255);
     color: white;
@@ -80,5 +78,10 @@
     }
 
     .button:active {
+        background-color: rgb(234, 234, 234)
+    }
+
+    .button[disabled] {
+        cursor: not-allowed;
         background-color: rgb(234, 234, 234)
     }

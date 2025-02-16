@@ -1,11 +1,11 @@
-import Category from "./Category"
+import Category from "./Category";
 
 type BudgetItem = {
-	id: number,
-	category: Category,
-	amount: number,
-	effectiveDate: Date,
-	isYearly: boolean
-}
+    id: number;
+    category: Category;
+    amount: number;
+    effectiveDate: Date;
+    isYearly: boolean;
+};
 
-export default BudgetItem
+export default BudgetItem;

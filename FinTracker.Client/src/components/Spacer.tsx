@@ -1,12 +1,9 @@
-
 interface SpacerProps {
-    height: number
+    height: number;
 }
 
 function Spacer(props: SpacerProps) {
-  return (
-      <div style={{ height: props.height + "px" }}></div>
-  );
+    return <div style={{ height: props.height + "px" }}></div>;
 }
 
 export default Spacer;

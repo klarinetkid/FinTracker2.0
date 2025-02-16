@@ -1,9 +1,10 @@
-import CategoryTransactionCount from "../types/CategoryTransactionCount";
+import "../../styles/CategoryTable.css";
+import CategoryTransactionCount from "../../types/CategoryTransactionCount";
 import CategoryTableRow from "./CategoryTableRow";
 
 interface CategoryTableProps {
-    categories: CategoryTransactionCount[],
-    editCategory: (category: CategoryTransactionCount) => void
+    categories: CategoryTransactionCount[];
+    editCategory: (category: CategoryTransactionCount) => void;
 }
 
 function CategoryTable(props: CategoryTableProps) {
@@ -19,9 +20,14 @@ function CategoryTable(props: CategoryTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.categories.map((c, i) =>
-                        <CategoryTableRow key={i} category={c} num={i} editCategory={props.editCategory} />
-                    )}
+                    {props.categories.map((c, i) => (
+                        <CategoryTableRow
+                            key={i}
+                            category={c}
+                            num={i}
+                            editCategory={props.editCategory}
+                        />
+                    ))}
                 </tbody>
             </table>
         </div>

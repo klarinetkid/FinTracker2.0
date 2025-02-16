@@ -1,10 +1,10 @@
-
 enum Pages {
     Dashboard = "/",
     Breakdown = "/breakdown",
-    Categories = "/categories"
+    Categories = "/categories",
+    Formats = "/formats",
 }
 
-export default Pages
+export default Pages;
 
-export type ViewEditDelete = "view" | "edit" | "new"
+export type ViewEditDelete = "view" | "edit" | "new";

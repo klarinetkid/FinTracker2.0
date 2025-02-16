@@ -3,8 +3,7 @@ import Back from "../assets/Back.svg?react";
 import "../styles/BackButton.css";
 
 function BackButton() {
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     return (
         <div className="back-button">

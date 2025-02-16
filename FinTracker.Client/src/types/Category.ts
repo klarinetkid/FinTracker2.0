@@ -1,20 +1,19 @@
-
 type Category = {
-    id: number | undefined,
-    categoryName: string,
-    colour: string
-}
+    id: number | undefined;
+    categoryName: string;
+    colour: string;
+};
 
 export const Uncategorized: Category = {
     id: undefined,
     categoryName: "uncategorized",
-    colour: "ffffff"
-}
+    colour: "ffffff",
+};
 
 export const Total: Category = {
     id: -1,
     categoryName: "Total",
-    colour: "330033"
-}
+    colour: "330033",
+};
 
 export default Category;
