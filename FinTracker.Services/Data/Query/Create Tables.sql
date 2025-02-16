@@ -42,9 +42,10 @@ Create table TblImportFileFormat (
 	[DateKey] varchar(100) NOT NULL,
 	[MemoFormat] varchar(100) NOT NULL,
 	[AmountKey] varchar(100) NOT NULL,
-	[InvertAmounts] int NOT NULL,
+	[InvertAmounts] bit NOT NULL,
 	[HeaderLines] int NOT NULL,
-	[Delimiter] varchar(1) NOT NULL
+	[Delimiter] varchar(1) NOT NULL,
+	[Image] varchar(100)
 );
 
 ----------------------------------

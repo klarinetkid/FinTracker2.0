@@ -12,7 +12,7 @@ import '../styles/Dashboard.css'
 import Breakdown from '../types/Breakdown'
 import { getTotalIn, getTotalOut } from '../utils/BreakdownHelper'
 
-function Dashboard() {
+function DashboardPage() {
 
     const [searchParams] = useSearchParams()
 
@@ -40,7 +40,7 @@ function Dashboard() {
 
 
     return (
-        <div className="dashboard-container">
+        <div className="page" style={{width:800}}>
 
             <div className="dashboard-header">
 
@@ -75,4 +75,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default DashboardPage

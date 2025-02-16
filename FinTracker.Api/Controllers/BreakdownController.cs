@@ -8,10 +8,11 @@ namespace FinTracker.Api.Controllers
     [Route("[controller]/[action]")]
     public class BreakdownController : Controller
     {
+        private readonly BreakdownService service = new ();
+
         [HttpGet]
         public BreakdownViewModel GetBreakdown([FromQuery] BreakdownQuery query)
         {
-            BreakdownService service = new BreakdownService();
             return service.GetBreakdown(query);
         }
 
@@ -20,7 +21,6 @@ namespace FinTracker.Api.Controllers
         {
             if (year == null) throw new ArgumentNullException();
 
-            BreakdownService service = new BreakdownService();
             return service.GetMonthlyBreakdownsForYear(year.Value);
         }
     }

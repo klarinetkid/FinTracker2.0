@@ -48,6 +48,7 @@ namespace FinTracker.Services.Data.Entities
         public bool InvertAmounts { get; set; }
         public int HeaderLines { get; set; }
         public char Delimiter { get; set; }
+        public string? Image { get; set; }
     }
 
     [Table("TblDefaultCategorization")]

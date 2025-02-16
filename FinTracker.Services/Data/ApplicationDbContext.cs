@@ -11,6 +11,8 @@ namespace FinTracker.Services.Data
         public DbSet<TblImportFileFormat> TblImportFileFormats { get; set; }
         public DbSet<TblDefaultCategorization> TblDefaultCategorizations { get; set; }
 
+        // views
+        public DbSet<VwCategoryTransactionCount> VwCategoryTransactionCount { get; set; }
 
         public ApplicationDbContext(string connectionString) : base(GetOptions(connectionString))
         {

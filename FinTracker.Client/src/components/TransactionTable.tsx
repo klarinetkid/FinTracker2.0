@@ -10,8 +10,8 @@ interface TransactionTableProps {
 function TransactionTable(props: TransactionTableProps) {
 
     return (
-        <div className="transaction-table-holder">
-            <table className="transaction-table">
+        <div className="table-holder">
+            <table className="table transaction-table">
                 <thead>
                     <tr>
                         <th></th>

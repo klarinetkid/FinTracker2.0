@@ -1,5 +1,6 @@
 import { createContext } from "react"
 import Category from "../types/Category"
+import ImportFileFormat from "../types/ImportFileFormat"
 
 
 export class GlobalDataCacheItem<T> {
@@ -24,16 +25,22 @@ export class GlobalDataCacheContextManager {
 
     public availableYears: GlobalDataCacheItem<number[]>
     public categories: GlobalDataCacheItem<Category[]>
+    public importFileFormats: GlobalDataCacheItem<ImportFileFormat[]>
 
-    constructor(params?: { availableYears: GlobalDataCacheItem<number[]>, categories: GlobalDataCacheItem<Category[]> }) {
+    constructor(params?: {
+        availableYears: GlobalDataCacheItem<number[]>,
+        categories: GlobalDataCacheItem<Category[]>,
+        importFileFormats: GlobalDataCacheItem<ImportFileFormat[]>
+    }) {
 
         this.availableYears = params?.availableYears ?? new GlobalDataCacheItem<number[]>([])
         this.categories = params?.categories ?? new GlobalDataCacheItem<Category[]>([])
+        this.importFileFormats = params?.importFileFormats ?? new GlobalDataCacheItem<ImportFileFormat[]>([])
 
     }
 
     public initializeData() {
-        [this.availableYears, this.categories]
+        [this.availableYears, this.categories, this.importFileFormats]
             .map(d => d.refresh())
     }
 }

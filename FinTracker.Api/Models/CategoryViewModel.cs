@@ -2,11 +2,20 @@
 
 namespace FinTracker.Api.Models
 {
-    public class CategoryViewModel : BaseViewModel
+    public class CategoryViewModel
     {
-        public TblCategory[] GetCategories()
+        public int? Id { get; set; }
+        public string? CategoryName { get; set; }
+        public string? Colour { get; set; }
+
+        public TblCategory ToTblCategory()
         {
-            return db.TblCategories.OrderBy(e => e.CategoryName).ToArray();
+            return new TblCategory()
+            {
+                Id = Id.HasValue ? Id.Value : 0,
+                CategoryName = CategoryName,
+                Colour = Colour
+            };
         }
     }
 }

@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate, useNavigation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import ThreeDBoxIcon from '../assets/3d_box_fill.svg?react';
 import Back from "../assets/Back.svg?react";
 import DashboardIcon from '../assets/Chart_fill.svg?react';
 import ViewYearIcon from '../assets/Date_range_fill.svg?react';
+import FileIcon from '../assets/File_dock_fill.svg?react';
 import ImportIcon from '../assets/Import_fill.svg?react';
 import TransactionsIcon from '../assets/Paper_fill.svg?react';
+import SaveIcon from '../assets/Save_fill.svg?react';
 import CustomReportIcon from '../assets/Setting_alt_fill.svg?react';
 import SystemIcon from '../assets/Setting_fill.svg?react';
-import ThreeDBoxIcon from '../assets/3d_box_fill.svg?react';
-import FileIcon from '../assets/File_dock_fill.svg?react';
-import SaveIcon from '../assets/Save_fill.svg?react';
-import MenuTile from './MenuTile';
+import BudetIcon from '../assets/Wallet_fill.svg?react';
 import useGlobalDataCache from '../hooks/useGlobalDataCache';
 import '../styles/Menu.css';
 import CustomReportForm from './CustomReportForm';
+import MenuImportSubmenu from './MenuImportSubmenu';
+import MenuTile from './MenuTile';
+import Pages from '../types/Pages';
 
 type menuState = undefined | "dashboard" | "view year" | "custom report" | "import" | "transactions" | "system"
 
@@ -50,14 +53,17 @@ function Menu(props: MenuProps) {
                 <div className="back-button" style={{visibility: submenu ? "visible" : "hidden"} }>
                     <Back onClick={() => submenu ? setSubmenu(undefined) : props.setIsOpen(false)} width={32} height={32} />
                 </div>
-                
 
                 {!submenu ? (
+
                     <div className="menu-tile-container">
                         <MenuTile title="Dashboard" icon={DashboardIcon} onClick={() => setSubmenu("dashboard")} />
                         <MenuTile title="View Year" icon={ViewYearIcon} onClick={() => setSubmenu("view year")} />
                         <MenuTile title="Custom Report" icon={CustomReportIcon} onClick={() => setSubmenu("custom report")} />
                         <MenuTile title="Import" icon={ImportIcon} onClick={() => setSubmenu("import")} />
+                        {/*<Link to="/transactions">*/}
+                        <MenuTile title="Budget" icon={BudetIcon} />
+                        {/*</Link>*/}
                         {/*<Link to="/transactions">*/}
                             <MenuTile title="Transactions" icon={TransactionsIcon} />
                         {/*</Link>*/}
@@ -65,6 +71,7 @@ function Menu(props: MenuProps) {
                     </div>
 
                 ) : submenu == "dashboard" ? (
+
                     <div className="menu-tile-container">
                         {globalDataCache.availableYears.value.map(year =>
                             <Link key={year} to={`/?year=${year}`}>
@@ -72,7 +79,9 @@ function Menu(props: MenuProps) {
                             </Link>
                         )}
                     </div>
+
                 ) : submenu == "view year" ? (
+
                     <div className="menu-tile-container">
                         {globalDataCache.availableYears.value.map(year =>
                             <Link key={year} to={`/breakdown?start=${year}&end=${year + 1}`}>
@@ -80,17 +89,21 @@ function Menu(props: MenuProps) {
                             </Link>
                         )}
                     </div>
+
                 ) : submenu == "custom report" ? (
                         
                     <CustomReportForm />
 
                 ) : submenu == "import" ? (
-                    <h2>need to load the import types....</h2>
+
+                    <MenuImportSubmenu />
+
                 ) : submenu == "system" ? (
+
                     <div className="menu-tile-container">
-                        {/*<Link to="/categories">*/}
+                        <Link to={Pages.Categories}>
                             <MenuTile title="Categories" icon={ThreeDBoxIcon} />
-                        {/*</Link>*/}
+                        </Link>
                         {/*<Link to="/defaults">*/}
                             <MenuTile title="Defaults" icon={SaveIcon} />
                         {/*</Link>*/}
@@ -98,6 +111,7 @@ function Menu(props: MenuProps) {
                             <MenuTile title="Formats" icon={FileIcon} />
                         {/*</Link>*/}
                     </div>
+
                 ): ""}
             
             </div>

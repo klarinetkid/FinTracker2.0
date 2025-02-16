@@ -1,4 +1,6 @@
 ﻿using FinTracker.Api.Models;
+using FinTracker.Api.Services;
+using FinTracker.Services.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinTracker.Api.Controllers
@@ -7,10 +9,12 @@ namespace FinTracker.Api.Controllers
     [Route("[controller]/[action]")]
     public class TransactionController : Controller
     {
+        private readonly TransactionService service = new ();
+
         [HttpPatch]
-        public IActionResult PatchTransaction(TransactionViewModel model)
+        public TblTransaction? PatchTransaction(TransactionViewModel model)
         {
-            return Ok(model.PatchTransaction());
+            return service.PatchTransaction(model);
         }
     }
 }

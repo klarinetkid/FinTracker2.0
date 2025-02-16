@@ -26,24 +26,9 @@
     width: 1000px;
     margin: 0 auto;
     padding: 2rem;
-    text-align: center;
 }
 
-@keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
 
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-        animation: logo-spin infinite 20s linear;
-    }
-}
 
 .dashboard-month-row-header > h4 {
     margin: 6px;
@@ -83,28 +68,6 @@ h1 {
     background-color: #f9f9f9;
   }
 }
-
-/* dropdown nav menu */
-/*.dropdown-menu li {
-    position: relative;
-}
-
-.dropdown-menu .dropdown-submenu {
-    display: none;
-    position: absolute;
-    left: 100%;
-    top: -7px;
-}
-
-.dropdown-menu .dropdown-submenu-left {
-    right: 100%;
-    left: auto;
-}
-
-.dropdown-menu > li:hover > .dropdown-submenu {
-    display: block;
-}
-*/
 
 table {
     width: 100%

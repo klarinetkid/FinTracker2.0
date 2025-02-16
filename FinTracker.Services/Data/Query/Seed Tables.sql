@@ -13,3 +13,9 @@ delete from dbo.TblBudgetItem;
 insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (3, 34000, '2000-01-01');
 insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (4, 20000, '2000-01-01');
 insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (5, 9000, '2000-01-01');
+
+delete from dbo.TblImportFileFormat
+insert into dbo.TblImportFileFormat ([ImportFileFormatName], [DateKey], [MemoFormat], [AmountKey], [InvertAmounts], [HeaderLines], [Delimiter], [Image])
+	values ('Bank Export', 'Date', '{Memo}', 'Amount', 0, 0, ',', 'tangerine.png')
+insert into dbo.TblImportFileFormat ([ImportFileFormatName], [DateKey], [MemoFormat], [AmountKey], [InvertAmounts], [HeaderLines], [Delimiter], [Image])
+	values ('Credit Card Export', 'Date', '{Memo}', 'Amount', 0, 0, ',', 'ctfs.png')

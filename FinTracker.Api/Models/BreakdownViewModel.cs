@@ -2,14 +2,14 @@
 
 namespace FinTracker.Api.Models
 {
-    public class BreakdownViewModel : BaseViewModel
+    public class BreakdownViewModel
     {
         public DateOnly Start { get; set; }
         public DateOnly End { get; set; }
 
         public CategoryTotal[] CategoryTotals { get; set; }
         public TblTransaction[] Transactions { get; set; }
-        private IQueryable<TblTransaction> _transactions;
+        private IEnumerable<TblTransaction> _transactions;
         
         public int TotalIn
         {
@@ -56,21 +56,16 @@ namespace FinTracker.Api.Models
             }
         }
 
-        public BreakdownViewModel(DateOnly rangeStart, DateOnly rangeEnd)
+        public BreakdownViewModel(DateOnly start, DateOnly end, IEnumerable<TblTransaction> transactions, CategoryTotal[] categoryTotals)
         {
-            Start = rangeStart;
-            End = rangeEnd;
-            CategoryTotals = db.GetCategoryTotals(Start, End);
+            Start = start;
+            End = end;
+            CategoryTotals = categoryTotals;
 
-            _transactions = db.TransactionsInRange(Start, End);
+            _transactions = transactions;
 
             // to be requested explicitly
             Transactions = [];
-        }
-
-        public static BreakdownViewModel GetMonthBreakdown(DateOnly monthStart)
-        {
-            return new BreakdownViewModel(monthStart, monthStart.AddMonths(1));
         }
 
         public void IncludeTransactions()

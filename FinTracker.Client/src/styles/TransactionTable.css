@@ -1,25 +1,30 @@
 
-.transaction-table {
+/* todo: move to generic stylesheet */
+.table {
     border-collapse: collapse
 }
 
-    .transaction-table thead {
+    .table thead {
         background-color: var(--var-light-bg);
         border-start-start-radius: 12px;
         overflow: hidden
     }
 
-    .transaction-table th {
+    .table th {
         padding: 6px 12px;
     }
 
-    .transaction-table tbody td {
+    .table tbody td {
         padding: 3px 6px;
         border: 1px solid #f0f0f0;
-        transition: background-color ease-in 0.1s
     }
 
-.transaction-table-holder {
+
+.transaction-table tbody td {
+    transition: background-color ease-in 0.1s
+}
+
+.table-holder {
     border-radius: 12px;
 }
 
