@@ -41,9 +41,9 @@ namespace FinTracker.Services.Data
             return TblTransactions.Where(t => t.Date >= rangeStart && t.Date < rangeEnd);
         }
 
-        public bool DoesTransactionExist(TblTransaction ts)
+        public bool DoesTransactionExist(DateOnly date, string memo, int amount)
         {
-            return TblTransactions.Where(t => t.Date == ts.Date && t.Memo == ts.Memo && t.Amount == ts.Amount).Any();
+            return TblTransactions.Any(t => t.Date == date && t.Memo == memo && t.Amount == amount);
         }
     }
 }

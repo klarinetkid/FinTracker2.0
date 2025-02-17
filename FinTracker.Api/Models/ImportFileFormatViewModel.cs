@@ -22,9 +22,10 @@ namespace FinTracker.Api.Models
             {
                 Id = Id.HasValue ? Id.Value : 0,
                 ImportFileFormatName = ImportFileFormatName,
-                AmountKey = AmountKey,
                 DateKey = DateKey,
                 MemoFormat = MemoFormat,
+                AmountKey = AmountKey,
+                InvertAmounts = InvertAmounts.HasValue ? InvertAmounts.Value : false,
                 HeaderLines = HeaderLines.HasValue ? HeaderLines.Value : 0,
                 Delimiter = Delimiter.HasValue ? Delimiter.Value : ',',
                 Image = Image

@@ -25,7 +25,9 @@ export function CategoryFormValuesToModel(
 ): CategoryViewModel {
     return {
         ...formValues,
-        categoryName: isEmpty(formValues.categoryName) ? undefined : formValues.categoryName,
+        categoryName: isEmpty(formValues.categoryName)
+            ? undefined
+            : formValues.categoryName,
         colour: isEmpty(formValues.colour) ? undefined : formValues.colour,
     };
 }

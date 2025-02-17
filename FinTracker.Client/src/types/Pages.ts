@@ -4,6 +4,7 @@ enum Pages {
     Categories = "/categories",
     Formats = "/formats",
     Budget = "/budget",
+    Import = "/import",
 }
 
 export default Pages;

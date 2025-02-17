@@ -37,11 +37,5 @@ namespace FinTracker.Api.Controllers
             service.DeleteImportFileFormat(id.Value);
             return Ok();
         }
-
-        [HttpPost("{id?}/PrepareImport")]
-        public IActionResult PrepareImport(int? id)
-        {
-            return Ok();
-        }
     }
 }

@@ -36,7 +36,7 @@ function CategoriesPage() {
                     alignItems: "center",
                 }}
             >
-                <div></div>
+                {/*<div></div>*/}
                 <h1>Categories</h1>
                 <IconButton icon={AddIcon} onClick={newCategory} />
             </div>

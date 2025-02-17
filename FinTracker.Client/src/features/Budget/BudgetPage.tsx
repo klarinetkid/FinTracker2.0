@@ -35,7 +35,7 @@ function BudgetPage() {
                     alignItems: "center",
                 }}
             >
-                <div></div>
+                {/*<div></div>*/}
                 <h1>Budget</h1>
                 <IconButton icon={AddIcon} onClick={newBudgetItem} />
             </div>

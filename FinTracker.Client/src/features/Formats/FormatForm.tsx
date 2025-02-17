@@ -2,7 +2,6 @@ import { SyntheticEvent } from "react";
 import Spacer from "../../components/Spacer";
 import { FormatFormValues } from "../../types/forms/ImportFileFormatFormValues";
 
-
 interface FormatsFormProps {
     formValues: FormatFormValues;
     updateFormValues: (

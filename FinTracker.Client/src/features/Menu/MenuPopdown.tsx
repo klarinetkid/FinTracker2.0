@@ -10,13 +10,14 @@ import TransactionsIcon from "../../assets/Paper_fill.svg?react";
 import SaveIcon from "../../assets/Save_fill.svg?react";
 import CustomReportIcon from "../../assets/Setting_alt_fill.svg?react";
 import SystemIcon from "../../assets/Setting_fill.svg?react";
-import BudetIcon from "../../assets/Wallet_fill.svg?react";
+import BudgetIcon from "../../assets/Wallet_fill.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import "../../styles/Menu.css";
 import Pages from "../../types/Pages";
 import CustomReportForm from "./CustomReportForm";
+import ImportSubmenu from "./ImportSubmenu";
 import MenuTile from "./MenuTile";
 
 type menuState = undefined | "dashboard" | "view year" | "import" | "system";
@@ -89,7 +90,7 @@ function MenuPopdown(props: MenuProps) {
                                 onClick={() => setSubmenu("import")}
                             />
                             <Link to={Pages.Budget}>
-                                <MenuTile title="Budget" icon={BudetIcon} />
+                                <MenuTile title="Budget" icon={BudgetIcon} />
                             </Link>
                             <MenuTile
                                 title="Transactions"
@@ -131,21 +132,7 @@ function MenuPopdown(props: MenuProps) {
                             )}
                         </div>
                     ) : submenu === "import" ? (
-                        <div className="menu-tile-container">
-                            {globalDataCache.importFileFormats.value.map(
-                                (f, i) => (
-                                    <MenuTile
-                                        key={i}
-                                        title={f.importFileFormatName}
-                                        iconPath={
-                                            f.image
-                                                ? "/format-icons/" + f.image
-                                                : undefined
-                                        }
-                                    />
-                                )
-                            )}
-                        </div>
+                        <ImportSubmenu />
                     ) : submenu === "system" ? (
                         <div className="menu-tile-container">
                             <Link to={Pages.Categories}>

@@ -6,30 +6,26 @@ namespace FinTracker.Api.Models
     public class TransactionViewModel
     {
         public int? Id { get; set; }
-        public DateTime? Date { get; set; }
+        public DateOnly? Date { get; set; }
         public int? Amount { get; set; }
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
         public TblCategory? Category { get; set; }
 
-        //public TblTransaction? PatchTransaction()
-        //{
-        //    if (!Id.HasValue) throw new Exception("id == null");
 
-        //    TblTransaction? tblTransaction = db.TblTransactions.Find(Id.Value);
-        //    if (tblTransaction != null)
-        //    {
-        //        tblTransaction.CategoryId = CategoryId;
-        //        db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //    }
+        public TblCategory? DefaultCategory { get; set; }
+        public bool? IsAlreadyImported { get; set; }
 
-        //    return GetTransaction(Id.Value);
-        //}
-
-        //public TblTransaction? GetTransaction(int id)
-        //{
-        //    return db.TblTransactions.Include(e => e.Category).FirstOrDefault(e => e.Id == id);
-        //}
+        public TblTransaction ToTblTransaction()
+        {
+            return new TblTransaction
+            { 
+                Id = Id.HasValue ? Id.Value : 0,
+                Date = Date.HasValue ? Date.Value : DateOnly.MinValue,
+                Memo = Memo,
+                Amount = Amount.HasValue ? Amount.Value : 0,
+                CategoryId = CategoryId
+            };
+        }
     }
 }

@@ -7,7 +7,6 @@ interface FormatTableProps {
 }
 
 function FormatTable(props: FormatTableProps) {
-
     const globalDataCache = useGlobalDataCache();
 
     return (

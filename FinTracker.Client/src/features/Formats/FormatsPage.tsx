@@ -30,7 +30,7 @@ function FormatsPage() {
                     alignItems: "center",
                 }}
             >
-                <div></div>
+                {/*<div></div>*/}
                 <h1>Import Formats</h1>
                 <div>
                     <IconButton icon={AddIcon} onClick={newFormat} />

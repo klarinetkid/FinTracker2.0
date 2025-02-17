@@ -9,6 +9,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\features\Import\" />
     <Folder Include="src\types\models\" />
   </ItemGroup>
 </Project>

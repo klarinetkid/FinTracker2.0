@@ -34,6 +34,7 @@
     overflow-y: scroll;
     visibility: hidden;
     width: 100%;
+    z-index: 2;
 }
 
 .category-option {

@@ -7,7 +7,7 @@ namespace FinTracker.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TransactionController : Controller
+    public class TransactionsController : Controller
     {
         private readonly TransactionService service = new ();
 
@@ -22,6 +22,12 @@ namespace FinTracker.Api.Controllers
         public IActionResult Import()
         {
             return Ok();
+        }
+
+        [HttpPost("PrepareImport")]
+        public TransactionViewModel[] PrepareImport(TransactionViewModel[] transactions)
+        {
+            return service.PrepareImport(transactions);
         }
     }
 }

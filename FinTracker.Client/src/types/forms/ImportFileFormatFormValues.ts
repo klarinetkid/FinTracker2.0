@@ -28,6 +28,7 @@ export const FormatFormDefaults = {
 export function FormatFormValuesToModel(
     formValues: FormatFormValues
 ): ImportFileFormatViewModel {
+    const x = formValues.invertAmounts.toLowerCase() === "true";
     return {
         ...formValues,
         invertAmounts: formValues.invertAmounts.toLowerCase() === "true",
