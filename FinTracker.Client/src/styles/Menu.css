@@ -66,3 +66,22 @@
 .custom-report-form-holder {
     /*padding: 0 px;*/
 }
+
+
+.menu-tile {
+    display: flex;
+}
+/*.menu-tile > * {
+    height: 50%;
+}*/
+
+.menu-tile h2 {
+    height: 40%;
+    margin: 0;
+}
+
+.menu-tile-icon-holder {
+    height: 60%;
+    display: flex;
+    align-items: center;
+}

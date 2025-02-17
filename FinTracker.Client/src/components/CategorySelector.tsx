@@ -6,12 +6,14 @@ import CategoryPill from "./CategoryPill";
 import Category, { Uncategorized } from "../types/Category";
 
 interface CategorySelectorProps {
-    onChange?: React.Dispatch<React.SetStateAction<Category | undefined>>;
+    //onChange?: React.Dispatch<React.SetStateAction<Category | undefined>>;
+    onChange?: (category: Category) => void;
     onClose?: () => void;
     value?: Category | undefined | null; // TODO: category needs to just be undefined, not null everywhere
     selectedId?: number;
     isOpen?: boolean;
     allowEmptySelection?: boolean;
+    disabled?: boolean
 }
 
 function CategorySelector(props: CategorySelectorProps) {
@@ -39,8 +41,8 @@ function CategorySelector(props: CategorySelectorProps) {
     return (
         <div
             ref={ref}
-            className={`category-selector ${isOpen ? "open" : ""}`}
-            onClick={() => setIsOpen(!isOpen)}
+            className={`category-selector ${isOpen ? "open" : ""} ${props.disabled ? "disabled" : ""}`}
+            onClick={() => !props.disabled && setIsOpen(!isOpen)}
         >
             {!selectedValue ? (
                 <span className="category-selector-placeholder">

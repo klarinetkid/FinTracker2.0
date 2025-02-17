@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 
@@ -14,6 +15,8 @@ function DashboardIncrementButton(props: DashboardIncrementButtonProps) {
     const targetYear = (props.currentYear ?? 0) + props.increment;
 
     const globalDataCache = useGlobalDataCache();
+
+    const navigate = useNavigate();
 
     return (
         <div

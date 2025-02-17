@@ -33,8 +33,10 @@
     height: 200px;
     overflow-y: scroll;
     visibility: hidden;
-    width: 100%;
+    min-width: 100%;
+    /*min-width: 200px;*/
     z-index: 2;
+    overflow-x: hidden;
 }
 
 .category-option {

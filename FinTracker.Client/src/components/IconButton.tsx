@@ -2,16 +2,14 @@ import "../styles/IconButton.css";
 
 interface IconButtonProps {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 function IconButton(props: IconButtonProps) {
-    //const navigate = useNavigate();
-
     return (
-        <div className="icon-button">
-            <props.icon onClick={props.onClick} width={32} height={32} />
-        </div>
+        <button className="icon-button" onClick={props.onClick}>
+            <props.icon width={32} height={32} />
+        </button>
     );
 }
 

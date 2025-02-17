@@ -10,19 +10,24 @@ interface CheckboxProps {
 function Checkbox(props: CheckboxProps) {
     const [isChecked, setIsChecked] = useState(props.checked ?? false);
 
+    // controlled if no onchange
+    const value = props.onChange ? props.checked : isChecked;
+
     return (
-        <div className="checkbox" onClick={toggleCheckboxState}>
-            {isChecked ? (
+        <button className="checkbox" onClick={toggleCheckboxState}>
+            {value ? (
                 <CheckedIcon stroke="rgb(33, 53, 71)" />
             ) : (
                 <UncheckedIcon stroke="rgb(33, 53, 71)" />
             )}
-        </div>
+        </button>
     );
 
     function toggleCheckboxState() {
-        setIsChecked(!isChecked);
-        if (props.onChange) props.onChange(!isChecked);
+        if (props.onChange) {
+            setIsChecked(!isChecked);
+            props.onChange(!isChecked);
+        }
     }
 }
 

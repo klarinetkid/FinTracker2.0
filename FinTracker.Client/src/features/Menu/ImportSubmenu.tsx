@@ -8,25 +8,20 @@ import Pages from "../../types/Pages";
 import MenuTile from "./MenuTile";
 
 function ImportSubmenu() {
-    const [selectedFormat, setSelectedFormat] = useState<ImportFileFormat>();
     const navigate = useNavigate();
     const globalDataCache = useGlobalDataCache();
     const { openFilePicker } = useFilePicker({
         accept: ".csv",
+        multiple: true,
         onFilesSuccessfullySelected: (data: SelectedFiles<ArrayBuffer>) => {
-            if (!selectedFormat) {
-                console.log("no format");
-                return;
-            }
+            if (!selectedFormat) return;
             const { filesContent } = data;
             navigate(Pages.Import, { state: { selectedFormat, filesContent } });
-            setSelectedFormat(undefined);
         },
     });
 
-    useEffect(() => {
-        if (selectedFormat) openFilePicker();
-    }, [selectedFormat]);
+    // need to use block scoped variable for this
+    let selectedFormat: ImportFileFormat | undefined;
 
     return (
         <div className="menu-tile-container">
@@ -42,7 +37,8 @@ function ImportSubmenu() {
     );
 
     function selectFormat(format: ImportFileFormat) {
-        setSelectedFormat(format);
+        selectedFormat = format;
+        openFilePicker();
     }
 }
 

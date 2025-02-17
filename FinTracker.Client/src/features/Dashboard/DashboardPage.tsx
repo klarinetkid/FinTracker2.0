@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ArrowLeft from "../../assets/arrow-left-square.svg?react";
 import ArrowRight from "../../assets/arrow-right-square.svg?react";
 import InOutPills from "../../components/InOutPills";
@@ -14,28 +14,32 @@ import MonthSummaryCard from "./MonthSummaryCard";
 
 function DashboardPage() {
     const [searchParams] = useSearchParams();
+    const globalDataCache = useGlobalDataCache();
 
-    const defaultYear = parseInt(searchParams.get("year") ?? "") || undefined;
+    const defaultYear = useMemo(
+        () =>
+            parseInt(searchParams.get("year") ?? "") ||
+            globalDataCache.availableYears.value[0] ||
+            undefined,
+        [searchParams, globalDataCache.availableYears.value]
+    );
 
     const [breakdowns, setBreakdowns] = useState<Breakdown[]>();
     const [year, setYear] = useState(defaultYear);
-
-    const globalDataCache = useGlobalDataCache();
 
     const navigate = useNavigate();
 
     // set year from cache if none provided
     useEffect(() => {
-        if (!year && globalDataCache.availableYears.value.length > 0)
-            setYear(globalDataCache.availableYears.value[0]);
-    }, [globalDataCache.availableYears.value, year, defaultYear]);
+        if (defaultYear && defaultYear !== year) setYear(defaultYear);
+    }, [defaultYear]);
 
     // load breakdowns
     useEffect(() => {
         if (!year) return;
         navigate("?year=" + year);
         BreakdownService.getYearSummaries(year).then(setBreakdowns);
-    }, [year, navigate]);
+    }, [year]);
 
     return (
         <div className="page" style={{ width: 800 }}>

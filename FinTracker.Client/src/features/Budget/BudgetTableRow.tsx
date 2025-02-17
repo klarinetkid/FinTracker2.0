@@ -18,12 +18,12 @@ interface BudgetTableRowProps {
 
 function BudgetTableRow(props: BudgetTableRowProps) {
     return (
-        <tr className={props.isCurrent ? "current" : "past"}>
+        <tr
+            className={props.isCurrent ? "current" : "past"}
+            onClick={() => props.editBudgetItem(props.budgetItem)}
+        >
             <td className="bold centre noselect">{props.num}</td>
-            <td
-                className="centre selectable"
-                onClick={() => props.editBudgetItem(props.budgetItem)}
-            >
+            <td className="centre selectable">
                 <CategoryPill category={props.budgetItem.category} />
             </td>
             <td>
@@ -42,24 +42,25 @@ function BudgetTableRow(props: BudgetTableRowProps) {
                     )}
                 />
             </td>
-            <td
-                onClick={() =>
-                    props.isCurrent && props.setIsExpanded(!props.isExpanded)
-                }
-                style={{ width: 0 }}
-            >
+            <td style={{ width: 0 }}>
                 {props.isCurrent && props.groupCount > 1 ? (
-                    props.isExpanded ? (
-                        <IconButton icon={ExpandUpIcon} />
-                    ) : (
-                        <IconButton icon={ExpandDownIcon} />
-                    )
+                    <IconButton
+                        icon={props.isExpanded ? ExpandUpIcon : ExpandDownIcon}
+                        onClick={toggleExpand}
+                    />
                 ) : (
                     ""
                 )}
             </td>
         </tr>
     );
+
+    function toggleExpand(event: React.MouseEvent<HTMLDivElement>) {
+        if (props.isCurrent) {
+            event.stopPropagation();
+            props.setIsExpanded(!props.isExpanded);
+        }
+    }
 }
 
 export default BudgetTableRow;

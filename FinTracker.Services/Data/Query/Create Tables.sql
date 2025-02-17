@@ -16,8 +16,7 @@ Create table TblBudgetItem (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[CategoryId] int references TblCategory(Id) NOT NULL,
 	[Amount] int NOT NULL,
-	[EffectiveDate] date NOT NULL,
-	[IsYearly] bit NOT NULL
+	[EffectiveDate] date NOT NULL
 );
 
 ----------------------------------

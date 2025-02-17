@@ -1,9 +1,12 @@
 .checkbox {
-    cursor: pointer
-
+    cursor: pointer;
+    display: flex;
+    border: none;
+    border-radius: 50px;
+    padding: 2px;
+    background-color: #00000000;
 }
 
-    .checkbox:hover svg {
+    .checkbox:hover {
         background-color: var(--var-light-bg);
-        border-radius: 50px
     }

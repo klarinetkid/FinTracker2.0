@@ -28,12 +28,18 @@ namespace FinTracker.Api.Services
                 transaction.IsAlreadyImported = transaction.Date.HasValue && transaction.Memo != null && transaction.Amount.HasValue
                     ? db.DoesTransactionExist(transaction.Date.Value, transaction.Memo, transaction.Amount.Value)
                     : false;
-                transaction.DefaultCategory = transaction.Memo != null
+                TblCategory? defaultCategory = transaction.Memo != null
                     ? defaultCategorizationService.FindDefault(transaction.Memo)
                     : null;
+                if (defaultCategory != null)
+                {
+                    transaction.CategoryId = defaultCategory.Id;
+                    transaction.Category = defaultCategory;
+                    transaction.IsDefaultCategorized = true;
+                }
             }
 
-            return transactions;
+            return transactions.OrderBy(e => e.Date).ToArray();
         }
     }
 }

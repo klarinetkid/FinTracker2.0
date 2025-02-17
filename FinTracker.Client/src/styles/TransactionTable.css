@@ -37,11 +37,11 @@
     border-bottom: none;
 }
 
-.table.selectable tr:hover td, .table td.selectable:hover {
+.table.selectable tr:hover td, .table.selectable tr:hover input {
     background-color: #cce6ff;
     cursor: pointer;
 }
 
-.table.selectable tr:active td, .table td.selectable:active {
+.table.selectable tr:active td {
     background-color: #4da6ff;
 }

@@ -9,6 +9,7 @@ import FormatsPage from "./features/Formats/FormatsPage";
 import ImportPage from "./features/Import/ImportPage";
 import "./styles/Form.css";
 import Pages from "./types/Pages";
+import TransactionImportProvider from "./contexts/TransactionImportProvider";
 
 function App() {
     return (
@@ -27,7 +28,14 @@ function App() {
                         />
                         <Route path={Pages.Formats} element={<FormatsPage />} />
                         <Route path={Pages.Budget} element={<BudgetPage />} />
-                        <Route path={Pages.Import} element={<ImportPage />} />
+                        <Route
+                            path={Pages.Import}
+                            element={
+                                <TransactionImportProvider>
+                                    <ImportPage />
+                                </TransactionImportProvider>
+                            }
+                        />
                     </Route>
                 </Routes>
             </BrowserRouter>

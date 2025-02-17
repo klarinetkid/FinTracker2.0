@@ -7,8 +7,11 @@ type TransactionViewModel = {
     memo?: string;
     categoryId?: number;
     category?: Category;
-    defaultCategory?: Category;
+    isDefaultCategorized?: boolean;
     isAlreadyImported?: boolean;
+
+    saveDefault?: boolean;
+    selectedForImport?: boolean;
 };
 
 export default TransactionViewModel;

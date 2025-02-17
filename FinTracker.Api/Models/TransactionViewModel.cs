@@ -13,7 +13,7 @@ namespace FinTracker.Api.Models
         public TblCategory? Category { get; set; }
 
 
-        public TblCategory? DefaultCategory { get; set; }
+        public bool? IsDefaultCategorized { get; set; }
         public bool? IsAlreadyImported { get; set; }
 
         public TblTransaction ToTblTransaction()

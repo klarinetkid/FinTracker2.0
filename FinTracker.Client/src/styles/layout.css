@@ -26,6 +26,12 @@
 .page {
     margin: 0 auto
 }
+.page-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .monospace {
     font-family: monospace

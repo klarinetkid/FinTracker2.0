@@ -50,6 +50,7 @@ function BreakdownPage() {
                 <IconButton icon={BackIcon} onClick={() => navigate(-1)} />
                 {/*TODO display month count below title*/}
                 <h1
+                    style={{ marginLeft: 16 }}
                     title={
                         monthCount + " month" + (monthCount === 1 ? "" : "s")
                     }

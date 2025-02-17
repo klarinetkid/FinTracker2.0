@@ -13,7 +13,7 @@ function MenuTile(props: MenuTileProps) {
             className="menu-tile"
             onClick={(event) => props.onClick && props.onClick(event)}
         >
-            <div>
+            <div className="menu-tile-icon-holder">
                 {!props.icon ? (
                     ""
                 ) : (
@@ -28,8 +28,8 @@ function MenuTile(props: MenuTileProps) {
                         height={iconSize}
                     />
                 )}
-                <h2>{props.title}</h2>
             </div>
+            <h2>{props.title}</h2>
         </div>
     );
 }

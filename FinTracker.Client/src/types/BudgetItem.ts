@@ -6,7 +6,6 @@ type BudgetItem = {
     category: Category;
     amount: number;
     effectiveDate: Date;
-    isYearly: boolean;
 };
 
 export type BudgetItemGroup = {

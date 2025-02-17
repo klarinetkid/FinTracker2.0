@@ -5,8 +5,13 @@
     --var-success: rgb(25, 135, 84);
     --var-warning: rgb(255, 193, 7);
     --var-danger: rgb(220, 53, 69);
+    --var-accent: #ffeecc;
 }
 
+html {
+    /*overflow-y: scroll;*/
+    padding-left: calc(100vw - 100%);
+}
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, Segoe UI, sans-serif;
@@ -63,9 +68,6 @@ h1 {
   }
   a:hover {
     color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
   }
 }
 

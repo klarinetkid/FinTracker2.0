@@ -21,7 +21,6 @@ namespace FinTracker.Services.Data.Entities
         public virtual TblCategory? Category { get; set; }
         public int Amount { get; set; }
         public DateOnly EffectiveDate { get; set; }
-        public bool IsYearly { get; set; }
     }
 
     [Table("TblTransaction")]
