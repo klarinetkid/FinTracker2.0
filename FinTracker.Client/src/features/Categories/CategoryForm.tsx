@@ -1,18 +1,13 @@
-import { Total } from "../../types/Category";
+import { SyntheticEvent } from "react";
 import CategoryPill from "../../components/CategoryPill";
 import Spacer from "../../components/Spacer";
-
-export type CategoryFormValues = {
-    id: number;
-    categoryName: string;
-    colour: string;
-    transactionCount: number;
-};
+import { Total } from "../../types/Category";
+import CategoryFormValues from "../../types/forms/CategoryFormValues";
 
 interface CategoryFormProps {
     formValues: CategoryFormValues;
     updateFormValues: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onSubmit: () => void;
+    onSubmit: (event: SyntheticEvent) => void;
     onDelete: () => void;
     onCancel: () => void;
 }

@@ -17,15 +17,16 @@
         margin: 0;
     }
 
-.form input, .form select {
+input, select {
     font-size: 14px;
     box-sizing: border-box;
     padding: 6px 8px;
 }
 
-    .form input:not([type="submit"]), .form select {
+    input:not([type="submit"]), .form select {
         width: 100%;
     }
+
 
 .btn {
     border-radius: 6px;
@@ -81,7 +82,10 @@
         background-color: rgb(234, 234, 234)
     }
 
+input[disabled], input[readonly], .button[disabled] {
+    background-color: rgb(234, 234, 234)
+}
+
     .button[disabled] {
         cursor: not-allowed;
-        background-color: rgb(234, 234, 234)
     }

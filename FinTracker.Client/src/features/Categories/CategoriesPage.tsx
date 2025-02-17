@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import Drawer from "../../components/Drawer";
 import useFormValues from "../../hooks/useFormValues";
 import CategoryService from "../../services/CategoryService";
-import CategoryTransactionCount from "../../types/CategoryTransactionCount";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
-import CategoryForm, { CategoryFormValues } from "./CategoryForm";
+import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
+import { CategoryTransactionCount } from "../../types/Category";
+import IconButton from "../../components/IconButton";
+import CategoryFormValues, {
+    CategoryFormDefaults,
+    CategoryFormValuesToModel,
+    CategoryToFormValues,
+} from "../../types/forms/CategoryFormValues";
 
 function CategoriesPage() {
     const [categories, setCategories] = useState<CategoryTransactionCount[]>(
@@ -15,12 +21,7 @@ function CategoriesPage() {
     const [isRefreshed, setIsRefreshed] = useState(false);
 
     const [formValues, setFormValues, updateFormValues] =
-        useFormValues<CategoryFormValues>({
-            id: 0,
-            categoryName: "",
-            colour: "",
-            transactionCount: 0,
-        });
+        useFormValues<CategoryFormValues>(CategoryFormDefaults);
 
     useEffect(() => {
         CategoryService.getCategoryTransactionCounts().then(setCategories);
@@ -37,9 +38,7 @@ function CategoriesPage() {
             >
                 <div></div>
                 <h1>Categories</h1>
-                <div>
-                    <AddIcon width={36} height={36} onClick={newCategory} />
-                </div>
+                <IconButton icon={AddIcon} onClick={newCategory} />
             </div>
 
             <CategoryTable
@@ -60,32 +59,29 @@ function CategoriesPage() {
     );
 
     function newCategory() {
-        setFormValues({
-            id: 0,
-            categoryName: "",
-            colour: "",
-            transactionCount: -1,
-        });
+        setFormValues(CategoryFormDefaults);
         setIsDrawerOpen(true);
     }
     function editCategory(category: CategoryTransactionCount) {
-        setFormValues(category);
+        setFormValues(CategoryToFormValues(category));
         setIsDrawerOpen(true);
     }
-    async function submitCategory(event) {
+    async function submitCategory(event: SyntheticEvent) {
         event.preventDefault();
 
+        const model = CategoryFormValuesToModel(formValues);
+
         if (formValues.id === 0) {
-            await CategoryService.createCategory(formValues);
+            await CategoryService.createCategory(model);
         } else {
-            await CategoryService.putCategory(formValues);
+            await CategoryService.putCategory(model);
         }
 
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }
     async function deleteCategory() {
-        await CategoryService.deleteCategory(formValues);
+        await CategoryService.deleteCategory(formValues.id);
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

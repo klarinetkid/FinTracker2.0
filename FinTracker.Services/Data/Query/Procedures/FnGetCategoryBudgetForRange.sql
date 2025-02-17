@@ -10,7 +10,7 @@ create function FnGetCategoryBudgetForRange(@categoryId int, @start Date, @end D
 --declare @end as Date = '2025-02-01'
 
 	select
-		sum(Amount*12/365 * EffectiveDays) as Budget
+		sum((Amount*12*EffectiveDays)/365) as Budget
 	from
 		(
 			select

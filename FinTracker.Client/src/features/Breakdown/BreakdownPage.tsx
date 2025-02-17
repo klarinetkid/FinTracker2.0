@@ -1,20 +1,22 @@
 import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import BackButton from "../../components/BackButton";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import BackIcon from "../../assets/Back.svg?react";
+import IconButton from "../../components/IconButton";
 import InOutPills from "../../components/InOutPills";
 import Spacer from "../../components/Spacer";
 import CategorySelectionProvider from "../../contexts/CategorySelectionProvider";
 import BreakdownService from "../../services/BreakdownService";
+import "../../styles/BreakdownPage.css";
 import Breakdown from "../../types/Breakdown";
 import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
-import "../../styles/BreakdownPage.css";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
 import TransactionTable from "./TransactionTable";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const start = useMemo(
         () => searchParams.get("start") ?? "",
@@ -39,13 +41,13 @@ function BreakdownPage() {
 
     return !paramsAreValid ? (
         <>
-            <BackButton />
+            <IconButton icon={BackIcon} onClick={() => navigate(-1)} />
             <h1>Invalid Parameters</h1>
         </>
     ) : (
         <>
             <div className="breakdown-header">
-                <BackButton />
+                <IconButton icon={BackIcon} onClick={() => navigate(-1)} />
                 {/*TODO display month count below title*/}
                 <h1
                     title={

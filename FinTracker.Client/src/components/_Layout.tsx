@@ -4,6 +4,7 @@ import HomeIcon from "../assets/Home.svg?react";
 import MenuIcon from "../assets/darhboard.svg?react";
 import MenuPopdown from "../features/Menu/MenuPopdown";
 import "../styles/layout.css";
+import IconButton from "./IconButton";
 
 function Layout() {
     const iconSize = 28;
@@ -14,13 +15,9 @@ function Layout() {
         <>
             <div className="nav-buttons-holder">
                 <Link to={{ pathname: "/", search: "" }}>
-                    <HomeIcon width={iconSize} height={iconSize} />
+                    <IconButton icon={HomeIcon} />
                 </Link>
-                <MenuIcon
-                    width={iconSize}
-                    height={iconSize}
-                    onClick={menuIconClick}
-                />
+                <IconButton icon={MenuIcon} onClick={menuIconClick} />
             </div>
             <MenuPopdown isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} />
 

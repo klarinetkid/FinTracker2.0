@@ -18,29 +18,14 @@ export default function useFormValues<T>(
             | React.ChangeEvent<HTMLInputElement>
             | React.ChangeEvent<HTMLSelectElement>
     ) => {
-        let value: string | number | boolean = event.target.value;
-
-        const type = event.target.getAttribute("data-field-type");
-        if (type) {
-            switch (type) {
-                case "boolean":
-                    value = value.toLowerCase() === "true";
-                    break;
-                case "int":
-                    value = parseInt(value) || 0;
-                    break;
-                case "float":
-                    value = parseFloat(value) || 0;
-                    break;
-            }
-        }
+        const { name, value } = event.target;
         //console.log({
         //    ...formValues,
         //    [event.target.name]: value,
         //});
         setFormValues({
             ...formValues,
-            [event.target.name]: value,
+            [name]: value,
         });
     };
 

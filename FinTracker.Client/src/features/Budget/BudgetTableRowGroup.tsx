@@ -5,7 +5,7 @@ import BudgetTableRow from "./BudgetTableRow";
 interface BudgetTableRowGroupProps {
     budgetGroup: BudgetItemGroup;
     num: number;
-    editBudgetItem: (format: BudgetItem) => void;
+    editBudgetItem: (budgetItem: BudgetItem) => void;
 }
 
 function BudgetTableRowGroup(props: BudgetTableRowGroupProps) {
@@ -16,11 +16,7 @@ function BudgetTableRowGroup(props: BudgetTableRowGroupProps) {
             {props.budgetGroup.budgetItems.map((b, i) => (
                 <BudgetTableRow
                     key={i}
-                    num={
-                        i === 0
-                            ? (props.num + 1).toString()
-                            : `${props.num + 1}.${i + 1}`
-                    }
+                    num={i === 0 ? (props.num + 1).toString() : ""}
                     budgetItem={b}
                     isCurrent={i === 0}
                     isExpanded={isExpanded}
@@ -29,6 +25,7 @@ function BudgetTableRowGroup(props: BudgetTableRowGroupProps) {
                     editBudgetItem={props.editBudgetItem}
                 />
             ))}
+            <tr className="budget-group-spacer"></tr>
         </tbody>
     );
 }

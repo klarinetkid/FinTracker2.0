@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import moment from "moment";
+import { SyntheticEvent, useEffect, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import useFormValues from "../../hooks/useFormValues";
-import ImportFileFormat from "../../types/ImportFileFormat";
-import BudgetItemForm, { BudgetItemFormValues } from "./BudgetItemForm";
-import BudgetTable from "./BudgetTable";
-import BudgetItem, { BudgetItemGroup } from "../../types/BudgetItem";
 import BudgetItemService from "../../services/BudgetItemService";
-import moment from "moment";
+import BudgetItem, { BudgetItemGroup } from "../../types/BudgetItem";
+import BudgetItemForm from "./BudgetItemForm";
+import BudgetTable from "./BudgetTable";
+import IconButton from "../../components/IconButton";
+import BudgetItemFormValues, {
+    BudgetFormValuesToModel,
+    BudgetItemFormDefaults,
+    BudgetItemToFormValues,
+} from "../../types/forms/BudgetItemFormValues";
 
 function BudgetPage() {
     const [groupedBudgets, setGroupedBudgets] = useState<BudgetItemGroup[]>([]);
@@ -15,12 +20,7 @@ function BudgetPage() {
     const [isRefreshed, setIsRefreshed] = useState(false);
 
     const [formValues, setFormValues, updateFormValues] =
-        useFormValues<BudgetItemFormValues>({
-            id: 0,
-            categoryId: undefined,
-            amount: "0",
-            effectiveDate: "",
-        });
+        useFormValues<BudgetItemFormValues>(BudgetItemFormDefaults);
 
     useEffect(() => {
         BudgetItemService.getGrouped().then(setGroupedBudgets);
@@ -37,9 +37,7 @@ function BudgetPage() {
             >
                 <div></div>
                 <h1>Budget</h1>
-                <div>
-                    <AddIcon width={36} height={36} onClick={newBudgetItem} />
-                </div>
+                <IconButton icon={AddIcon} onClick={newBudgetItem} />
             </div>
 
             <BudgetTable
@@ -61,36 +59,22 @@ function BudgetPage() {
     );
 
     function newBudgetItem() {
-        setFormValues({
-            id: 0,
-            categoryId: 0,
-            amount: "0.00",
-            effectiveDate: "",
-        });
+        setFormValues(BudgetItemFormDefaults);
         setIsDrawerOpen(true);
     }
     function editBudgetItem(budgetItem: BudgetItem) {
-        setFormValues({
-            ...budgetItem,
-            amount: (budgetItem.amount / 100).toFixed(2),
-            effectiveDate: moment(budgetItem.effectiveDate).format(
-                "yyyy-MM-DD"
-            ),
-        });
+        setFormValues(BudgetItemToFormValues(budgetItem));
         setIsDrawerOpen(true);
     }
-    async function submitBudgetItem(event) {
+    async function submitBudgetItem(event: SyntheticEvent) {
         event.preventDefault();
 
-        const payload = {
-            ...formValues,
-            amount: Math.round(parseFloat(formValues.amount) * 100),
-        };
+        const model = BudgetFormValuesToModel(formValues);
 
         if (formValues.id === 0) {
-            await BudgetItemService.createBudgetItem(payload);
+            await BudgetItemService.createBudgetItem(model);
         } else {
-            await BudgetItemService.putBudgetItem(payload);
+            await BudgetItemService.putBudgetItem(model);
         }
 
         setIsRefreshed(!isRefreshed);

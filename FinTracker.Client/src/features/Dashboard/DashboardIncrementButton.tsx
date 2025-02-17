@@ -1,3 +1,4 @@
+import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 
 interface DashboardIncrementButtonProps {
@@ -22,7 +23,7 @@ function DashboardIncrementButton(props: DashboardIncrementButtonProps) {
                 yearIsAvailable() && props.setCurrentYear(targetYear)
             }
         >
-            <props.button width="36px" height="36px" />
+            <IconButton icon={props.button} />
         </div>
     );
 

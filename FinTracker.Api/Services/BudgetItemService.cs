@@ -8,8 +8,13 @@ namespace FinTracker.Api.Services
     {
         public BudgetItemGroupViewModel[] GetBudgetItemGroups()
         {
-            return db.TblBudgetItems.Include(b => b.Category).GroupBy(b => b.Category).AsEnumerable()
-                .Select(g => new BudgetItemGroupViewModel(g.Key, g.OrderByDescending(e => e.EffectiveDate))).ToArray();
+            return db.TblBudgetItems
+                .Include(b => b.Category)
+                .GroupBy(b => b.Category)
+                .AsEnumerable()
+                .Select(g => new BudgetItemGroupViewModel(g.Key, g.OrderByDescending(e => e.EffectiveDate)))
+                .OrderBy(g => g.Category.CategoryName)
+                .ToArray();
         }
 
         public TblBudgetItem CreateBudgetItem(BudgetItemViewModel model)

@@ -1,15 +1,9 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import CategorySelector from "../../components/CategorySelector";
 import Spacer from "../../components/Spacer";
 import Category from "../../types/Category";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-
-export type BudgetItemFormValues = {
-    id: number;
-    categoryId: number;
-    amount: string;
-    effectiveDate: string;
-};
+import BudgetItemFormValues from "../../types/forms/BudgetItemFormValues";
 
 interface BudgetItemFormProps {
     formValues: BudgetItemFormValues;
@@ -19,7 +13,7 @@ interface BudgetItemFormProps {
             | React.ChangeEvent<HTMLSelectElement>
     ) => void;
     setFormValues: React.Dispatch<React.SetStateAction<BudgetItemFormValues>>;
-    onSubmit: () => void;
+    onSubmit: (event: SyntheticEvent) => void;
     onDelete: () => void;
     onCancel: () => void;
 }
@@ -45,7 +39,7 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                         onChange={(c: Category) => {
                             props.setFormValues({
                                 ...props.formValues,
-                                categoryId: c.id ?? 0,
+                                categoryId: c.id,
                             });
                         }}
                         value={
@@ -57,7 +51,7 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                 </div>
 
                 <div className="control-group">
-                    <h4>Amount</h4>
+                    <h4>Monthly Amount</h4>
                     <input
                         name="amount"
                         type="number"
@@ -71,6 +65,8 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                     <h4>Effective Date</h4>
                     <input
                         name="effectiveDate"
+                        className="ralign"
+                        type="date"
                         value={props.formValues.effectiveDate}
                         onChange={props.updateFormValues}
                     />

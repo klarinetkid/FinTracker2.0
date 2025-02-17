@@ -1,11 +1,10 @@
 import "../../styles/Budget.css";
-import { BudgetItemGroup } from "../../types/BudgetItem";
-import ImportFileFormat from "../../types/ImportFileFormat";
+import BudgetItem, { BudgetItemGroup } from "../../types/BudgetItem";
 import BudgetTableRowGroup from "./BudgetTableRowGroup";
 
 interface BudgetTableProps {
     groupedBudgets: BudgetItemGroup[];
-    editBudgetItem: (format: ImportFileFormat) => void;
+    editBudgetItem: (format: BudgetItem) => void;
 }
 
 // TODO make expand button float so doesn't trigger click row
@@ -13,14 +12,14 @@ interface BudgetTableProps {
 function BudgetTable(props: BudgetTableProps) {
     return (
         <div className="table-holder">
-            <table className="table budget-table">
+            <table className="table budget-table selectable">
                 <thead>
                     <tr>
-                        <th style={{width:20}}></th>
+                        <th></th>
                         <th>Category</th>
-                        <th>Amount</th>
+                        <th>Monthly Amount</th>
                         <th>Effective Date</th>
-                        <td></td>
+                        <th></th>
                     </tr>
                 </thead>
                 {props.groupedBudgets.map((b, i) => (

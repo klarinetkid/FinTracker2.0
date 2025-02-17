@@ -1,30 +1,25 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import useFormValues from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFileFormatService from "../../services/ImportFileFormatService";
 import ImportFileFormat from "../../types/ImportFileFormat";
-import FormatForm, { FormatsFormValues } from "./FormatForm";
+import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
+import IconButton from "../../components/IconButton";
+import FormatFormValues, {
+    FormatFormDefaults,
+    FormatFormValuesToModel,
+    ImportFileFormatToFormValues,
+} from "../../types/forms/ImportFileFormatFormValues";
 
 function FormatsPage() {
-
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const [formValues, setFormValues, updateFormValues] =
-        useFormValues<FormatsFormValues>({
-            id: 0,
-            importFileFormatName: "",
-            dateKey: "",
-            memoFormat: "",
-            amountKey: "",
-            invertAmounts: false,
-            headerLines: 0,
-            delimiter: "",
-            image: "",
-        });
+        useFormValues<FormatFormValues>(FormatFormDefaults);
 
     return (
         <div className="page" style={{ width: 600 }}>
@@ -38,7 +33,7 @@ function FormatsPage() {
                 <div></div>
                 <h1>Import Formats</h1>
                 <div>
-                    <AddIcon width={36} height={36} onClick={newFormat} />
+                    <IconButton icon={AddIcon} onClick={newFormat} />
                 </div>
             </div>
 
@@ -57,31 +52,22 @@ function FormatsPage() {
     );
 
     function newFormat() {
-        setFormValues({
-            id: 0,
-            importFileFormatName: "",
-            dateKey: "",
-            memoFormat: "",
-            amountKey: "",
-            invertAmounts: false,
-            headerLines: 0,
-            delimiter: "",
-            image: "",
-        });
+        setFormValues(FormatFormDefaults);
         setIsDrawerOpen(true);
     }
     function editFormat(format: ImportFileFormat) {
-        setFormValues(format);
+        setFormValues(ImportFileFormatToFormValues(format));
         setIsDrawerOpen(true);
     }
-    async function submitFormat(event) {
+    async function submitFormat(event: SyntheticEvent) {
         event.preventDefault();
-        event.target.blur();
+
+        const model = FormatFormValuesToModel(formValues);
 
         if (formValues.id === 0) {
-            await ImportFileFormatService.createFormat(formValues);
+            await ImportFileFormatService.createFormat(model);
         } else {
-            await ImportFileFormatService.putFormat(formValues);
+            await ImportFileFormatService.putFormat(model);
         }
 
         globalDataCache.importFileFormats.refresh();
@@ -89,7 +75,7 @@ function FormatsPage() {
         //return false;
     }
     async function deleteFormat() {
-        await ImportFileFormatService.deleteFormat(formValues);
+        await ImportFileFormatService.deleteFormat(formValues.id);
         globalDataCache.importFileFormats.refresh();
         setIsDrawerOpen(false);
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ThreeDBoxIcon from "../../assets/3d_box_fill.svg?react";
-import Back from "../../assets/Back.svg?react";
+import BackIcon from "../../assets/Back.svg?react";
 import DashboardIcon from "../../assets/Chart_fill.svg?react";
 import ViewYearIcon from "../../assets/Date_range_fill.svg?react";
 import FileIcon from "../../assets/File_dock_fill.svg?react";
@@ -12,6 +12,7 @@ import CustomReportIcon from "../../assets/Setting_alt_fill.svg?react";
 import SystemIcon from "../../assets/Setting_fill.svg?react";
 import BudetIcon from "../../assets/Wallet_fill.svg?react";
 import Drawer from "../../components/Drawer";
+import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import "../../styles/Menu.css";
 import Pages from "../../types/Pages";
@@ -55,14 +56,13 @@ function MenuPopdown(props: MenuProps) {
                         className="back-button"
                         style={{ visibility: submenu ? "visible" : "hidden" }}
                     >
-                        <Back
+                        <IconButton
+                            icon={BackIcon}
                             onClick={() =>
                                 submenu
                                     ? setSubmenu(undefined)
                                     : props.setIsOpen(false)
                             }
-                            width={32}
-                            height={32}
                         />
                     </div>
 

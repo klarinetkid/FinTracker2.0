@@ -1,4 +1,5 @@
 import Category, { CategoryTransactionCount } from "../types/Category";
+import CategoryViewModel from "../types/models/CategoryViewModel";
 import BaseService from "./baseService";
 
 class CategoryService extends BaseService {
@@ -10,16 +11,16 @@ class CategoryService extends BaseService {
         return this.get<CategoryTransactionCount[]>("/Categories/WithCounts");
     }
 
-    createCategory(category: Category): Promise<Category> {
+    createCategory(category: CategoryViewModel): Promise<Category> {
         return this.post<Category>("/Categories", category);
     }
 
-    putCategory(category: Category): Promise<Category> {
+    putCategory(category: CategoryViewModel): Promise<Category> {
         return this.put<Category>(`/Categories/${category.id}`, category);
     }
 
-    deleteCategory(category: Category): Promise<void> {
-        return this.delete(`/Categories/${category.id}`);
+    deleteCategory(categoryId: number): Promise<void> {
+        return this.delete(`/Categories/${categoryId}`);
     }
 }
 

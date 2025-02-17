@@ -1,21 +1,16 @@
+import { SyntheticEvent } from "react";
 import Spacer from "../../components/Spacer";
+import { FormatFormValues } from "../../types/forms/ImportFileFormatFormValues";
 
-export type FormatsFormValues = {
-    id: number;
-    importFileFormatName: string;
-    dateKey: string;
-    memoFormat: string;
-    amountKey: string;
-    invertAmounts: boolean;
-    headerLines: number;
-    delimiter: string;
-    image: string;
-};
 
 interface FormatsFormProps {
-    formValues: FormatsFormValues;
-    updateFormValues: (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
-    onSubmit: () => void;
+    formValues: FormatFormValues;
+    updateFormValues: (
+        event:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLSelectElement>
+    ) => void;
+    onSubmit: (event: SyntheticEvent) => void;
     onDelete: () => void;
     onCancel: () => void;
 }

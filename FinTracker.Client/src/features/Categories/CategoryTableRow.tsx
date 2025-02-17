@@ -1,5 +1,5 @@
 import CategoryPill from "../../components/CategoryPill";
-import CategoryTransactionCount from "../../types/CategoryTransactionCount";
+import { CategoryTransactionCount } from "../../types/Category";
 
 interface CategoryTableRowProps {
     category: CategoryTransactionCount;

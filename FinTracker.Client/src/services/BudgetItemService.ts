@@ -1,4 +1,5 @@
 import BudgetItem, { BudgetItemGroup } from "../types/BudgetItem";
+import BudgetItemViewModel from "../types/models/BudgetItemViewModel";
 import BaseService from "./baseService";
 
 class BudgetItemService extends BaseService {
@@ -6,11 +7,11 @@ class BudgetItemService extends BaseService {
         return this.get<BudgetItemGroup[]>("/BudgetItems/Grouped");
     }
 
-    createBudgetItem(budgetItem: BudgetItem): Promise<BudgetItem> {
+    createBudgetItem(budgetItem: BudgetItemViewModel): Promise<BudgetItem> {
         return this.post<BudgetItem>("/BudgetItems", budgetItem);
     }
 
-    putBudgetItem(budgetItem: BudgetItem): Promise<BudgetItem> {
+    putBudgetItem(budgetItem: BudgetItemViewModel): Promise<BudgetItem> {
         return this.put<BudgetItem>(
             `/BudgetItems/${budgetItem.id}`,
             budgetItem

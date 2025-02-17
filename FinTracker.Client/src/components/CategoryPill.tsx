@@ -1,6 +1,8 @@
 import "../styles/CategoryPills.css";
-import Category, { Uncategorized } from "../types/Category";
-import CategoryTransactionCount from "../types/CategoryTransactionCount";
+import Category, {
+    CategoryTransactionCount,
+    Uncategorized,
+} from "../types/Category";
 import { colourAvgValue } from "../utils/ColourHelper";
 
 interface CategoryPillProps {

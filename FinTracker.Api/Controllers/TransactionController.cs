@@ -17,5 +17,11 @@ namespace FinTracker.Api.Controllers
             if (id == null) throw new Exception("Id cannot be null");
             return service.PatchTransaction(id.Value, model);
         }
+
+        [HttpPost("$batch")]
+        public IActionResult Import()
+        {
+            return Ok();
+        }
     }
 }

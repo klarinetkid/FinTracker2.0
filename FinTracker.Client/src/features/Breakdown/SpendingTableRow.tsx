@@ -90,7 +90,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                     props.categoryTotal.budgetDeviation ? (
                         <span
                             className={
-                                props.categoryTotal.budgetDeviation < 0
+                                props.categoryTotal.budgetDeviation > 0
                                     ? "budget-dev-over"
                                     : "budget-dev-under"
                             }
@@ -98,7 +98,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                                 props.categoryTotal.budgetDeviation * -1
                             )}
                         >
-                            {(props.categoryTotal.budgetDeviation < 0
+                            {(props.categoryTotal.budgetDeviation > 0
                                 ? "+"
                                 : "-") +
                                 toFixed(
