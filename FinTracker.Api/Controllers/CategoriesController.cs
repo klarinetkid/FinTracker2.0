@@ -30,11 +30,11 @@ namespace FinTracker.Api.Controllers
             return service.CreateCategory(model);
         }
 
-        [HttpPatch("{id?}")]
-        public TblCategory? Patch(int? id, CategoryViewModel model)
+        [HttpPut("{id?}")]
+        public TblCategory? Put(int? id, CategoryViewModel model)
         {
             if (id == null) throw new Exception("Id is null");
-            return service.PatchCategory(id.Value, model);
+            return service.PutCategory(id.Value, model);
         }
 
         [HttpDelete("{id?}")]

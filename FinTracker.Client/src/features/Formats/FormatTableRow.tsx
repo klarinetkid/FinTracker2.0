@@ -8,12 +8,9 @@ interface FormatTableRowProps {
 
 function FormatTableRow(props: FormatTableRowProps) {
     return (
-        <tr>
+        <tr onClick={() => props.editFormat(props.format)}>
             <td className="bold centre">{props.num + 1}</td>
-            <td
-                className="category-table-name centre"
-                onClick={() => props.editFormat(props.format)}
-            >
+            <td className="category-table-name centre">
                 {props.format.importFileFormatName}
             </td>
             <td className="centre">

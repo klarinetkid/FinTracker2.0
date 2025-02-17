@@ -27,14 +27,17 @@ export default function useFormValues<T>(
                     value = value.toLowerCase() === "true";
                     break;
                 case "int":
-                    value = parseInt(value) ?? 0;
+                    value = parseInt(value) || 0;
+                    break;
+                case "float":
+                    value = parseFloat(value) || 0;
                     break;
             }
         }
-        console.log({
-            ...formValues,
-            [event.target.name]: value,
-        })
+        //console.log({
+        //    ...formValues,
+        //    [event.target.name]: value,
+        //});
         setFormValues({
             ...formValues,
             [event.target.name]: value,

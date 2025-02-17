@@ -30,18 +30,17 @@ namespace FinTracker.Api.Controllers
             return service.PutImportFileFormat(id.Value, model);
         }
 
-        [HttpPatch("{id?}")]
-        public TblImportFileFormat? Patch(int? id, ImportFileFormatViewModel model)
-        {
-            if (id == null) throw new Exception("Id is null");
-            return service.PatchImportFileFormat(id.Value, model);
-        }
-
         [HttpDelete("{id?}")]
         public IActionResult Delete(int? id)
         {
             if (id == null) return BadRequest();
             service.DeleteImportFileFormat(id.Value);
+            return Ok();
+        }
+
+        [HttpPost("{id?}/PrepareImport")]
+        public IActionResult PrepareImport(int? id)
+        {
             return Ok();
         }
     }

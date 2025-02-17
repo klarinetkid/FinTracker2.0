@@ -17,7 +17,7 @@ Create table TblBudgetItem (
 	[CategoryId] int references TblCategory(Id) NOT NULL,
 	[Amount] int NOT NULL,
 	[EffectiveDate] date NOT NULL,
-	[IsYearly] int NOT NULL
+	[IsYearly] bit NOT NULL
 );
 
 ----------------------------------

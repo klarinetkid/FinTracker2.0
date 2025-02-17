@@ -16,4 +16,11 @@ export const Total: Category = {
     colour: "330033",
 };
 
+export type CategoryTransactionCount = {
+    id: number;
+    categoryName: string;
+    colour: string;
+    transactionCount: number;
+};
+
 export default Category;

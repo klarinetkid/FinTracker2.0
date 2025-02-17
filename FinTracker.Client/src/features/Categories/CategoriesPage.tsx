@@ -78,7 +78,7 @@ function CategoriesPage() {
         if (formValues.id === 0) {
             await CategoryService.createCategory(formValues);
         } else {
-            await CategoryService.patchCategory(formValues);
+            await CategoryService.putCategory(formValues);
         }
 
         setIsRefreshed(!isRefreshed);

@@ -1,0 +1,38 @@
+
+.budget-table {
+    border-collapse: collapse;
+}
+
+.budget-item-group .past {
+    display: none;
+}
+
+.budget-item-group {
+    border-collapse: separate;
+    border: solid #00000000 2px;
+    border-spacing: 4px;
+}
+
+
+    .budget-item-group.expanded {
+        border-collapse: separate;
+        border: solid #aaaaaa 2px;
+        border-spacing: 4px;
+        border-top: none;
+    }
+
+.budget-item-group.expanded .past {
+    display: table-row;
+}
+
+        .budget-item-group.expanded .current td {
+            background-color: #ffeecc;
+        }
+
+.budget-table tbody td {
+    padding: 7px 14px;
+}
+
+.budget-table tbody tr.current td {
+    padding: 14px 14px;
+}

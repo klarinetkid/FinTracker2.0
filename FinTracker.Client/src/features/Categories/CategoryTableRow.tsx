@@ -9,12 +9,9 @@ interface CategoryTableRowProps {
 
 function CategoryTableRow(props: CategoryTableRowProps) {
     return (
-        <tr>
+        <tr onClick={() => props.editCategory(props.category)}>
             <td className="bold centre">{props.num + 1}</td>
-            <td
-                className="category-table-name centre"
-                onClick={() => props.editCategory(props.category)}
-            >
+            <td className="category-table-name centre">
                 <CategoryPill category={props.category} />
             </td>
             <td className="centre monospace">#{props.category.colour}</td>

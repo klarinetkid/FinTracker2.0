@@ -30,26 +30,6 @@ namespace FinTracker.Api.Services
             db.SaveChanges();
             return importFileFormat;
         }
-        public TblImportFileFormat? PatchImportFileFormat(int importFileFormatId, ImportFileFormatViewModel model)
-        {
-            TblImportFileFormat? importFileFormat = db.TblImportFileFormats.Find(importFileFormatId);
-            if (importFileFormat != null)
-            {
-                importFileFormat.ImportFileFormatName = model.ImportFileFormatName ?? importFileFormat.ImportFileFormatName;
-                importFileFormat.DateKey = model.DateKey ?? importFileFormat.DateKey;
-                importFileFormat.MemoFormat = model.MemoFormat ?? importFileFormat.MemoFormat;
-                importFileFormat.AmountKey = model.AmountKey ?? importFileFormat.AmountKey;
-                importFileFormat.InvertAmounts = model.InvertAmounts ?? importFileFormat.InvertAmounts;
-                importFileFormat.HeaderLines = model.HeaderLines ?? importFileFormat.HeaderLines;
-                importFileFormat.Delimiter = model.Delimiter ?? importFileFormat.Delimiter;
-                importFileFormat.Image = model.Image ?? importFileFormat.Image;
-
-                db.TblImportFileFormats.Entry(importFileFormat).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return importFileFormat;
-        }
 
         public void DeleteImportFileFormat(int id)
         {

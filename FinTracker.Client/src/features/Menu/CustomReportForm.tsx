@@ -1,7 +1,6 @@
 import moment from "moment";
-import { useState } from "react";
-import { toBreakdown } from "../../utils/BreakdownHelper";
 import { useNavigate } from "react-router-dom";
+import { toBreakdown } from "../../utils/BreakdownHelper";
 
 interface CustomReportFormProps {
     onCancel: () => void;
@@ -11,7 +10,7 @@ function CustomReportForm(props: CustomReportFormProps) {
     const navigate = useNavigate();
 
     return (
-        <form className="form drawer-content" onSubmit={formSubmit}>
+        <form className="form" onSubmit={formSubmit}>
             <div className="drawer-content-body">
                 <h2>Custom Report</h2>
 

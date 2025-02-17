@@ -3,6 +3,7 @@ enum Pages {
     Breakdown = "/breakdown",
     Categories = "/categories",
     Formats = "/formats",
+    Budget = "/budget",
 }
 
 export default Pages;

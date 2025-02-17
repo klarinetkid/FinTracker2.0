@@ -7,6 +7,7 @@ import DashboardPage from "./features/Dashboard/DashboardPage";
 import FormatsPage from "./features/Formats/FormatsPage";
 import "./styles/Form.css";
 import Pages from "./types/Pages";
+import BudgetPage from "./features/Budget/BudgetPage";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                             element={<CategoriesPage />}
                         />
                         <Route path={Pages.Formats} element={<FormatsPage />} />
+                        <Route path={Pages.Budget} element={<BudgetPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

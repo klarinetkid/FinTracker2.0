@@ -2,17 +2,27 @@
 .category-selector {
     position: relative;
     display: inline-flex;
-    border: solid 1px var(--var-light-border);
+    border: solid 1px rgb(118, 118, 118);
     padding: 4px 4px;
     min-height: 24px;
     min-width: 135px;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 2px;
 }
 
-.category-selector-menu.open {
-    visibility: visible
-}
+    .category-selector.open {
+        border: solid;
+    }
+
+
+    .category-selector.open .category-selector-menu {
+        visibility: visible
+    }
 
 .category-selector-menu {
     background: white;
@@ -22,7 +32,8 @@
     top: 32px;
     height: 200px;
     overflow-y: scroll;
-    visibility: hidden
+    visibility: hidden;
+    width: 100%;
 }
 
 .category-option {

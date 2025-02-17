@@ -26,9 +26,13 @@
     transition: right 0.4s cubic-bezier(0, 0.1, 0.2, 1);
     height: 100%;
     border-left: solid 3px #ddd;
+    z-index: 21;
+}
+
+.drawer-content > form {
     display: flex;
     flex-direction: column;
-    z-index: 21;
+    height: 100%;
 }
 
 .drawer-container.active .drawer-content {

@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import Pages from "../../types/Pages";
 import ThreeDBoxIcon from "../../assets/3d_box_fill.svg?react";
 import Back from "../../assets/Back.svg?react";
 import DashboardIcon from "../../assets/Chart_fill.svg?react";
@@ -13,10 +11,12 @@ import SaveIcon from "../../assets/Save_fill.svg?react";
 import CustomReportIcon from "../../assets/Setting_alt_fill.svg?react";
 import SystemIcon from "../../assets/Setting_fill.svg?react";
 import BudetIcon from "../../assets/Wallet_fill.svg?react";
-import "../../styles/Menu.css";
-import MenuTile from "./MenuTile";
 import Drawer from "../../components/Drawer";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
+import "../../styles/Menu.css";
+import Pages from "../../types/Pages";
 import CustomReportForm from "./CustomReportForm";
+import MenuTile from "./MenuTile";
 
 type menuState = undefined | "dashboard" | "view year" | "import" | "system";
 
@@ -88,7 +88,9 @@ function MenuPopdown(props: MenuProps) {
                                 icon={ImportIcon}
                                 onClick={() => setSubmenu("import")}
                             />
-                            <MenuTile title="Budget" icon={BudetIcon} />
+                            <Link to={Pages.Budget}>
+                                <MenuTile title="Budget" icon={BudetIcon} />
+                            </Link>
                             <MenuTile
                                 title="Transactions"
                                 icon={TransactionsIcon}

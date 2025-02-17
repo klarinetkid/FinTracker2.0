@@ -12,7 +12,7 @@ function FormatTable(props: FormatTableProps) {
 
     return (
         <div className="table-holder">
-            <table className="table">
+            <table className="table selectable">
                 <thead>
                     <tr>
                         <th></th>

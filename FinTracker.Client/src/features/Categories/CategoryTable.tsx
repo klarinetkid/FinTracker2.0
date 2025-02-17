@@ -10,7 +10,7 @@ interface CategoryTableProps {
 function CategoryTable(props: CategoryTableProps) {
     return (
         <div className="table-holder">
-            <table className="table">
+            <table className="table selectable">
                 <thead>
                     <tr>
                         <th></th>

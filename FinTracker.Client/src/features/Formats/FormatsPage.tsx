@@ -76,6 +76,7 @@ function FormatsPage() {
     }
     async function submitFormat(event) {
         event.preventDefault();
+        event.target.blur();
 
         if (formValues.id === 0) {
             await ImportFileFormatService.createFormat(formValues);

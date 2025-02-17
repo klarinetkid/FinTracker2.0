@@ -1,5 +1,4 @@
-import Category from "../types/Category";
-import CategoryTransactionCount from "../types/CategoryTransactionCount";
+import Category, { CategoryTransactionCount } from "../types/Category";
 import BaseService from "./baseService";
 
 class CategoryService extends BaseService {
@@ -15,8 +14,8 @@ class CategoryService extends BaseService {
         return this.post<Category>("/Categories", category);
     }
 
-    patchCategory(category: Category): Promise<Category> {
-        return this.patch<Category>(`/Categories/${category.id}`, category);
+    putCategory(category: Category): Promise<Category> {
+        return this.put<Category>(`/Categories/${category.id}`, category);
     }
 
     deleteCategory(category: Category): Promise<void> {

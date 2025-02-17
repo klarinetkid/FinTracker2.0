@@ -10,7 +10,7 @@ interface CategoryPillProps {
 function CategoryPill(props: CategoryPillProps) {
     const cat: Category = props.category ?? Uncategorized;
     const className =
-        cat.id || cat.categoryName || cat.colour
+        cat.id || cat.id === 0
             ? "category-pill"
             : "category-pill uncategorized";
     const style = {
