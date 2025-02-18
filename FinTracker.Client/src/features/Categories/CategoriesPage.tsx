@@ -76,7 +76,7 @@ function CategoriesPage() {
         } else {
             await CategoryService.putCategory(model);
         }
-
+        document.activeElement.blur() // TODO: is there a better way to do this?
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

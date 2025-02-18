@@ -14,6 +14,10 @@ class TransactionService extends BaseService {
     ): Promise<TransactionViewModel[]> {
         return this.post("/Transactions/PrepareImport", transactions);
     }
+
+    createBatch(transactions: TransactionViewModel[]): Promise<number> {
+        return this.post("/Transactions/$batch", transactions);
+    }
 }
 
 export default new TransactionService();

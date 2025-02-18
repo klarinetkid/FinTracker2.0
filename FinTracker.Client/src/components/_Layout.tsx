@@ -7,8 +7,6 @@ import "../styles/layout.css";
 import IconButton from "./IconButton";
 
 function Layout() {
-    const iconSize = 28;
-
     const [menuIsOpen, setMenuIsOpen] = useState(false);
 
     return (

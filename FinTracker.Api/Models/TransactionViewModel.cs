@@ -5,7 +5,6 @@ namespace FinTracker.Api.Models
 {
     public class TransactionViewModel
     {
-        public int? Id { get; set; }
         public DateOnly? Date { get; set; }
         public int? Amount { get; set; }
         public string? Memo { get; set; }
@@ -16,11 +15,11 @@ namespace FinTracker.Api.Models
         public bool? IsDefaultCategorized { get; set; }
         public bool? IsAlreadyImported { get; set; }
 
-        public TblTransaction ToTblTransaction()
+        public TblTransaction ToTblTransaction(int id = 0)
         {
             return new TblTransaction
-            { 
-                Id = Id.HasValue ? Id.Value : 0,
+            {
+                Id = id,
                 Date = Date.HasValue ? Date.Value : DateOnly.MinValue,
                 Memo = Memo,
                 Amount = Amount.HasValue ? Amount.Value : 0,

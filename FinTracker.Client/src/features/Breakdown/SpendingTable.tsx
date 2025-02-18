@@ -54,21 +54,43 @@ function SpendingTable(props: SpendingTableProps) {
                     <tr style={{ height: "20px" }}></tr>
                 </thead>
 
-                {spendingCategories.map((c, i) => (
-                    <SpendingTableRow
-                        key={i}
-                        categoryTotal={c}
-                        maxCategorySpend={spendingCategories[0].total}
-                    />
-                ))}
+                {spendingCategories.length > 0 ? (
+                    <>
+                        {spendingCategories.map((c, i) => (
+                            <SpendingTableRow
+                                key={i}
+                                categoryTotal={c}
+                                maxCategorySpend={spendingCategories[0].total}
+                            />
+                        ))}
 
-                <SpendingTableRow
-                    key={-1}
-                    categoryTotal={aggregateSelectedCategoryTotals()}
-                    maxCategorySpend={spendingCategories[0].total}
-                    noSelect={true}
-                    visible={selectedSpendingCategories().length !== 0}
-                />
+                        <SpendingTableRow
+                            key={-1}
+                            categoryTotal={aggregateSelectedCategoryTotals()}
+                            maxCategorySpend={spendingCategories[0]?.total}
+                            noSelect={true}
+                            visible={selectedSpendingCategories().length !== 0}
+                        />
+                    </>
+                ) : (
+                    <tbody>
+                        <tr>
+                            <td colSpan={7} className="centre">
+                                <h4>No spending? Right on!</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                )}
+
+                {/*{spendingCategories.length === 0 ? (*/}
+                {/*    <tr>*/}
+                {/*        <td colSpan={7} className="centre">*/}
+                {/*            Nothing spent? Right on!*/}
+                {/*        </td>*/}
+                {/*    </tr>*/}
+                {/*) : (*/}
+                {/*    ""*/}
+                {/*)}*/}
             </table>
         </div>
     );

@@ -4,15 +4,15 @@ namespace FinTracker.Api.Models
 {
     public class CategoryViewModel
     {
-        public int? Id { get; set; }
+        //public int? Id { get; set; }
         public string? CategoryName { get; set; }
         public string? Colour { get; set; }
 
-        public TblCategory ToTblCategory()
+        public TblCategory ToTblCategory(int id = 0)
         {
             return new TblCategory()
             {
-                Id = Id.HasValue ? Id.Value : 0,
+                Id = id,
                 CategoryName = CategoryName,
                 Colour = Colour
             };

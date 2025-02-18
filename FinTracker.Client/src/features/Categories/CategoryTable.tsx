@@ -1,5 +1,5 @@
 import "../../styles/CategoryTable.css";
-import CategoryTransactionCount from "../../types/CategoryTransactionCount";
+import { CategoryTransactionCount } from "../../types/Category";
 import CategoryTableRow from "./CategoryTableRow";
 
 interface CategoryTableProps {

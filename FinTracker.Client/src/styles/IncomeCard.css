@@ -4,7 +4,6 @@
     background: var(--var-light-bg);
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

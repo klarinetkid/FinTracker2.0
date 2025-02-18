@@ -19,9 +19,9 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpPost("$batch")]
-        public IActionResult Import()
+        public int BatchCreate(TransactionViewModel[] transactions)
         {
-            return Ok();
+            return service.BatchCreate(transactions);
         }
 
         [HttpPost("PrepareImport")]

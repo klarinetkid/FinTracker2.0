@@ -34,8 +34,11 @@ function csvRowToTransaction(
 ): TransactionViewModel {
     return {
         date: moment(row[format.dateKey]).format("yyyy-MM-DD"),
-        amount:
-            Math.floor(parseFloat(row[format.amountKey]) * (format.invertAmounts ? -1 : 1)*100),
+        amount: Math.floor(
+            parseFloat(row[format.amountKey]) *
+                (format.invertAmounts ? -1 : 1) *
+                100
+        ),
         memo: getTransactionMemo(format.memoFormat, row),
     };
 }

@@ -2,7 +2,7 @@ import "../styles/IconButton.css";
 
 interface IconButtonProps {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 function IconButton(props: IconButtonProps) {

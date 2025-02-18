@@ -6,7 +6,6 @@ namespace FinTracker.Api.Models
 {
     public class ImportFileFormatViewModel
     {
-        public int? Id { get; set; }
         public string? ImportFileFormatName { get; set; }
         public string? DateKey { get; set; }
         public string? MemoFormat { get; set; }
@@ -16,11 +15,11 @@ namespace FinTracker.Api.Models
         public char? Delimiter { get; set; }
         public string? Image { get; set; }
 
-        public TblImportFileFormat ToTblImportFileFormat()
+        public TblImportFileFormat ToTblImportFileFormat(int id = 0)
         {
             return new TblImportFileFormat()
             {
-                Id = Id.HasValue ? Id.Value : 0,
+                Id = id,
                 ImportFileFormatName = ImportFileFormatName,
                 DateKey = DateKey,
                 MemoFormat = MemoFormat,

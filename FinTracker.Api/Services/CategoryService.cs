@@ -26,26 +26,10 @@ namespace FinTracker.Api.Services
 
         public TblCategory? PutCategory(int categoryId, CategoryViewModel model)
         {
-            TblCategory category = model.ToTblCategory();
-            category.Id = categoryId;
-
-            //TblImportFileFormat importFileFormat = db.TblImportFileFormats.Find(importFileFormatId);
-            //importFileFormat = model.ToTblImportFileFormat();
+            TblCategory category = model.ToTblCategory(categoryId);
             db.TblCategories.Entry(category).State = EntityState.Modified;
             db.SaveChanges();
             return category;
-
-            //TblCategory? category = db.TblCategories.Find(categoryId);
-            //if (category != null)
-            //{
-            //    category.CategoryName = model.CategoryName ?? category.CategoryName;
-            //    category.Colour = model.Colour ?? category.Colour;
-
-            //    db.TblCategories.Entry(category).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //}
-
-            //return category;
         }
 
         public void DeleteCategory(int id)

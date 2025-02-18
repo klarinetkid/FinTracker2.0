@@ -60,7 +60,6 @@ function ImportTableRow(props: ImportTableRowProps) {
             </td>
             <td>
                 <CategorySelector
-                    key={props.transaction.categoryId}
                     value={props.transaction.category}
                     onChange={updateCategory}
                     disabled={!props.transaction.selectedForImport}

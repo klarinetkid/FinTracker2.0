@@ -37,9 +37,7 @@ function TransactionTableRow(props: TransactionTableRowProps) {
             }
             title={transaction.category?.id?.toString()}
         >
-            <td className="bold centre" title={"Row ID: " + transaction.id}>
-                {props.rowId}
-            </td>
+            <td className="bold centre">{props.rowId}</td>
             <td className="nobreak">
                 {moment(transaction.date).format("yyyy-MM-DD")}
             </td>

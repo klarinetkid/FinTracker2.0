@@ -48,7 +48,7 @@ function ImportTable(props: ImportTableProps) {
             >
                 <p>
                     There {numUncategorized === 1 ? "is" : "are"}{" "}
-                    {numUncategorized} uncategorized transaction
+                    <b>{numUncategorized}</b> uncategorized transaction
                     {numUncategorized === 1 ? "" : "s"} selected for import.
                 </p>
                 <select

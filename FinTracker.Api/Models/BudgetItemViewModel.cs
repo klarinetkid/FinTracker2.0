@@ -5,7 +5,7 @@ namespace FinTracker.Api.Models
 {
     public class BudgetItemViewModel
     {
-        public int? Id { get; set; }
+        //public int? Id { get; set; }
 
         [Required]
         public int? CategoryId { get; set; }
@@ -16,11 +16,11 @@ namespace FinTracker.Api.Models
         [Required]
         public DateOnly? EffectiveDate { get; set; }
 
-        public TblBudgetItem ToTblBudgetItem()
+        public TblBudgetItem ToTblBudgetItem(int id = 0)
         {
             return new TblBudgetItem()
             {
-                Id = Id.HasValue ? Id.Value : 0,
+                Id = id,
                 CategoryId = CategoryId.HasValue ? CategoryId.Value : throw new Exception("Category ID is required"),
                 Amount = Amount.HasValue ? Amount.Value : throw new Exception("Amount is required"),
                 EffectiveDate = EffectiveDate.HasValue ? EffectiveDate.Value : throw new Exception("Effective Date is required")

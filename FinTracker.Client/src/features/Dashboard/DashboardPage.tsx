@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ArrowLeft from "../../assets/arrow-left-square.svg?react";
 import ArrowRight from "../../assets/arrow-right-square.svg?react";
 import InOutPills from "../../components/InOutPills";

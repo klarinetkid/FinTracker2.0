@@ -21,16 +21,12 @@ namespace FinTracker.Api.Services
 
         public TblImportFileFormat PutImportFileFormat(int importFileFormatId, ImportFileFormatViewModel model)
         {
-            TblImportFileFormat importFileFormat = model.ToTblImportFileFormat();
-            importFileFormat.Id = importFileFormatId;
-
-            //TblImportFileFormat importFileFormat = db.TblImportFileFormats.Find(importFileFormatId);
-            //importFileFormat = model.ToTblImportFileFormat();
+            TblImportFileFormat importFileFormat = model.ToTblImportFileFormat(importFileFormatId);
             db.TblImportFileFormats.Entry(importFileFormat).State = EntityState.Modified;
             db.SaveChanges();
             return importFileFormat;
         }
-
+        
         public void DeleteImportFileFormat(int id)
         {
             TblImportFileFormat? importFileFormat = db.TblImportFileFormats.Find(id);

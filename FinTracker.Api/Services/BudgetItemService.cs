@@ -27,9 +27,7 @@ namespace FinTracker.Api.Services
 
         public TblBudgetItem PutBudgetItem(int budgetItemId, BudgetItemViewModel model)
         {
-            TblBudgetItem budgetItem = model.ToTblBudgetItem();
-            budgetItem.Id = budgetItemId;
-
+            TblBudgetItem budgetItem = model.ToTblBudgetItem(budgetItemId);
             db.TblBudgetItems.Entry(budgetItem).State = EntityState.Modified;
             db.SaveChanges();
             return budgetItem;

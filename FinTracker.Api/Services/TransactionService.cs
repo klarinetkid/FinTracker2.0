@@ -29,7 +29,7 @@ namespace FinTracker.Api.Services
                     ? db.DoesTransactionExist(transaction.Date.Value, transaction.Memo, transaction.Amount.Value)
                     : false;
                 TblCategory? defaultCategory = transaction.Memo != null
-                    ? defaultCategorizationService.FindDefault(transaction.Memo)
+                    ? defaultCategorizationService.GetDefaultCategory(transaction.Memo)
                     : null;
                 if (defaultCategory != null)
                 {
@@ -40,6 +40,20 @@ namespace FinTracker.Api.Services
             }
 
             return transactions.OrderBy(e => e.Date).ToArray();
+        }
+
+        //public TblTransaction Create(TransactionViewModel transaction)
+        //{
+        //    TblTransaction tblTransaction = transaction.ToTblTransaction();
+        //    db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
+        //}
+
+        public int BatchCreate(TransactionViewModel[] transactions)
+        {
+            //foreach (TransactionViewModel transaction in transactions)
+            db.TblTransactions.AddRange(transactions.Select(t => t.ToTblTransaction()));
+                    //Entry(transaction.ToTblTransaction()).State = EntityState.Modified;
+            return db.SaveChanges();
         }
     }
 }
