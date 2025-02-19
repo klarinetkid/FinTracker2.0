@@ -1,0 +1,36 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table thead {
+        background-color: var(--var-light-bg);
+    }
+
+    .table th {
+        padding: 6px 12px;
+    }
+
+        .table th:first-child {
+            border-start-start-radius: 4px;
+        }
+
+        .table th:last-child {
+            border-start-end-radius: 4px;
+        }
+
+    .table td {
+        padding: 3px 6px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .table.selectable tr:hover td,
+    .table.selectable tr:hover input {
+        background-color: #cce6ff;
+        cursor: pointer;
+    }
+
+    .table.selectable tr:active td,
+    .table.selectable tr:active input {
+        background-color: #4da6ff;
+    }

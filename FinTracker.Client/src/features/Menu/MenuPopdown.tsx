@@ -14,11 +14,12 @@ import BudgetIcon from "../../assets/Wallet_fill.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import "../../styles/Menu.css";
+import style from "../../styles/Menu.module.css";
 import Pages from "../../types/Pages";
 import CustomReportForm from "./CustomReportForm";
 import ImportSubmenu from "./ImportSubmenu";
 import MenuTile from "./MenuTile";
+import { classList } from "../../utils/htmlHelper";
 
 type menuState = undefined | "dashboard" | "view year" | "import" | "system";
 
@@ -49,15 +50,19 @@ function MenuPopdown(props: MenuProps) {
     return (
         <>
             <div
-                className={`menu-popdown ${props.isOpen ? "active" : ""}`}
+                className={classList(
+                    style.popdown,
+                    props.isOpen ? style.active : ""
+                )}
                 onClick={handlePopdownClick}
             >
-                <div className="menu-container">
+                <div className={style.container}>
                     <div
-                        className="back-button"
+                        className={style.backButton}
                         style={{ visibility: submenu ? "visible" : "hidden" }}
                     >
                         <IconButton
+                            title="Main menu"
                             icon={BackIcon}
                             onClick={() =>
                                 submenu
@@ -66,92 +71,87 @@ function MenuPopdown(props: MenuProps) {
                             }
                         />
                     </div>
-
-                    {!submenu ? (
-                        <div className="menu-tile-container">
-                            <MenuTile
-                                title="Dashboard"
-                                icon={DashboardIcon}
-                                onClick={() => setSubmenu("dashboard")}
-                            />
-                            <MenuTile
-                                title="View Year"
-                                icon={ViewYearIcon}
-                                onClick={() => setSubmenu("view year")}
-                            />
-                            <MenuTile
-                                title="Custom Report"
-                                icon={CustomReportIcon}
-                                onClick={() => setIsCustomReportOpen(true)}
-                            />
-                            <MenuTile
-                                title="Import"
-                                icon={ImportIcon}
-                                onClick={() => setSubmenu("import")}
-                            />
-                            <Link to={Pages.Budget}>
-                                <MenuTile title="Budget" icon={BudgetIcon} />
-                            </Link>
-                            <MenuTile
-                                title="Transactions"
-                                icon={TransactionsIcon}
-                            />
-                            <MenuTile
-                                title="System"
-                                icon={SystemIcon}
-                                onClick={() => setSubmenu("system")}
-                            />
-                        </div>
-                    ) : submenu === "dashboard" ? (
-                        <div className="menu-tile-container">
-                            {globalDataCache.availableYears.value.map(
-                                (year) => (
-                                    <Link key={year} to={`/?year=${year}`}>
-                                        <MenuTile
-                                            title={year.toString()}
-                                            icon={DashboardIcon}
-                                        />
-                                    </Link>
-                                )
-                            )}
-                        </div>
-                    ) : submenu === "view year" ? (
-                        <div className="menu-tile-container">
-                            {globalDataCache.availableYears.value.map(
-                                (year) => (
-                                    <Link
-                                        key={year}
-                                        to={`/breakdown?start=${year}&end=${year + 1}`}
-                                    >
-                                        <MenuTile
-                                            title={year.toString()}
-                                            icon={ViewYearIcon}
-                                        />
-                                    </Link>
-                                )
-                            )}
-                        </div>
-                    ) : submenu === "import" ? (
-                        <ImportSubmenu />
-                    ) : submenu === "system" ? (
-                        <div className="menu-tile-container">
-                            <Link to={Pages.Categories}>
+                    <div className={style.tileContainer}>
+                        {!submenu ? (
+                            <>
                                 <MenuTile
-                                    title="Categories"
-                                    icon={ThreeDBoxIcon}
+                                    title="Dashboard"
+                                    icon={DashboardIcon}
+                                    onClick={() => setSubmenu("dashboard")}
                                 />
-                            </Link>
-                            <MenuTile title="Defaults" icon={SaveIcon} />
-                            <Link to={Pages.Formats}>
-                                <MenuTile title="Formats" icon={FileIcon} />
-                            </Link>
-                        </div>
-                    ) : (
-                        ""
-                    )}
+                                <MenuTile
+                                    title="View Year"
+                                    icon={ViewYearIcon}
+                                    onClick={() => setSubmenu("view year")}
+                                />
+                                <MenuTile
+                                    title="Custom Report"
+                                    icon={CustomReportIcon}
+                                    onClick={() => setIsCustomReportOpen(true)}
+                                />
+                                <MenuTile
+                                    title="Import"
+                                    icon={ImportIcon}
+                                    onClick={() => setSubmenu("import")}
+                                />
+                                <Link to={Pages.Budget}>
+                                    <MenuTile
+                                        title="Budget"
+                                        icon={BudgetIcon}
+                                    />
+                                </Link>
+                                <MenuTile
+                                    title="Transactions"
+                                    icon={TransactionsIcon}
+                                />
+                                <MenuTile
+                                    title="System"
+                                    icon={SystemIcon}
+                                    onClick={() => setSubmenu("system")}
+                                />
+                            </>
+                        ) : submenu === "dashboard" ? (
+                            globalDataCache.availableYears.value.map((year) => (
+                                <Link key={year} to={`/?year=${year}`}>
+                                    <MenuTile
+                                        title={year.toString()}
+                                        icon={DashboardIcon}
+                                    />
+                                </Link>
+                            ))
+                        ) : submenu === "view year" ? (
+                            globalDataCache.availableYears.value.map((year) => (
+                                <Link
+                                    key={year}
+                                    to={`/breakdown?start=${year}&end=${year + 1}`}
+                                >
+                                    <MenuTile
+                                        title={year.toString()}
+                                        icon={ViewYearIcon}
+                                    />
+                                </Link>
+                            ))
+                        ) : submenu === "import" ? (
+                            <ImportSubmenu />
+                        ) : submenu === "system" ? (
+                            <>
+                                <Link to={Pages.Categories}>
+                                    <MenuTile
+                                        title="Categories"
+                                        icon={ThreeDBoxIcon}
+                                    />
+                                </Link>
+                                <MenuTile title="Defaults" icon={SaveIcon} />
+                                <Link to={Pages.Formats}>
+                                    <MenuTile title="Formats" icon={FileIcon} />
+                                </Link>
+                            </>
+                        ) : (
+                            ""
+                        )}
+                    </div>
                 </div>
             </div>
-
             <Drawer
                 isOpen={isCustomReportOpen}
                 setIsOpen={setIsCustomReportOpen}
@@ -164,10 +164,7 @@ function MenuPopdown(props: MenuProps) {
     );
 
     function handlePopdownClick(event: React.MouseEvent) {
-        if (
-            event.target instanceof HTMLElement &&
-            event.target.classList.contains("menu-popdown")
-        ) {
+        if (event.target === event.currentTarget) {
             props.setIsOpen(false);
         }
     }

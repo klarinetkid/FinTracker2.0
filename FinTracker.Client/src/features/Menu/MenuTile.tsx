@@ -1,3 +1,5 @@
+import style from "../../styles/MenuTile.module.css";
+
 interface MenuTileProps {
     title: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -10,10 +12,10 @@ function MenuTile(props: MenuTileProps) {
 
     return (
         <div
-            className="menu-tile"
+            className={style.tile}
             onClick={(event) => props.onClick && props.onClick(event)}
         >
-            <div className="menu-tile-icon-holder">
+            <div className={style.tileIconHolder}>
                 {!props.icon ? (
                     ""
                 ) : (

@@ -1,0 +1,39 @@
+.popdown {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    transition: top ease-in-out 0.2s;
+    z-index: 10;
+    top: -100%;
+    position: fixed;
+    background-color: white
+}
+
+    .popdown.active {
+        top: 0;
+        transition: top ease-in-out 0.4s;
+    }
+
+
+.container {
+    position: relative;
+    width: 700px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: white;
+}
+
+.tileContainer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+
+.container .backButton {
+    position: absolute;
+    left: -45px;
+    top: 12px;
+}

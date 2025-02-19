@@ -68,8 +68,6 @@ export class TransactionImportManager {
             //if (newTransactions[id].memo)
             //    this.RemoveDefault(newTransactions[id].memo);
 
-            console.log(newTransactions);
-
             this.setTransactions(newTransactions);
         }
     }
@@ -83,7 +81,6 @@ export class TransactionImportManager {
                 transaction.saveDefault = true;
             }
         }
-        console.log(newTransactions);
         this.setTransactions(newTransactions);
     }
 

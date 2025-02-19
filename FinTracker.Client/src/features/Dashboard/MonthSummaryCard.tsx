@@ -5,7 +5,7 @@ import Breakdown from "../../types/Breakdown";
 import { toBreakdown } from "../../utils/BreakdownHelper";
 import { addToColour } from "../../utils/ColourHelper";
 import { formatCurrency, toFixed } from "../../utils/NumberHelper";
-import "../../styles/MonthSummaryCard.css";
+import style from "../../styles/MonthSummaryCard.module.css";
 
 interface DashboardMonthSummaryProps {
     breakdown: Breakdown;
@@ -20,8 +20,8 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
         .sort((a, b) => a.total - b.total);
 
     return (
-        <div className="row dashboard-month-row" onClick={openBreakdown}>
-            <div className="dashboard-month-row-header">
+        <div className={style.row} onClick={openBreakdown}>
+            <div className={style.header}>
                 <h4>{moment(props.breakdown.start).format("MMMM")}</h4>
 
                 <InOutPills
@@ -30,14 +30,12 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
                 />
             </div>
 
-            <div className="band-holder">
+            <div className={style.bandHolder}>
                 {categoryBands.map((categoryTotal) =>
-                    !categoryTotal.category ? (
-                        ""
-                    ) : (
+                    categoryTotal.category && categoryTotal.percentOfIncome ? (
                         <div
                             key={categoryTotal.category.id}
-                            className="band"
+                            className={style.band}
                             style={{
                                 width:
                                     Math.abs(categoryTotal.percentOfIncome) +
@@ -45,7 +43,7 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
                                 background: `linear-gradient(#${categoryTotal.category.colour}, #${addToColour(categoryTotal.category.colour, 0x60)})`,
                             }}
                         >
-                            <div className="band-tooltip">
+                            <div className={style.tooltip}>
                                 {categoryTotal.category.categoryName}:{" "}
                                 {formatCurrency(categoryTotal.total, true)} (
                                 {toFixed(
@@ -55,6 +53,8 @@ function MonthSummaryCard(props: DashboardMonthSummaryProps) {
                                 %)
                             </div>
                         </div>
+                    ) : (
+                        ""
                     )
                 )}
             </div>

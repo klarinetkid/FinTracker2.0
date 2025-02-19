@@ -1,0 +1,8 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table thead tr:last-child {
+        border-bottom: rgb(222, 226, 230) solid 1px;
+    }

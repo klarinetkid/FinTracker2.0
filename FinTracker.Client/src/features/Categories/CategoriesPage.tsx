@@ -12,6 +12,8 @@ import CategoryFormValues, {
     CategoryFormValuesToModel,
     CategoryToFormValues,
 } from "../../types/forms/CategoryFormValues";
+import Page from "../../components/Page";
+import Row from "../../components/Row";
 
 function CategoriesPage() {
     const [categories, setCategories] = useState<CategoryTransactionCount[]>(
@@ -28,18 +30,15 @@ function CategoriesPage() {
     }, [isRefreshed]);
 
     return (
-        <div className="page" style={{ width: 600 }}>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                {/*<div></div>*/}
+        <Page width={600}>
+            <Row justifyContent="space-between">
                 <h1>Categories</h1>
-                <IconButton icon={AddIcon} onClick={newCategory} />
-            </div>
+                <IconButton
+                    title="New category"
+                    icon={AddIcon}
+                    onClick={newCategory}
+                />
+            </Row>
 
             <CategoryTable
                 categories={categories}
@@ -55,7 +54,7 @@ function CategoriesPage() {
                     onSubmit={submitCategory}
                 />
             </Drawer>
-        </div>
+        </Page>
     );
 
     function newCategory() {
@@ -76,7 +75,7 @@ function CategoriesPage() {
         } else {
             await CategoryService.putCategory(model);
         }
-        document.activeElement.blur() // TODO: is there a better way to do this?
+        document.activeElement.blur(); // TODO: is there a better way to do this?
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

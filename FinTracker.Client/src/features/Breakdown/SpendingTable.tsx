@@ -1,6 +1,6 @@
 import Checkbox from "../../components/Checkbox";
 import useCategorySelection from "../../hooks/useCategorySelection";
-import "../../styles/SpendingTable.css";
+import style from "../../styles/SpendingTable.module.css";
 import Breakdown from "../../types/Breakdown";
 import { Total, Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
@@ -19,80 +19,68 @@ function SpendingTable(props: SpendingTableProps) {
         .sort((a, b) => a.total - b.total);
 
     return (
-        <div className="breakdown-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <div
-                                style={{
-                                    position: "relative",
-                                    top: 12,
-                                    userSelect: "none",
-                                }}
-                            >
-                                <Checkbox
-                                    key={(
-                                        categorySelection.selectedCategories
-                                            .length > 0
-                                    ).toString()}
-                                    checked={
-                                        categorySelection.selectedCategories
-                                            .length > 0
-                                    }
-                                    onChange={toggleAllCategories}
-                                />
-                            </div>
-                        </th>
-                        <th>Category</th>
-                        <th>Total</th>
-                        <th>% of in.</th>
-                        <th>% of sp.</th>
-                        <th>Budget</th>
-                        <th></th>
-                    </tr>
-                    <tr style={{ height: "20px" }}></tr>
-                </thead>
-
-                {spendingCategories.length > 0 ? (
-                    <>
-                        {spendingCategories.map((c, i) => (
-                            <SpendingTableRow
-                                key={i}
-                                categoryTotal={c}
-                                maxCategorySpend={spendingCategories[0].total}
+        <table className={style.table}>
+            <thead>
+                <tr>
+                    <th>
+                        <div
+                            style={{
+                                position: "relative",
+                                top: 12,
+                                userSelect: "none",
+                            }}
+                        >
+                            <Checkbox
+                                key={(
+                                    categorySelection.selectedCategories
+                                        .length > 0
+                                ).toString()}
+                                checked={
+                                    categorySelection.selectedCategories
+                                        .length > 0
+                                }
+                                onChange={toggleAllCategories}
                             />
-                        ))}
+                        </div>
+                    </th>
+                    <th>Category</th>
+                    <th>Total</th>
+                    <th>% of in.</th>
+                    <th>% of sp.</th>
+                    <th>Budget</th>
+                    <th></th>
+                </tr>
+                <tr style={{ height: "20px" }}></tr>
+            </thead>
 
+            {spendingCategories.length > 0 ? (
+                <>
+                    {spendingCategories.map((c, i) => (
                         <SpendingTableRow
-                            key={-1}
-                            categoryTotal={aggregateSelectedCategoryTotals()}
-                            maxCategorySpend={spendingCategories[0]?.total}
-                            noSelect={true}
-                            visible={selectedSpendingCategories().length !== 0}
+                            key={i}
+                            categoryTotal={c}
+                            maxCategorySpend={spendingCategories[0].total}
                         />
-                    </>
-                ) : (
-                    <tbody>
-                        <tr>
-                            <td colSpan={7} className="centre">
-                                <h4>No spending? Right on!</h4>
-                            </td>
-                        </tr>
-                    </tbody>
-                )}
+                    ))}
 
-                {/*{spendingCategories.length === 0 ? (*/}
-                {/*    <tr>*/}
-                {/*        <td colSpan={7} className="centre">*/}
-                {/*            Nothing spent? Right on!*/}
-                {/*        </td>*/}
-                {/*    </tr>*/}
-                {/*) : (*/}
-                {/*    ""*/}
-                {/*)}*/}
-            </table>
-        </div>
+                    <SpendingTableRow
+                        key={-1}
+                        categoryTotal={aggregateSelectedCategoryTotals()}
+                        maxCategorySpend={spendingCategories[0]?.total}
+                        noSelect={true}
+                        visible={selectedSpendingCategories().length !== 0}
+                    />
+                </>
+            ) : (
+                <tbody>
+                    <tr>
+                        <td colSpan={7} className="centre">
+                            <h4>No spending? Right on!</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            )}
+        </table>
     );
 
     function toggleAllCategories() {

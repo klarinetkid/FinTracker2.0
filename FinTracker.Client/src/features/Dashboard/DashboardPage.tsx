@@ -6,11 +6,12 @@ import InOutPills from "../../components/InOutPills";
 import Spacer from "../../components/Spacer";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BreakdownService from "../../services/BreakdownService";
-import "../../styles/Dashboard.css";
 import Breakdown from "../../types/Breakdown";
 import { getTotalIn, getTotalOut } from "../../utils/BreakdownHelper";
 import DashboardIncrementButton from "./DashboardIncrementButton";
 import MonthSummaryCard from "./MonthSummaryCard";
+import Page from "../../components/Page";
+import Row from "../../components/Row";
 
 function DashboardPage() {
     const [searchParams] = useSearchParams();
@@ -42,10 +43,11 @@ function DashboardPage() {
     }, [year]);
 
     return (
-        <div className="page" style={{ width: 800 }}>
-            <div className="dashboard-header">
+        <Page width={800}>
+            <Row justifyContent="space-around">
                 <DashboardIncrementButton
-                    button={ArrowLeft}
+                    title="Previous year"
+                    icon={ArrowLeft}
                     increment={-1}
                     currentYear={year}
                     setCurrentYear={setYear}
@@ -54,12 +56,13 @@ function DashboardPage() {
                 <h1>Dashboard {year}</h1>
 
                 <DashboardIncrementButton
-                    button={ArrowRight}
+                    title="Next year"
+                    icon={ArrowRight}
                     increment={1}
                     currentYear={year}
                     setCurrentYear={setYear}
                 />
-            </div>
+            </Row>
 
             {!breakdowns ? (
                 ""
@@ -79,7 +82,7 @@ function DashboardPage() {
                         ))}
                 </>
             )}
-        </div>
+        </Page>
     );
 }
 

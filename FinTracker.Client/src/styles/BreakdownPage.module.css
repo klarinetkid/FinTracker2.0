@@ -1,19 +1,20 @@
-.breakdown-header {
+.header {
     display: flex;
+    gap: 16px;
     align-items: center;
 }
 
-.breakdown-details-container {
+.details {
     display: flex
 }
 
-.breakdown-details-spending-table-holder {
+.spendingTableHolder {
     flex-grow: 1;
     margin-right: 20px;
 }
 
-.breakdown-details-income-column {
-    display: flex; 
+.incomeColumn {
+    display: flex;
     flex-direction: column;
     gap: 18px;
 }

@@ -1,18 +1,20 @@
 import { SyntheticEvent, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
+import IconButton from "../../components/IconButton";
+import Page from "../../components/Page";
+import Row from "../../components/Row";
 import useFormValues from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFileFormatService from "../../services/ImportFileFormatService";
-import ImportFileFormat from "../../types/ImportFileFormat";
-import FormatForm from "./FormatForm";
-import FormatTable from "./FormatTable";
-import IconButton from "../../components/IconButton";
 import FormatFormValues, {
     FormatFormDefaults,
     FormatFormValuesToModel,
     ImportFileFormatToFormValues,
 } from "../../types/forms/ImportFileFormatFormValues";
+import ImportFileFormat from "../../types/ImportFileFormat";
+import FormatForm from "./FormatForm";
+import FormatTable from "./FormatTable";
 
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
@@ -22,20 +24,17 @@ function FormatsPage() {
         useFormValues<FormatFormValues>(FormatFormDefaults);
 
     return (
-        <div className="page" style={{ width: 600 }}>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                {/*<div></div>*/}
+        <Page width={600}>
+            <Row justifyContent="space-between">
                 <h1>Import Formats</h1>
                 <div>
-                    <IconButton icon={AddIcon} onClick={newFormat} />
+                    <IconButton
+                        title="New format"
+                        icon={AddIcon}
+                        onClick={newFormat}
+                    />
                 </div>
-            </div>
+            </Row>
 
             <FormatTable editFormat={editFormat} />
 
@@ -48,7 +47,7 @@ function FormatsPage() {
                     onSubmit={submitFormat}
                 />
             </Drawer>
-        </div>
+        </Page>
     );
 
     function newFormat() {

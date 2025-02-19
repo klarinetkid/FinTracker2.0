@@ -3,7 +3,6 @@ import { Link, Outlet } from "react-router-dom";
 import HomeIcon from "../assets/Home.svg?react";
 import MenuIcon from "../assets/darhboard.svg?react";
 import MenuPopdown from "../features/Menu/MenuPopdown";
-import "../styles/layout.css";
 import IconButton from "./IconButton";
 
 function Layout() {
@@ -11,11 +10,21 @@ function Layout() {
 
     return (
         <>
-            <div className="nav-buttons-holder">
+            <div
+                style={{
+                    float: "right",
+                    display: "flex",
+                    gap: 5,
+                }}
+            >
                 <Link to={{ pathname: "/", search: "" }}>
-                    <IconButton icon={HomeIcon} />
+                    <IconButton title="Dashboard" icon={HomeIcon} />
                 </Link>
-                <IconButton icon={MenuIcon} onClick={menuIconClick} />
+                <IconButton
+                    title="Menu"
+                    icon={MenuIcon}
+                    onClick={menuIconClick}
+                />
             </div>
             <MenuPopdown isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} />
 

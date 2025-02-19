@@ -1,4 +1,4 @@
-import "../styles/InOutPills.css";
+import style from "../styles/InOutPills.module.css";
 import { formatCurrency } from "../utils/NumberHelper";
 
 interface InOutPillsProps {
@@ -8,14 +8,12 @@ interface InOutPillsProps {
 
 function InOutPills(props: InOutPillsProps) {
     return (
-        <div className="dashboard-month-inout">
-            <div className="dashboard-month-in month-inout-pill">
-                In: {formatCurrency(props.totalIn)}
-            </div>
-            <div className="dashboard-month-out month-inout-pill">
+        <div className={style.holder}>
+            <div className={style.in}>In: {formatCurrency(props.totalIn)}</div>
+            <div className={style.out}>
                 Out: {formatCurrency(props.totalOut, true)}
             </div>
-            <div className="dashboard-month-net month-inout-pill">
+            <div className={style.net}>
                 Net: {formatCurrency(props.totalIn + props.totalOut)}
             </div>
         </div>

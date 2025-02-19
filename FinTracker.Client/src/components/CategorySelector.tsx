@@ -1,27 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { useClickOutside } from "../hooks/useClickOutisde";
-import useGlobalDataCache from "../hooks/useGlobalDataCache";
-import "../styles/CategorySelector.css";
+import styles from "../styles/CategorySelector.module.css";
 import Category, { Uncategorized } from "../types/Category";
+import { classList } from "../utils/htmlHelper";
 import CategoryPill from "./CategoryPill";
 
 interface CategorySelectorProps {
-    //onChange?: React.Dispatch<React.SetStateAction<Category | undefined>>;
+    categories: Category[]; // don't want this component dependent on global data cache context, so just pass the options
     onChange?: (category: Category) => void;
     onClose?: () => void;
-    value?: Category | undefined | null; // TODO: category needs to just be undefined, not null everywhere
+    value?: Category | undefined | null; // TODO: category needs to just be undefined, not null everywhere. null is uncategorized, which is a category
     selectedId?: number;
     isOpen?: boolean;
     disabled?: boolean;
 }
 
 function CategorySelector(props: CategorySelectorProps) {
-    const ref = useRef<HTMLDivElement>(null);
-    useClickOutside(ref, () => setIsOpen(false));
-
+    const controlled = props.onChange ? true : false;
     const defaultValue = props.value ?? Uncategorized;
 
-    const globalDataCache = useGlobalDataCache();
+    const ref = useRef<HTMLDivElement>(null);
+    //useClickOutside(ref, () => setIsOpen(false));
+
     const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
     const [search, setSearch] = useState("");
     const [selectedValue, setSelectedValue] = useState<Category>(
@@ -29,15 +28,29 @@ function CategorySelector(props: CategorySelectorProps) {
     );
 
     useEffect(() => {
+        if (props.isOpen) ref.current?.focus();
+    }, [props.isOpen]);
+
+    useEffect(() => {
         if (!isOpen && props.onClose) props.onClose();
     }, [isOpen, props]);
 
-    const options = [...globalDataCache.categories.value, Uncategorized];
+    useEffect(() => {
+        if (search.length === 0) return;
+    }, [search]);
+
+    const options = [...props.categories, Uncategorized];
+
+    const value = controlled ? props.value : selectedValue;
 
     return (
         <div
             ref={ref}
-            className={`category-selector ${isOpen ? "open" : ""} ${props.disabled ? "disabled" : ""}`}
+            className={classList(
+                styles.selector,
+                isOpen ? styles.open : "",
+                props.disabled ? styles.disabled : ""
+            )}
             onClick={() => !props.disabled && setIsOpen(!isOpen)}
             tabIndex={10}
             onKeyDown={onKeyDown}
@@ -45,19 +58,13 @@ function CategorySelector(props: CategorySelectorProps) {
                 setIsOpen(false);
             }}
         >
-            {!selectedValue ? (
-                <span className="category-selector-placeholder">
-                    Select category
-                </span>
-            ) : (
-                <CategoryPill category={selectedValue} />
-            )}
+            <CategoryPill category={value} />
 
-            <div className="category-selector-menu">
+            <div key={isOpen.toString()} className={styles.menu}>
                 {options.map((c, i) => (
                     <div
                         key={i}
-                        className="category-option"
+                        className={styles.option}
                         onClick={() => optionClick(c)}
                     >
                         <CategoryPill category={c} />
@@ -73,21 +80,36 @@ function CategorySelector(props: CategorySelectorProps) {
     }
 
     function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-        if (event.key === "Enter") setIsOpen(!isOpen);
-        else {
-            // TODO: filter other keys
-            const newSearch = search + event.key;
-
-            const found = globalDataCache.categories.value.filter((c) =>
-                c.categoryName.toLowerCase().startsWith(newSearch.toLowerCase())
-            )[0];
-            if (found) {
-                updateSelectedValue(found);
-                setSearch(newSearch);
-            } else {
-                setSearch("");
-            }
+        if (event.key === "Enter" && !props.disabled) {
+            setIsOpen(!isOpen);
+            return;
         }
+
+        if (event.key === "Escape") {
+            setIsOpen(false);
+            event.currentTarget.blur();
+            return;
+        }
+
+        if (event.key.length !== 1) return;
+
+        trySetValueFromSearch(search + event.key) ||
+            trySetValueFromSearch(event.key) ||
+            setSearch("");
+    }
+
+    function trySetValueFromSearch(str: string): boolean {
+        const testSeach = str.toLowerCase();
+        const found = props.categories.filter((c) =>
+            c.categoryName.toLowerCase().startsWith(testSeach)
+        );
+        if (found.length > 0) {
+            updateSelectedValue(found[0]);
+            setSearch(str);
+            return true;
+        }
+
+        return false;
     }
 
     function updateSelectedValue(category: Category) {

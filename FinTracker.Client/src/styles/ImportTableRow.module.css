@@ -1,30 +1,13 @@
-.autofilled .category-selector {
-    background-color: rgba(230, 230, 255);
-}
-
-.save-default .category-selector {
-    background-color: var(--var-accent)
-}
-
 .unselected {
     opacity: 0.35;
 }
 
-.pagination-holder {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
 
-
-
-.already-imported-indicator {
+.alreadyImportedIndicator {
     position: absolute;
     top: 12px;
     right: 14px;
     cursor: pointer;
-
     background-color: rgb(255, 193, 7);
     font-weight: bold;
     text-align: center;
@@ -33,10 +16,19 @@
     border-radius: 2px;
 }
 
-    .already-imported-indicator::before {
+    .alreadyImportedIndicator::before {
         content: "!";
         position: relative;
         top: -3px;
         font-size: 14px;
         color: white;
     }
+
+/* select the category selector with > div */
+td.autofilled > div {
+    background-color: rgba(230, 230, 255);
+}
+
+td.saveDefault > div {
+    background-color: var(--var-accent)
+}

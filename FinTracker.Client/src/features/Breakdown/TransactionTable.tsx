@@ -1,4 +1,6 @@
-import "../../styles/TransactionTable.css";
+import PaginationNav from "../../components/PaginationNav";
+import Table from "../../components/Table";
+import useLocalPagination from "../../hooks/useLocalPagination";
 import Transaction from "../../types/Transaction";
 import TransactionTableRow from "./TransactionTableRow";
 
@@ -8,9 +10,11 @@ interface TransactionTableProps {
 }
 
 function TransactionTable(props: TransactionTableProps) {
+    const pagination = useLocalPagination(props.transactions, 100);
+
     return (
-        <div className="table-holder">
-            <table className="table transaction-table">
+        <>
+            <Table>
                 <thead>
                     <tr>
                         <th></th>
@@ -21,17 +25,18 @@ function TransactionTable(props: TransactionTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.transactions.map((t, i) => (
+                    {pagination.currentItems.map((t, i) => (
                         <TransactionTableRow
-                            key={t.id}
-                            transaction={t}
-                            rowId={i + 1}
+                            key={i}
+                            transaction={t.item}
+                            num={t.index}
                             onChange={props.onChange}
                         />
                     ))}
                 </tbody>
-            </table>
-        </div>
+            </Table>
+            <PaginationNav pagination={pagination} />
+        </>
     );
 }
 

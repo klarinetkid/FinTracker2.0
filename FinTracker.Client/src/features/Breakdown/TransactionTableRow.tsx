@@ -7,20 +7,22 @@ import TransactionService from "../../services/TransactionService";
 import Category, { Uncategorized } from "../../types/Category";
 import Transaction from "../../types/Transaction";
 import { formatCurrency } from "../../utils/NumberHelper";
+import style from "../../styles/TransactionTableRow.module.css";
+import { classList } from "../../utils/htmlHelper";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 
 interface TransactionTableRowProps {
     transaction: Transaction;
-    rowId: number;
+    num: number;
     onChange?: () => void;
 }
 
 function TransactionTableRow(props: TransactionTableRowProps) {
     const [isEditingCat, setIsEditingCat] = useState(false);
     const [newCategory, setNewCategory] = useState<Category>();
-
     const [transaction, setTransaction] = useState(props.transaction);
-
     const categorySelection = useCategorySelection();
+    const globalDataCache = useGlobalDataCache();
 
     useEffect(() => {
         patchTransaction();
@@ -28,16 +30,17 @@ function TransactionTableRow(props: TransactionTableRowProps) {
 
     return (
         <tr
-            className={
+            className={classList(
+                style.transactionRow,
                 categorySelection.isSelected(
                     transaction.category ?? Uncategorized
                 )
                     ? "selected"
                     : ""
-            }
+            )}
             title={transaction.category?.id?.toString()}
         >
-            <td className="bold centre">{props.rowId}</td>
+            <td className="bold centre">{props.num + 1}</td>
             <td className="nobreak">
                 {moment(transaction.date).format("yyyy-MM-DD")}
             </td>
@@ -48,9 +51,13 @@ function TransactionTableRow(props: TransactionTableRowProps) {
                 {transaction.memo}
             </td>
             <td className="ralign">{formatCurrency(transaction.amount)}</td>
-            <td className="centre" onDoubleClick={() => setIsEditingCat(true)}>
+            <td
+                className="centre noselect"
+                onDoubleClick={() => setIsEditingCat(true)}
+            >
                 {isEditingCat ? (
                     <CategorySelector
+                        categories={globalDataCache.categories.value}
                         onChange={setNewCategory}
                         value={transaction.category}
                         isOpen={true}

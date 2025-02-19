@@ -1,6 +1,11 @@
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { toBreakdown } from "../../utils/BreakdownHelper";
+import buttonStyle from "../../styles/common/Button.module.css";
+import Button from "../../components/Button";
+import ButtonFill from "../../components/ButtonFill";
+import Input from "../../components/Input";
+import FormGroup from "../../components/FormGroup";
 
 interface CustomReportFormProps {
     onCancel: () => void;
@@ -11,35 +16,24 @@ function CustomReportForm(props: CustomReportFormProps) {
 
     return (
         <form className="form" onSubmit={formSubmit}>
-            <div className="drawer-content-body">
+            <div>
                 <h2>Custom Report</h2>
 
-                <div className="control-group">
+                <FormGroup>
                     <h4>Start</h4>
-                    <input name="start" placeholder="yyyy-MM-dd" />
-                </div>
-                <div className="control-group">
+                    <Input name="start" placeholder="yyyy-MM-dd" />
+                </FormGroup>
+                <FormGroup>
                     <h4>End</h4>
-                    <input name="end" placeholder="yyyy-MM-dd" />
-                </div>
+                    <Input name="end" placeholder="yyyy-MM-dd" />
+                </FormGroup>
             </div>
-            <div
-                className="drawer-content-foot"
-                style={{ display: "flex", justifyContent: "space-between" }}
-            >
-                <div></div>
-
+            <div>
                 <div>
-                    <button
-                        type="button"
-                        className="button"
-                        onClick={props.onCancel}
-                    >
+                    <Button type="button" onClick={props.onCancel}>
                         Cancel
-                    </button>
-                    <button type="submit" className="button-fill">
-                        Submit
-                    </button>
+                    </Button>
+                    <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
             </div>
         </form>

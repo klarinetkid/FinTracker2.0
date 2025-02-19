@@ -1,0 +1,9 @@
+:root {
+    --var-light-bg: #eeeeee;
+    --var-selected-highlight: #ffd480;
+    --var-light-border: #ddd;
+    --var-success: rgb(25, 135, 84);
+    --var-warning: rgb(255, 193, 7);
+    --var-danger: rgb(220, 53, 69);
+    --var-accent: #ffeecc;
+}

@@ -1,82 +1,88 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import ThreeDBoxIconRefresh from "../../assets/3d_box_fill_refresh.svg?react";
+import Button from "../../components/Button";
+import ButtonFill from "../../components/ButtonFill";
+import IconButton from "../../components/IconButton";
 import Spacer from "../../components/Spacer";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import TransactionViewModel from "../../types/models/TransactionViewModel";
 import ImportTableRow from "./ImportTableRow";
+import Table from "../../components/Table";
+import Row from "../../components/Row";
+import Select from "../../components/Select";
+import useLocalPagination from "../../hooks/useLocalPagination";
+import PaginationNav from "../../components/PaginationNav";
 
 interface ImportTableProps {
     transactions: TransactionViewModel[];
 }
 
+type ImportFilter = "all" | "selected" | "uncategorized" | "unselected";
+
 function ImportTable(props: ImportTableProps) {
-    const [currentPage, setCurrentPage] = useState(0);
-    const pageSize = 25;
-
-    // reset when location state changes
+    const globalDataCache = useGlobalDataCache();
+    const [filter, setFilter] = useState<ImportFilter>("all");
+    const pagination = useLocalPagination(transactionsFiltered(filter), 25);
     const location = useLocation();
-    useEffect(() => setCurrentPage(0), [location.state]);
 
-    const [filter, setFilter] = useState<
-        "all" | "selected" | "uncategorized" | "unselected"
-    >("all");
+    useEffect(() => pagination.setCurrentPage(0), [location.state]);
 
-    if (props.transactions.length > 0 && transactionsFiltered().length === 0) {
-        setFilter("all");
-        setCurrentPage(0);
-    }
+    useEffect(() => {
+        if (filter !== "all" && transactionsFiltered(filter).length === 0) {
+            setFilter("all");
+            pagination.setCurrentPage(0);
+        }
+    }, [filter]);
 
-    const pageCount = Math.ceil(transactionsFiltered().length / pageSize);
-
-    const numSelected = props.transactions.filter(
-        (t) => t.selectedForImport
-    ).length;
-    const numUnselected = props.transactions.filter(
-        (t) => !t.selectedForImport
-    ).length;
-    const numUncategorized = props.transactions.filter(
-        (t) => t.selectedForImport && !t.categoryId
-    ).length;
+    const numSelected = transactionsFiltered("selected").length;
+    const numUnselected = transactionsFiltered("unselected").length;
+    const numUncategorized = transactionsFiltered("uncategorized").length;
 
     return (
         <div>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
+            <Row justifyContent="space-between">
                 <p>
                     There {numUncategorized === 1 ? "is" : "are"}{" "}
                     <b>{numUncategorized}</b> uncategorized transaction
                     {numUncategorized === 1 ? "" : "s"} selected for import.
                 </p>
-                <select
-                    value={filter}
-                    onChange={(e) => {
-                        console.log("changled");
-                        setFilter(e.target.value);
-                        setCurrentPage(0);
-                    }}
-                >
-                    <option value="all">
-                        View all ({props.transactions.length})
-                    </option>
-                    <option value="selected" disabled={numSelected === 0}>
-                        Selected ({numSelected})
-                    </option>
-                    <option value="unselected" disabled={numUnselected === 0}>
-                        Unselected ({numUnselected})
-                    </option>
-                    <option
-                        value="uncategorized"
-                        disabled={numUncategorized === 0}
+                <div style={{ display: "flex", gap: 10 }}>
+                    {/*TODO: better icon for this*/}
+                    <IconButton
+                        title="Refresh categories"
+                        icon={ThreeDBoxIconRefresh}
+                        onClick={() => globalDataCache.categories.refresh()}
+                    />
+                    <Select
+                        value={filter}
+                        onChange={(e) => {
+                            setFilter(e.target.value as ImportFilter);
+                            pagination.setCurrentPage(0);
+                        }}
                     >
-                        Uncategorized ({numUncategorized})
-                    </option>
-                </select>
-            </div>
-            <table className="table">
+                        <option value="all">
+                            View all ({props.transactions.length})
+                        </option>
+                        <option value="selected" disabled={numSelected === 0}>
+                            Selected ({numSelected})
+                        </option>
+                        <option
+                            value="unselected"
+                            disabled={numUnselected === 0}
+                        >
+                            Unselected ({numUnselected})
+                        </option>
+                        <option
+                            value="uncategorized"
+                            disabled={numUncategorized === 0}
+                        >
+                            Uncategorized ({numUncategorized})
+                        </option>
+                    </Select>
+                </div>
+            </Row>
+            <Table>
                 <thead>
                     <tr>
                         <th></th>
@@ -88,44 +94,23 @@ function ImportTable(props: ImportTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactionsFiltered()
-                        .slice(
-                            currentPage * pageSize,
-                            (currentPage + 1) * pageSize
-                        )
-                        .map((t, i) => (
-                            <ImportTableRow
-                                key={t.id}
-                                num={currentPage * pageSize + i}
-                                transaction={t}
-                            />
-                        ))}
-                </tbody>
-            </table>
-
-            <Spacer height={20} />
-
-            {pageCount <= 1 ? (
-                ""
-            ) : (
-                <div className="pagination-holder">
-                    {[...Array(pageCount).keys()].map((p) => (
-                        <button
-                            className={
-                                currentPage === p ? "button-fill" : "button"
-                            }
-                            key={p}
-                            onClick={() => setCurrentPage(p)}
-                        >
-                            {p + 1}
-                        </button>
+                    {pagination.currentItems.map((t, i) => (
+                        <ImportTableRow
+                            key={i}
+                            num={t.index}
+                            transaction={t.item}
+                        />
                     ))}
-                </div>
-            )}
+                </tbody>
+            </Table>
+
+            <PaginationNav pagination={pagination} />
         </div>
     );
 
-    function transactionsFiltered(): TransactionViewModel[] {
+    function transactionsFiltered(
+        filter: ImportFilter
+    ): TransactionViewModel[] {
         switch (filter) {
             case "selected":
                 return props.transactions.filter((t) => t.selectedForImport);

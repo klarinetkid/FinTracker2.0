@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../styles/import.css";
-import ImportTable from "./ImportTable";
+import Button from "../../components/Button";
+import ButtonFill from "../../components/ButtonFill";
 import useTransactionImport from "../../hooks/useTransactionImport";
 import Pages from "../../types/Pages";
+import ImportTable from "./ImportTable";
+import Page from "../../components/Page";
+import Row from "../../components/Row";
 
 function ImportPage() {
     const location = useLocation();
@@ -44,32 +47,28 @@ function ImportPage() {
     ).length;
 
     return (
-        <div className="page" style={{ width: 900 }}>
-            <div className="page-header">
+        <Page width={900}>
+            <Row justifyContent="space-between">
                 <h1>Import Transactions</h1>
                 <div>
                     {pageState === "editing" ? (
                         <>
-                            <button className="button" onClick={cancelImport}>
+                            <Button type="button" onClick={cancelImport}>
                                 Cancel
-                            </button>
-                            <button
-                                className="button-fill"
+                            </Button>
+                            <ButtonFill
+                                type="button"
                                 onClick={submitImport}
                                 disabled={numSelected === 0}
                             >
                                 Submit
-                            </button>
+                            </ButtonFill>
                         </>
                     ) : (
                         ""
                     )}
-                    {/*<IconButton*/}
-                    {/*    icon={ThreeDBoxIcon}*/}
-                    {/*    onClick={() => window.open(Pages.Categories)}*/}
-                    {/*/>*/}
                 </div>
-            </div>
+            </Row>
 
             {pageState === "complete" ? (
                 <div className="centre">
@@ -85,7 +84,7 @@ function ImportPage() {
             ) : (
                 <ImportTable transactions={transactionImport.Transcations} />
             )}
-        </div>
+        </Page>
     );
 
     function cancelImport() {
@@ -96,8 +95,6 @@ function ImportPage() {
         setIsLoading(true);
 
         transactionImport.Submit().then((result: number) => {
-            //setInsertedRows(result);
-            //setPageState("complete");
             navigate(Pages.Import, { state: { insertedRows: result } });
         });
     }

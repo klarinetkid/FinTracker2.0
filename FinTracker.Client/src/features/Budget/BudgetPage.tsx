@@ -2,6 +2,8 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
+import Page from "../../components/Page";
+import Row from "../../components/Row";
 import useFormValues from "../../hooks/useFormValues";
 import BudgetItemService from "../../services/BudgetItemService";
 import BudgetItem, { BudgetItemGroup } from "../../types/BudgetItem";
@@ -26,18 +28,15 @@ function BudgetPage() {
     }, [isRefreshed]);
 
     return (
-        <div className="page" style={{ width: 800 }}>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                {/*<div></div>*/}
+        <Page width={800}>
+            <Row justifyContent="space-between">
                 <h1>Budget</h1>
-                <IconButton icon={AddIcon} onClick={newBudgetItem} />
-            </div>
+                <IconButton
+                    title="New budget item"
+                    icon={AddIcon}
+                    onClick={newBudgetItem}
+                />
+            </Row>
 
             <BudgetTable
                 groupedBudgets={groupedBudgets}
@@ -54,7 +53,7 @@ function BudgetPage() {
                     onSubmit={submitBudgetItem}
                 />
             </Drawer>
-        </div>
+        </Page>
     );
 
     function newBudgetItem() {

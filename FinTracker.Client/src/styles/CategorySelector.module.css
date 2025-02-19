@@ -1,8 +1,7 @@
 
-.category-selector {
+.selector {
     position: relative;
     display: inline-flex;
-    border: solid 1px rgb(118, 118, 118);
     padding: 4px 4px;
     min-height: 24px;
     min-width: 135px;
@@ -12,23 +11,20 @@
     box-sizing: border-box;
     width: 100%;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 4px;
+    border: inset rgb(118, 118, 118) 2px;
 }
 
-.category-selector:focus, .category-selector:active {
-    /*background-color: red;*/
-}
-
-    .category-selector.open {
-        border: solid;
+    .selector:focus {
+        outline: solid 2px rgb(0, 96, 223);
     }
 
-
-    .category-selector.open .category-selector-menu {
+    .selector.open .menu {
         visibility: visible
     }
 
-.category-selector-menu {
+
+.menu {
     background: white;
     border: solid black 1px;
     border-radius: 6px;
@@ -38,32 +34,21 @@
     overflow-y: scroll;
     visibility: hidden;
     min-width: 100%;
-    /*min-width: 200px;*/
     z-index: 2;
     overflow-x: hidden;
 }
 
-.category-option {
+
+.option {
     padding: 8px 16px;
     cursor: pointer;
     border-bottom: solid 1px var(--var-light-border)
 }
 
-    .category-option:hover {
+    .option:hover {
         background-color: var(--var-light-bg)
     }
 
-    .category-option:active {
+    .option:active {
         background-color: var(--var-light-border)
     }
-
-.category-selector-placeholder {
-    font-style: italic;
-    color: #aaaaaa
-}
-
-.clear-category-select {
-    cursor: pointer;
-    background-color: black;
-    border-radius: 50px;
-}

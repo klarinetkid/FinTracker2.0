@@ -1,15 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/_Layout";
 import GlobalDataCacheProvider from "./contexts/GlobalDataCacheProvider";
+import TransactionImportProvider from "./contexts/TransactionImportProvider";
 import BreakdownPage from "./features/Breakdown/BreakdownPage";
 import BudgetPage from "./features/Budget/BudgetPage";
 import CategoriesPage from "./features/Categories/CategoriesPage";
 import DashboardPage from "./features/Dashboard/DashboardPage";
 import FormatsPage from "./features/Formats/FormatsPage";
 import ImportPage from "./features/Import/ImportPage";
-import "./styles/Form.css";
+import "./styles/_global.css";
+import "./styles/_variables.css";
 import Pages from "./types/Pages";
-import TransactionImportProvider from "./contexts/TransactionImportProvider";
 
 function App() {
     return (

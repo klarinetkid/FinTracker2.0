@@ -1,20 +1,17 @@
-
-
-.icon-button {
+.button {
     cursor: pointer;
     background-color: white;
     transition: all 0.1s ease 0s;
-    /*margin-right: 18px;*/
     border-radius: 6px;
     padding: 3px;
     display: flex;
     border: none;
 }
 
-    .icon-button:hover {
+    .button:hover {
         background-color: var(--var-light-bg);
     }
 
-    .icon-button:active {
+    .button:active {
         background-color: rgb(234, 234, 234)
     }

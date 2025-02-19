@@ -1,0 +1,76 @@
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    background-color: #eeeeee;
+    border-spacing: 0;
+}
+
+.table tbody {
+    background-color: white;
+}
+
+    .table tbody tr:not(:first-child):not(.spacerRow) {
+        display: none;
+    }
+
+    .table tbody.active tr:not(:first-child) {
+        display: table-row;
+    }
+
+.table tbody td {
+    padding: 8px 14px;
+}
+
+    .table tr:first-child td {
+        background-color: #ffeecc;
+        border: solid #1a1100 2px;
+        border-spacing: 0
+    }
+
+    .table tr:first-child td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-right: none;
+    }
+
+    .table tr:first-child td:not(:first-child):not(:last-child) {
+        border-left: none;
+        border-right: none;
+    }
+
+    .table tr:first-child td:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-left: none;
+    }
+
+    /* todo select last child of group instead of spacer */
+.table tbody .spacerRow {
+    display: table-row;
+    height: 2px;
+}
+
+.table.selectable tr:hover td, .table.selectable tr:hover input {
+    background-color: #cce6ff;
+    cursor: pointer;
+}
+
+/*.budget-table tr.past td:first-child, .budget-table tr td:nth-child(4) {
+    border-right: none;
+}
+.budget-table tr.past td:last-child, .budget-table tr.past td:nth-child(2) {
+    border-left: none;
+}*/
+
+.table tbody tr:not(:first-child) td:first-child {
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.table tbody tr:not(:first-child) td:last-child {
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}

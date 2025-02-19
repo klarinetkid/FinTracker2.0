@@ -1,8 +1,12 @@
 import { SyntheticEvent } from "react";
+import Button from "../../components/Button";
+import ButtonFill from "../../components/ButtonFill";
 import CategoryPill from "../../components/CategoryPill";
 import Spacer from "../../components/Spacer";
 import { Total } from "../../types/Category";
 import CategoryFormValues from "../../types/forms/CategoryFormValues";
+import Input from "../../components/Input";
+import FormGroup from "../../components/FormGroup";
 
 interface CategoryFormProps {
     formValues: CategoryFormValues;
@@ -15,7 +19,7 @@ interface CategoryFormProps {
 function CategoryForm(props: CategoryFormProps) {
     return (
         <form className="form" onSubmit={props.onSubmit}>
-            <div className="drawer-content-body">
+            <div>
                 <h2>{props.formValues.id === 0 ? "New" : "Edit"} Category</h2>
 
                 <CategoryPill
@@ -29,33 +33,37 @@ function CategoryForm(props: CategoryFormProps) {
                 <Spacer height={24} />
 
                 <input name="id" type="hidden" value={props.formValues.id} />
-                <div className="control-group">
+                <FormGroup>
                     <h4>Category Name</h4>
-                    <input
+                    <Input
                         name="categoryName"
                         value={props.formValues.categoryName}
                         onChange={props.updateFormValues}
                     />
-                </div>
-                <div className="control-group">
+                </FormGroup>
+                <FormGroup>
                     <h4>Colour</h4>
-                    <input
+                    <Input
                         name="colour"
                         value={props.formValues.colour}
                         onChange={props.updateFormValues}
                     />
-                </div>
+                </FormGroup>
             </div>
-            <div
-                className="drawer-content-foot"
-                style={{ display: "flex", justifyContent: "space-between" }}
-            >
+            <div>
+                <div>
+                    <Button type="button" onClick={props.onCancel}>
+                        Cancel
+                    </Button>
+                    <ButtonFill type="submit" onClick={props.onSubmit}>
+                        Submit
+                    </ButtonFill>
+                </div>
                 <div>
                     {props.formValues.id === 0 ? (
                         ""
                     ) : (
-                        <button
-                            className="button"
+                        <Button
                             type="button"
                             disabled={props.formValues.transactionCount > 0}
                             onClick={props.onDelete}
@@ -66,25 +74,8 @@ function CategoryForm(props: CategoryFormProps) {
                             }
                         >
                             Delete
-                        </button>
+                        </Button>
                     )}
-                </div>
-
-                <div>
-                    <button
-                        type="button"
-                        className="button"
-                        onClick={props.onCancel}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="button-fill"
-                        onClick={props.onSubmit}
-                    >
-                        Submit
-                    </button>
                 </div>
             </div>
         </form>

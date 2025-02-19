@@ -1,9 +1,10 @@
 import CategoryPill from "../../components/CategoryPill";
 import useCategorySelection from "../../hooks/useCategorySelection";
+import style from "../../styles/IncomeCard.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
+import { classList } from "../../utils/htmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
-import "../../styles/IncomeCard.css";
 
 interface IncomeCardProps {
     categoryTotal: CategoryTotal;
@@ -14,7 +15,14 @@ function IncomeCard(props: IncomeCardProps) {
 
     return (
         <div
-            className={`income-card ${categorySelection.isSelected(props.categoryTotal.category ?? Uncategorized) ? "selected" : ""}`}
+            className={classList(
+                style.card,
+                categorySelection.isSelected(
+                    props.categoryTotal.category ?? Uncategorized
+                )
+                    ? style.selected
+                    : ""
+            )}
             onClick={() =>
                 categorySelection.toggleCategory(
                     props.categoryTotal.category ?? Uncategorized

@@ -1,9 +1,13 @@
 import React, { SyntheticEvent } from "react";
+import Button from "../../components/Button";
+import ButtonFill from "../../components/ButtonFill";
 import CategorySelector from "../../components/CategorySelector";
 import Spacer from "../../components/Spacer";
-import Category from "../../types/Category";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
+import Category from "../../types/Category";
 import BudgetItemFormValues from "../../types/forms/BudgetItemFormValues";
+import Input from "../../components/Input";
+import FormGroup from "../../components/FormGroup";
 
 interface BudgetItemFormProps {
     formValues: BudgetItemFormValues;
@@ -22,8 +26,8 @@ function BudgetItemForm(props: BudgetItemFormProps) {
     const globalDataCache = useGlobalDataCache();
 
     return (
-        <form className="form" onSubmit={props.onSubmit}>
-            <div className="drawer-content-body">
+        <form onSubmit={props.onSubmit}>
+            <div>
                 <h2>
                     {props.formValues.id === 0 ? "New" : "Edit"} Budget Item
                 </h2>
@@ -31,11 +35,10 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                 <Spacer height={24} />
 
                 <input name="id" type="hidden" value={props.formValues.id} />
-
-                <div className="control-group">
+                <FormGroup>
                     <h4>Category</h4>
                     <CategorySelector
-                        key={props.formValues.categoryId}
+                        categories={globalDataCache.categories.value}
                         onChange={(c: Category) => {
                             props.setFormValues({
                                 ...props.formValues,
@@ -48,59 +51,45 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                             )[0]
                         }
                     />
-                </div>
+                </FormGroup>
 
-                <div className="control-group">
+                <FormGroup>
                     <h4>Monthly Amount</h4>
-                    <input
+                    <Input
                         name="amount"
                         type="number"
                         className="ralign"
                         value={props.formValues.amount.toString()}
                         onChange={props.updateFormValues}
                     />
-                </div>
+                </FormGroup>
 
-                <div className="control-group">
+                <FormGroup>
                     <h4>Effective Date</h4>
-                    <input
+                    <Input
                         name="effectiveDate"
                         className="ralign"
                         type="date"
                         value={props.formValues.effectiveDate}
                         onChange={props.updateFormValues}
                     />
-                </div>
+                </FormGroup>
             </div>
-            <div
-                className="drawer-content-foot"
-                style={{ display: "flex", justifyContent: "space-between" }}
-            >
+            <div>
+                <div>
+                    <Button type="button" onClick={props.onCancel}>
+                        Cancel
+                    </Button>
+                    <ButtonFill type="submit">Submit</ButtonFill>
+                </div>
                 <div>
                     {props.formValues.id === 0 ? (
                         ""
                     ) : (
-                        <button
-                            type="button"
-                            className="button"
-                            onClick={props.onDelete}
-                        >
+                        <Button type="button" onClick={props.onDelete}>
                             Delete
-                        </button>
+                        </Button>
                     )}
-                </div>
-
-                <div>
-                    <button
-                        type="button"
-                        className="button"
-                        onClick={props.onCancel}
-                    >
-                        Cancel
-                    </button>
-                    <button type="submit" className="button-fill">
-                        Submit
-                    </button>
                 </div>
             </div>
         </form>

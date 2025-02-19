@@ -7,12 +7,13 @@ import InOutPills from "../../components/InOutPills";
 import Spacer from "../../components/Spacer";
 import CategorySelectionProvider from "../../contexts/CategorySelectionProvider";
 import BreakdownService from "../../services/BreakdownService";
-import "../../styles/BreakdownPage.css";
+import style from "../../styles/BreakdownPage.module.css";
 import Breakdown from "../../types/Breakdown";
 import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
 import TransactionTable from "./TransactionTable";
+import Page from "../../components/Page";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -39,18 +40,22 @@ function BreakdownPage() {
         })();
     }, [paramsAreValid, start, end, isUpdated]);
 
+    // TODO: use row here
+
     return !paramsAreValid ? (
         <>
-            <IconButton icon={BackIcon} onClick={() => navigate(-1)} />
             <h1>Invalid Parameters</h1>
         </>
     ) : (
-        <>
-            <div className="breakdown-header">
-                <IconButton icon={BackIcon} onClick={() => navigate(-1)} />
+        <Page width={1000}>
+            <div className={style.header}>
+                <IconButton
+                    title="Go back"
+                    icon={BackIcon}
+                    onClick={() => navigate(-1)}
+                />
                 {/*TODO display month count below title*/}
                 <h1
-                    style={{ marginLeft: 16 }}
                     title={
                         monthCount + " month" + (monthCount === 1 ? "" : "s")
                     }
@@ -59,9 +64,7 @@ function BreakdownPage() {
                 </h1>
             </div>
 
-            {!breakdown ? (
-                ""
-            ) : (
+            {breakdown ? (
                 <>
                     <InOutPills
                         totalIn={breakdown.totalIn}
@@ -71,12 +74,11 @@ function BreakdownPage() {
                     <Spacer height={26} />
 
                     <CategorySelectionProvider>
-                        <div className="breakdown-details-container">
-                            <div className="breakdown-details-spending-table-holder">
+                        <div className={style.details}>
+                            <div className={style.spendingTableHolder}>
                                 <SpendingTable breakdown={breakdown} />
                             </div>
-
-                            <div className="breakdown-details-income-column">
+                            <div className={style.incomeColumn}>
                                 {breakdown.categoryTotals
                                     .filter((c) => c.total > 0)
                                     .sort((a, b) => b.total - a.total)
@@ -94,8 +96,10 @@ function BreakdownPage() {
                         />
                     </CategorySelectionProvider>
                 </>
+            ) : (
+                ""
             )}
-        </>
+        </Page>
     );
 
     function refreshBreakdown() {

@@ -1,8 +1,10 @@
 import CategoryPill from "../../components/CategoryPill";
 import Checkbox from "../../components/Checkbox";
 import useCategorySelection from "../../hooks/useCategorySelection";
+import style from "../../styles/SpendingTableRow.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
+import { classList } from "../../utils/htmlHelper";
 import { formatCurrency, toFixed } from "../../utils/NumberHelper";
 
 interface BreakdownTableRowProps {
@@ -20,14 +22,15 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
 
     return (
         <tbody
-            className={isSelected ? "selected" : ""}
+            className={classList(
+                style.spendingRowGroup,
+                isSelected ? style.selected : ""
+            )}
             style={{ opacity: props.visible === false ? 0 : 100 }}
         >
             <tr>
                 <td rowSpan={2}>
-                    {props.noSelect ? (
-                        ""
-                    ) : (
+                    {!props.noSelect ? (
                         // TODO figure out if this is a good way to get it to rerender with key property
                         <Checkbox
                             key={isSelected.toString()}
@@ -36,11 +39,13 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                                 categorySelection.toggleCategory(category)
                             }
                         />
+                    ) : (
+                        ""
                     )}
                 </td>
                 <td colSpan={1}>
                     <div
-                        className="breakdown-cat-bar-start"
+                        className={style.valueBarStart}
                         style={{
                             backgroundColor: "#" + category.colour,
                             border: props.categoryTotal.category
@@ -52,7 +57,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                 </td>
                 <td colSpan={5}>
                     <div
-                        className="breakdown-cat-bar"
+                        className={style.valueBar}
                         style={{
                             backgroundColor: "#" + category.colour,
                             border: props.categoryTotal.category
@@ -67,18 +72,29 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                     ></div>
                 </td>
             </tr>
-            <tr className="breakdown-cat-value-row">
+            <tr className={style.dataRow}>
                 <td className="lalign">
-                    <CategoryPill category={props.categoryTotal.category} />
+                    <CategoryPill
+                        category={props.categoryTotal.category}
+                        style={{
+                            borderStartEndRadius: 0,
+                            borderStartStartRadius: 0,
+                            borderTop: "none",
+                        }}
+                    />
                 </td>
                 <td className="ralign">
                     {formatCurrency(props.categoryTotal.total)}
                 </td>
                 <td className="ralign">
-                    {toFixed(props.categoryTotal.percentOfIncome, 1)}%
+                    {props.categoryTotal.percentOfIncome
+                        ? toFixed(props.categoryTotal.percentOfIncome, 1) + "%"
+                        : ""}
                 </td>
                 <td className="ralign">
-                    {toFixed(props.categoryTotal.percentOfSpend, 1)}%
+                    {props.categoryTotal.percentOfSpend
+                        ? toFixed(props.categoryTotal.percentOfSpend, 1) + "%"
+                        : ""}
                 </td>
                 <td className="ralign">
                     {props.categoryTotal.budget
@@ -91,8 +107,8 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                         <span
                             className={
                                 props.categoryTotal.budgetDeviation > 0
-                                    ? "budget-dev-over"
-                                    : "budget-dev-under"
+                                    ? style.budgetOver
+                                    : style.budgetUnder
                             }
                             title={formatCurrency(
                                 props.categoryTotal.budgetDeviation * -1
@@ -115,11 +131,6 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                         ""
                     )}
                 </td>
-            </tr>
-            <tr
-                className={`breakdown-cat-spacer-row ${isSelected ? "selected" : ""}`}
-            >
-                <td colSpan={7}></td>
             </tr>
         </tbody>
     );
