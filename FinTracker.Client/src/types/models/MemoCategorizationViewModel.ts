@@ -1,10 +1,10 @@
 import Category from "../Category";
 
-type DefaultCatgorizationViewModel = {
+type MemoCatgorizationViewModel = {
     id?: number;
     memo?: string;
     categoryId?: number;
     category?: Category;
 };
 
-export default DefaultCatgorizationViewModel;
+export default MemoCatgorizationViewModel;

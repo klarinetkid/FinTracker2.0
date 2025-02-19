@@ -9,7 +9,7 @@ namespace FinTracker.Services.Data
         public DbSet<TblBudgetItem> TblBudgetItems { get; set; }
         public DbSet<TblTransaction> TblTransactions { get; set; }
         public DbSet<TblImportFileFormat> TblImportFileFormats { get; set; }
-        public DbSet<TblDefaultCategorization> TblDefaultCategorizations { get; set; }
+        public DbSet<TblMemoCategorization> TblMemoCategorizations { get; set; }
 
         // views
         public DbSet<VwCategoryTransactionCount> VwCategoryTransactionCount { get; set; }

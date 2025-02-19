@@ -4,33 +4,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class DefaultCategorizationService : BaseService
+    public class MemoCategorizationService : BaseService
     {
-        public TblCategory? GetDefaultCategory(string memo)
+        public TblCategory? GetMemoCategory(string memo)
         {
-            return db.TblDefaultCategorizations
+            return db.TblMemoCategorizations
                 .Where(e => e.Memo == memo)
                 .Select(e => e.Category)
                 .FirstOrDefault();
         }
 
-        public int BatchPatch(DefaultCategorizationViewModel[] defaultCategorizations)
+        public int BatchPatch(MemoCategorizationViewModel[] memoCategorizations)
         {
-            foreach (DefaultCategorizationViewModel categorization in defaultCategorizations)
+            foreach (MemoCategorizationViewModel categorization in memoCategorizations)
             {
                 if (categorization.Memo == null || categorization.CategoryId == null) continue;
 
-                TblDefaultCategorization? existing = db.TblDefaultCategorizations
+                TblMemoCategorization? existing = db.TblMemoCategorizations
                     .FirstOrDefault(e => e.Memo == categorization.Memo);
 
                 if (existing == null)
                 {
-                    db.TblDefaultCategorizations.Add(categorization.ToTblDefaultCategorization());
+                    db.TblMemoCategorizations.Add(categorization.ToTblMemoCategorization());
                 }
                 else if (existing.CategoryId != categorization.CategoryId.Value)
                 {
                     existing.CategoryId = categorization.CategoryId.Value;
-                    db.TblDefaultCategorizations.Update(existing);
+                    db.TblMemoCategorizations.Update(existing);
                 }
             }
 

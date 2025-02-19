@@ -48,10 +48,10 @@ Create table TblImportFileFormat (
 );
 
 ----------------------------------
----- create TblDefaultCategorization
+---- create TblMemoCategorization
 ----------------------------------
-drop table if exists TblDefaultCategorization;
-Create table TblDefaultCategorization (
+drop table if exists TblMemoCategorization;
+Create table TblMemoCategorization (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[Memo] varchar(200) NOT NULL,
 	[CategoryId] int references TblCategory(id) NOT NULL

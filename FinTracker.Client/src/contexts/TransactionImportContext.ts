@@ -1,14 +1,13 @@
 import { createContext } from "react";
-import ImportFileFormat from "../types/ImportFileFormat";
 import { FileContent } from "use-file-picker/types";
+import MemoCategorizationService from "../services/MemoCategorizationService";
 import TransactionService from "../services/TransactionService";
+import Category from "../types/Category";
+import ImportFileFormat from "../types/ImportFileFormat";
+import MemoCatgorizationViewModel from "../types/models/MemoCategorizationViewModel";
 import TransactionViewModel from "../types/models/TransactionViewModel";
 import { prepareImport } from "../utils/ImportHelper";
-import Category from "../types/Category";
-import DefaultCatgorizationViewModel from "../types/models/DefaultCategorizationViewModel";
-import DefaultCategorizationService from "../services/DefaultCategorizationService";
 
-// TODO rename transactioncategory to category
 export class TransactionImportManager {
     public Transcations: TransactionViewModel[];
     private setTransactions: React.Dispatch<
@@ -105,7 +104,7 @@ export class TransactionImportManager {
 
         if (newTransactions.length === 0) return 0;
 
-        const newDefaults: DefaultCatgorizationViewModel[] =
+        const newDefaults: MemoCatgorizationViewModel[] =
             this.Transcations.filter(
                 (t) => t.selectedForImport && t.saveDefault
             )
@@ -120,7 +119,7 @@ export class TransactionImportManager {
                 await TransactionService.createBatch(newTransactions),
             defaultsInserted:
                 newDefaults.length > 0
-                    ? await DefaultCategorizationService.patchBatch(newDefaults)
+                    ? await MemoCategorizationService.patchBatch(newDefaults)
                     : 0,
         };
 

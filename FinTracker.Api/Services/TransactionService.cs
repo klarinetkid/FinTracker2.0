@@ -6,7 +6,7 @@ namespace FinTracker.Api.Services
 {
     public class TransactionService : BaseService
     {
-        private readonly DefaultCategorizationService defaultCategorizationService = new ();
+        private readonly MemoCategorizationService memoCategorizationService = new ();
 
         public TblTransaction? PatchTransaction(int transactionId, TransactionViewModel model)
         {
@@ -29,7 +29,7 @@ namespace FinTracker.Api.Services
                     ? db.DoesTransactionExist(transaction.Date.Value, transaction.Memo, transaction.Amount.Value)
                     : false;
                 TblCategory? defaultCategory = transaction.Memo != null
-                    ? defaultCategorizationService.GetDefaultCategory(transaction.Memo)
+                    ? memoCategorizationService.GetMemoCategory(transaction.Memo)
                     : null;
                 if (defaultCategory != null)
                 {

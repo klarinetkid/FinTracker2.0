@@ -50,8 +50,8 @@ namespace FinTracker.Services.Data.Entities
         public string? Image { get; set; }
     }
 
-    [Table("TblDefaultCategorization")]
-    public class TblDefaultCategorization
+    [Table("TblMemoCategorization")]
+    public class TblMemoCategorization
     {
         [Key]
         public int Id { get; set; }

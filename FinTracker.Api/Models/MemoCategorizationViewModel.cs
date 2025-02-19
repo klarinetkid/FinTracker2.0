@@ -2,14 +2,14 @@
 
 namespace FinTracker.Api.Models
 {
-    public class DefaultCategorizationViewModel
+    public class MemoCategorizationViewModel
     {
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
 
-        public TblDefaultCategorization ToTblDefaultCategorization(int id = 0)
+        public TblMemoCategorization ToTblMemoCategorization(int id = 0)
         {
-            return new TblDefaultCategorization()
+            return new TblMemoCategorization()
             {
                 Id = id,
                 Memo = Memo,
