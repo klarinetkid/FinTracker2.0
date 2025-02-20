@@ -1,7 +1,7 @@
 import style from "../styles/Page.module.css";
 
 interface PageProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     width: number;
 }
 

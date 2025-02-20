@@ -28,32 +28,28 @@ function FormatForm(props: FormatsFormProps) {
                 <Spacer height={24} />
 
                 <input name="id" type="hidden" value={props.formValues.id} />
-                <FormGroup>
-                    <h4>Import File Format Name</h4>
+                <FormGroup fieldName="Import File Format Name">
                     <Input
                         name="importFileFormatName"
                         value={props.formValues.importFileFormatName}
                         onChange={props.updateFormValues}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Date Key</h4>
+                <FormGroup fieldName="Date Key">
                     <Input
                         name="dateKey"
                         value={props.formValues.dateKey}
                         onChange={props.updateFormValues}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Memo Format</h4>
+                <FormGroup fieldName="Memo Format">
                     <Input
                         name="memoFormat"
                         value={props.formValues.memoFormat}
                         onChange={props.updateFormValues}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Amount Key</h4>
+                <FormGroup fieldName="Amount Key">
                     <Input
                         name="amountKey"
                         value={props.formValues.amountKey}
@@ -61,8 +57,7 @@ function FormatForm(props: FormatsFormProps) {
                         data-field-type="int"
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Invert Amounts</h4>
+                <FormGroup fieldName="Invert Amounts">
                     <Select
                         name="invertAmounts"
                         value={props.formValues.invertAmounts.toString()}
@@ -72,8 +67,7 @@ function FormatForm(props: FormatsFormProps) {
                         <option>true</option>
                     </Select>
                 </FormGroup>
-                <FormGroup>
-                    <h4>Header Lines</h4>
+                <FormGroup fieldName="Header Lines">
                     <Input
                         name="headerLines"
                         type="number"
@@ -82,8 +76,7 @@ function FormatForm(props: FormatsFormProps) {
                         data-field-type="int"
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Delimiter</h4>
+                <FormGroup fieldName="Delimiter">
                     <Input
                         name="delimiter"
                         value={props.formValues.delimiter}
@@ -91,8 +84,7 @@ function FormatForm(props: FormatsFormProps) {
                         maxLength={1}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Image</h4>
+                <FormGroup fieldName="Image">
                     <Input
                         name="image"
                         value={props.formValues.image}

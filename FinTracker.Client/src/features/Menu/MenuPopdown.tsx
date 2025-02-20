@@ -141,7 +141,9 @@ function MenuPopdown(props: MenuProps) {
                                         icon={ThreeDBoxIcon}
                                     />
                                 </Link>
-                                <MenuTile title="Defaults" icon={SaveIcon} />
+                                <Link to={Pages.Memos}>
+                                    <MenuTile title="Memos" icon={SaveIcon} />
+                                </Link>
                                 <Link to={Pages.Formats}>
                                     <MenuTile title="Formats" icon={FileIcon} />
                                 </Link>

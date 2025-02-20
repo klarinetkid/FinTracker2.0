@@ -5,12 +5,13 @@
 }
 
 .details {
-    display: flex
+    display: flex;
+    gap: 14px;
 }
 
 .spendingTableHolder {
     flex-grow: 1;
-    margin-right: 20px;
+    padding: 4px;
 }
 
 .incomeColumn {

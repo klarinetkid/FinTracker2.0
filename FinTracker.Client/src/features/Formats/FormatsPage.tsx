@@ -69,9 +69,9 @@ function FormatsPage() {
             await ImportFileFormatService.putFormat(model);
         }
 
+        if (event.target instanceof HTMLButtonElement) event.target.blur();
         globalDataCache.importFileFormats.refresh();
         setIsDrawerOpen(false);
-        //return false;
     }
     async function deleteFormat() {
         await ImportFileFormatService.deleteFormat(formValues.id);

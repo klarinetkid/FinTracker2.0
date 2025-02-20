@@ -20,22 +20,24 @@
     }
 
     .selector.open .menu {
-        visibility: visible
+        max-height: 33vh;
+        border: solid black 1px;
+        transition: max-height 0.25s;
     }
 
 
 .menu {
     background: white;
-    border: solid black 1px;
     border-radius: 6px;
     position: absolute;
-    top: 32px;
-    height: 200px;
+    top: 35px;
+    max-height: 0;
     overflow-y: scroll;
-    visibility: hidden;
     min-width: 100%;
     z-index: 2;
-    overflow-x: hidden;
+    overflow: hidden;
+    transition: max-height 0.12s;
+    overflow-y: scroll;
 }
 
 

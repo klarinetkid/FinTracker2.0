@@ -18,7 +18,7 @@ interface CategoryFormProps {
 
 function CategoryForm(props: CategoryFormProps) {
     return (
-        <form className="form" onSubmit={props.onSubmit}>
+        <form onSubmit={props.onSubmit}>
             <div>
                 <h2>{props.formValues.id === 0 ? "New" : "Edit"} Category</h2>
 
@@ -33,16 +33,14 @@ function CategoryForm(props: CategoryFormProps) {
                 <Spacer height={24} />
 
                 <input name="id" type="hidden" value={props.formValues.id} />
-                <FormGroup>
-                    <h4>Category Name</h4>
+                <FormGroup fieldName="Category Name">
                     <Input
                         name="categoryName"
                         value={props.formValues.categoryName}
                         onChange={props.updateFormValues}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <h4>Colour</h4>
+                <FormGroup fieldName="Colour">
                     <Input
                         name="colour"
                         value={props.formValues.colour}

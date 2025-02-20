@@ -3,23 +3,25 @@ import BudgetItemViewModel from "../types/models/BudgetItemViewModel";
 import BaseService from "./baseService";
 
 class BudgetItemService extends BaseService {
+    constructor() {
+        super("/BudgetItems");
+    }
+
     getGrouped(): Promise<BudgetItemGroup[]> {
-        return this.get<BudgetItemGroup[]>("/BudgetItems/Grouped");
+        return this.get<BudgetItemGroup[]>("/Grouped");
     }
 
-    createBudgetItem(budgetItem: BudgetItemViewModel): Promise<BudgetItem> {
-        return this.post<BudgetItem>("/BudgetItems", budgetItem);
+    createBudgetItem(model: BudgetItemViewModel): Promise<BudgetItem> {
+        return this.post<BudgetItem>("", model);
     }
 
-    putBudgetItem(budgetItem: BudgetItemViewModel): Promise<BudgetItem> {
-        return this.put<BudgetItem>(
-            `/BudgetItems/${budgetItem.id}`,
-            budgetItem
-        );
+    putBudgetItem(model: BudgetItemViewModel): Promise<BudgetItem> {
+        const { id, ...values } = model;
+        return this.put<BudgetItem>(`/${id}`, values);
     }
 
-    deleteBudgetItem(budgetItem: Pick<BudgetItem, "id">): Promise<void> {
-        return this.delete(`/BudgetItems/${budgetItem.id}`);
+    deleteBudgetItem(id: number): Promise<void> {
+        return this.delete(`/${id}`);
     }
 }
 

@@ -12,14 +12,15 @@ interface CategorySelectorProps {
     selectedId?: number;
     isOpen?: boolean;
     disabled?: boolean;
+    tabIndex?: number;
 }
 
 function CategorySelector(props: CategorySelectorProps) {
     const controlled = props.onChange ? true : false;
     const defaultValue = props.value ?? Uncategorized;
 
-    const ref = useRef<HTMLDivElement>(null);
-    //useClickOutside(ref, () => setIsOpen(false));
+    const selectorRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
     const [search, setSearch] = useState("");
@@ -27,32 +28,32 @@ function CategorySelector(props: CategorySelectorProps) {
         props.value ?? defaultValue
     );
 
+    // focus if open by props
     useEffect(() => {
-        if (props.isOpen) ref.current?.focus();
+        if (props.isOpen) selectorRef.current?.focus();
     }, [props.isOpen]);
 
+    // onclose, trigger event and scroll menu back to top
     useEffect(() => {
-        if (!isOpen && props.onClose) props.onClose();
+        if (!isOpen) {
+            if (props.onClose) props.onClose();
+            if (menuRef.current) menuRef.current.scrollTop = 0;
+        }
     }, [isOpen, props]);
 
-    useEffect(() => {
-        if (search.length === 0) return;
-    }, [search]);
-
     const options = [...props.categories, Uncategorized];
-
     const value = controlled ? props.value : selectedValue;
 
     return (
         <div
-            ref={ref}
+            ref={selectorRef}
             className={classList(
                 styles.selector,
                 isOpen ? styles.open : "",
                 props.disabled ? styles.disabled : ""
             )}
             onClick={() => !props.disabled && setIsOpen(!isOpen)}
-            tabIndex={10}
+            tabIndex={props.tabIndex ?? 0}
             onKeyDown={onKeyDown}
             onBlur={() => {
                 setIsOpen(false);
@@ -60,7 +61,7 @@ function CategorySelector(props: CategorySelectorProps) {
         >
             <CategoryPill category={value} />
 
-            <div key={isOpen.toString()} className={styles.menu}>
+            <div ref={menuRef} className={styles.menu}>
                 {options.map((c, i) => (
                     <div
                         key={i}
@@ -93,9 +94,9 @@ function CategorySelector(props: CategorySelectorProps) {
 
         if (event.key.length !== 1) return;
 
-        trySetValueFromSearch(search + event.key) ||
-            trySetValueFromSearch(event.key) ||
-            setSearch("");
+        trySetValueFromSearch(search + event.key) || // try adding to current search
+            trySetValueFromSearch(event.key) || // try new search with this key
+            setSearch(""); // if still none reset search
     }
 
     function trySetValueFromSearch(str: string): boolean {

@@ -35,8 +35,7 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                 <Spacer height={24} />
 
                 <input name="id" type="hidden" value={props.formValues.id} />
-                <FormGroup>
-                    <h4>Category</h4>
+                <FormGroup fieldName="Category">
                     <CategorySelector
                         categories={globalDataCache.categories.value}
                         onChange={(c: Category) => {
@@ -53,8 +52,7 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                     />
                 </FormGroup>
 
-                <FormGroup>
-                    <h4>Monthly Amount</h4>
+                <FormGroup fieldName="Monthly Amount">
                     <Input
                         name="amount"
                         type="number"
@@ -64,8 +62,7 @@ function BudgetItemForm(props: BudgetItemFormProps) {
                     />
                 </FormGroup>
 
-                <FormGroup>
-                    <h4>Effective Date</h4>
+                <FormGroup fieldName="Effective Date">
                     <Input
                         name="effectiveDate"
                         className="ralign"

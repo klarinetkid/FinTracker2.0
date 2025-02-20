@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 

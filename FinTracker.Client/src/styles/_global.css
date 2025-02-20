@@ -73,6 +73,10 @@ h1 {
     font-family: monospace
 }
 
+.italic {
+    font-style: italic;
+}
+
 /*
     TODO: Theme
 */
@@ -86,9 +90,9 @@ h1 {
     a:hover {
         color: #747bff;
     }
-}
+}*/
 
-:root {
+/*:root {
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;

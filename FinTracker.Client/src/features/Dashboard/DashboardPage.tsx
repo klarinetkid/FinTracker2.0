@@ -12,6 +12,7 @@ import DashboardIncrementButton from "./DashboardIncrementButton";
 import MonthSummaryCard from "./MonthSummaryCard";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import BreakdownTable from "./BreakdownTable";
 
 function DashboardPage() {
     const [searchParams] = useSearchParams();
@@ -42,48 +43,59 @@ function DashboardPage() {
         BreakdownService.getYearSummaries(year).then(setBreakdowns);
     }, [year]);
 
+    // width 800
     return (
-        <Page width={800}>
-            <Row justifyContent="space-around">
-                <DashboardIncrementButton
-                    title="Previous year"
-                    icon={ArrowLeft}
-                    increment={-1}
-                    currentYear={year}
-                    setCurrentYear={setYear}
-                />
-
-                <h1>Dashboard {year}</h1>
-
-                <DashboardIncrementButton
-                    title="Next year"
-                    icon={ArrowRight}
-                    increment={1}
-                    currentYear={year}
-                    setCurrentYear={setYear}
-                />
-            </Row>
-
-            {!breakdowns ? (
-                ""
-            ) : (
-                <>
-                    <InOutPills
-                        totalIn={getTotalIn(breakdowns)}
-                        totalOut={getTotalOut(breakdowns)}
+        <Page width={1100}>
+            <Row justifyContent="center">
+                <Row justifyContent="space-around" style={{ width: 700, userSelect: "none" }}>
+                    <DashboardIncrementButton
+                        title="Previous year"
+                        icon={ArrowLeft}
+                        increment={-1}
+                        currentYear={year}
+                        setCurrentYear={setYear}
                     />
 
-                    <Spacer height={26} />
+                    <h1>Dashboard {year}</h1>
 
-                    {breakdowns
-                        .filter((b) => b.categoryTotals.length > 0)
-                        .map((b, i) => (
-                            <MonthSummaryCard key={i} breakdown={b} />
-                        ))}
+                    <DashboardIncrementButton
+                        title="Next year"
+                        icon={ArrowRight}
+                        increment={1}
+                        currentYear={year}
+                        setCurrentYear={setYear}
+                    />
+                </Row>
+            </Row>
+
+            {breakdowns ? (
+                <>
+                    <Row justifyContent="center">
+                        <InOutPills
+                            totalIn={getTotalIn(breakdowns)}
+                            totalOut={getTotalOut(breakdowns)}
+                        />
+                    </Row>
+
+                    <Spacer height={34} />
+
+                    <BreakdownTable breakowns={breakdowns} />
                 </>
+            ) : (
+                ""
             )}
         </Page>
     );
+
+    //<div
+    //    style={{ backgroundColor: "#eeeeee", borderRadius: 12 }}
+    //>
+    //    {breakdowns
+    //        .filter((b) => b.categoryTotals.length > 0)
+    //        .map((b, i) => (
+    //            <MonthSummaryCard key={i} breakdown={b} />
+    //        ))}
+    //</div>
 }
 
 export default DashboardPage;

@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\features\Import\" />
+    <Folder Include="src\features\Memos\" />
   </ItemGroup>
 </Project>

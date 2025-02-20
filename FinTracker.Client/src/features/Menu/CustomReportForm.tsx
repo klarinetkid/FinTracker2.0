@@ -1,11 +1,10 @@
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { toBreakdown } from "../../utils/BreakdownHelper";
-import buttonStyle from "../../styles/common/Button.module.css";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
-import Input from "../../components/Input";
 import FormGroup from "../../components/FormGroup";
+import Input from "../../components/Input";
+import { toBreakdown } from "../../utils/BreakdownHelper";
 
 interface CustomReportFormProps {
     onCancel: () => void;
@@ -19,13 +18,11 @@ function CustomReportForm(props: CustomReportFormProps) {
             <div>
                 <h2>Custom Report</h2>
 
-                <FormGroup>
-                    <h4>Start</h4>
-                    <Input name="start" placeholder="yyyy-MM-dd" />
+                <FormGroup fieldName="Start">
+                    <Input name="start" type="date" placeholder="yyyy-MM-dd" />
                 </FormGroup>
-                <FormGroup>
-                    <h4>End</h4>
-                    <Input name="end" placeholder="yyyy-MM-dd" />
+                <FormGroup fieldName="End">
+                    <Input name="end" type="date" placeholder="yyyy-MM-dd" />
                 </FormGroup>
             </div>
             <div>

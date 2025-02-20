@@ -1,12 +1,16 @@
 import styles from "../styles/FormGroup.module.css";
-import { classList } from "../utils/htmlHelper";
 
-function FormGroup(props: React.HTMLAttributes<HTMLDivElement>) {
+interface FormGroupProps {
+    fieldName: string;
+    children?: React.ReactNode;
+}
+
+function FormGroup(props: FormGroupProps) {
     return (
-        <div
-            {...props}
-            className={classList(styles.formGroup, props.className)}
-        />
+        <div className={styles.formGroup}>
+            <h4>{props.fieldName}</h4>
+            {props.children}
+        </div>
     );
 }
 

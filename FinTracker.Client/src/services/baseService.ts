@@ -1,13 +1,18 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+    AxiosError,
+    AxiosInstance,
+    AxiosRequestConfig,
+    AxiosResponse,
+} from "axios";
 
-const baseURL = "/api";
+const ApiBaseURL = "/api";
 
 class BaseService {
     protected axiosInstance: AxiosInstance;
 
-    constructor() {
+    constructor(area: string) {
         this.axiosInstance = axios.create({
-            baseURL,
+            baseURL: ApiBaseURL + area,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -23,7 +28,7 @@ class BaseService {
         return response.data;
     }
 
-    private handleError(error: any) {
+    private handleError(error: AxiosError) {
         // Handle errors here (e.g., logging, showing user-friendly messages)
         return Promise.reject(error);
     }
@@ -34,7 +39,7 @@ class BaseService {
 
     protected post<T>(
         url: string,
-        data: any,
+        data: unknown,
         config?: AxiosRequestConfig
     ): Promise<T> {
         return this.axiosInstance.post(url, data, config);
@@ -42,7 +47,7 @@ class BaseService {
 
     protected put<T>(
         url: string,
-        data: any,
+        data: unknown,
         config?: AxiosRequestConfig
     ): Promise<T> {
         return this.axiosInstance.put(url, data, config);
@@ -50,7 +55,7 @@ class BaseService {
 
     protected patch<T>(
         url: string,
-        data: any,
+        data: unknown,
         config?: AxiosRequestConfig
     ): Promise<T> {
         return this.axiosInstance.patch(url, data, config);

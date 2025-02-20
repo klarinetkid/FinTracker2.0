@@ -66,6 +66,7 @@ function ImportTableRow(props: ImportTableRowProps) {
                 )}
             >
                 <CategorySelector
+                    tabIndex={1}
                     categories={globalDataCache.categories.value}
                     value={props.transaction.category}
                     onChange={updateCategory}

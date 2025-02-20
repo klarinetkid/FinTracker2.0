@@ -12,7 +12,8 @@ namespace FinTracker.Api.Services
                 .Include(b => b.Category)
                 .GroupBy(b => b.Category)
                 .AsEnumerable()
-                .Select(g => new BudgetItemGroupViewModel(g.Key, g.OrderByDescending(e => e.EffectiveDate)))
+                .Where(g => g.Key != null)
+                .Select(g => new BudgetItemGroupViewModel(g.Key!, g.OrderByDescending(e => e.EffectiveDate)))
                 .OrderBy(g => g.Category.CategoryName)
                 .ToArray();
         }

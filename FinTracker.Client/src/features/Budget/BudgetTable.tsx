@@ -14,20 +14,30 @@ interface BudgetTableProps {
 
 function BudgetTable(props: BudgetTableProps) {
     return (
-        <GroupedTable selectable={true}>
+        <GroupedTable selectable={false}>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Category</th>
+                    <th>Monthly Amount</th>
+                    <th>Effective Date</th>
+                    <th></th>
+                </tr>
+            </thead>
             {props.groupedBudgets.map((group, groupIndex) => (
                 <GroupedTableRowSet key={groupIndex}>
                     {group.budgetItems.map((budgetItem, i) => (
-                        <GroupedTableRow
-                            key={i}
-                            rowIndex={i}
-                            onClick={() => props.editBudgetItem(budgetItem)}
-                        >
+                        <GroupedTableRow key={i} rowIndex={i}>
                             <td className="bold centre">
                                 {i === 0 ? groupIndex + 1 : ""}
                             </td>
                             <td className="centre selectable">
-                                <CategoryPill category={budgetItem.category} />
+                                <CategoryPill
+                                    category={budgetItem.category}
+                                    onClick={() =>
+                                        props.editBudgetItem(budgetItem)
+                                    }
+                                />
                             </td>
                             <td>
                                 <Input

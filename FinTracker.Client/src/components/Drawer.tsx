@@ -5,7 +5,7 @@ import { classList } from "../utils/htmlHelper";
 interface DrawerProps {
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 function Drawer(props: DrawerProps) {

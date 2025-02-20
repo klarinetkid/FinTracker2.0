@@ -11,6 +11,7 @@ import ImportPage from "./features/Import/ImportPage";
 import "./styles/_global.css";
 import "./styles/_variables.css";
 import Pages from "./types/Pages";
+import MemosPage from "./features/Memos/MemosPage";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                                 </TransactionImportProvider>
                             }
                         />
+                        <Route path={Pages.Memos} element={<MemosPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

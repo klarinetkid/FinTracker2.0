@@ -67,7 +67,6 @@ function CategoriesPage() {
     }
     async function submitCategory(event: SyntheticEvent) {
         event.preventDefault();
-
         const model = CategoryFormValuesToModel(formValues);
 
         if (formValues.id === 0) {
@@ -75,7 +74,8 @@ function CategoriesPage() {
         } else {
             await CategoryService.putCategory(model);
         }
-        document.activeElement.blur(); // TODO: is there a better way to do this?
+
+        if (event.target instanceof HTMLButtonElement) event.target.blur();
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

@@ -1,4 +1,4 @@
-import { Children, useContext } from "react";
+import { useContext } from "react";
 import ExpandDownIcon from "../assets/Expand_down.svg?react";
 import ExpandUpIcon from "../assets/Expand_up.svg?react";
 import { GroupedTableContext } from "../contexts/GroupedTableContext";

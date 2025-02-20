@@ -5,7 +5,7 @@ drop table if exists TblCategory;
 Create table TblCategory (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[CategoryName] varchar(40) NOT NULL,
-	[Colour] varchar(6) NOT NULL
+	[Colour] varchar(25) NOT NULL
 );
 
 ----------------------------------

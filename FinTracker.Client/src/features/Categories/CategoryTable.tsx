@@ -9,7 +9,7 @@ interface CategoryTableProps {
 
 function CategoryTable(props: CategoryTableProps) {
     return (
-        <Table selectable={true}>
+        <Table>
             <thead>
                 <tr>
                     <th></th>
@@ -20,12 +20,15 @@ function CategoryTable(props: CategoryTableProps) {
             </thead>
             <tbody>
                 {props.categories.map((category, i) => (
-                    <tr onClick={() => props.editCategory(category)}>
+                    <tr key={i}>
                         <td className="bold centre">{i + 1}</td>
                         <td className="centre">
-                            <CategoryPill category={category} />
+                            <CategoryPill
+                                category={category}
+                                onClick={() => props.editCategory(category)}
+                            />
                         </td>
-                        <td className="centre monospace">#{category.colour}</td>
+                        <td className="centre monospace">{category.colour}</td>
                         <td className="ralign">{category.transactionCount}</td>
                     </tr>
                 ))}

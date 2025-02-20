@@ -14,7 +14,10 @@ export function prepareImport(
     return allRows.map((r) => csvRowToTransaction(format, r));
 }
 
-function parseCsv(format: ImportFileFormat, content: string) {
+function parseCsv(
+    format: ImportFileFormat,
+    content: string
+): { [x: string]: string }[] {
     const lines = content.split(/[\r\n]+/);
     const header = lines[format.headerLines].split(format.delimiter);
 
@@ -30,7 +33,7 @@ function parseCsv(format: ImportFileFormat, content: string) {
 
 function csvRowToTransaction(
     format: ImportFileFormat,
-    row: any
+    row: { [x: string]: string }
 ): TransactionViewModel {
     return {
         date: moment(row[format.dateKey]).format("yyyy-MM-DD"),
@@ -43,7 +46,7 @@ function csvRowToTransaction(
     };
 }
 
-function getTransactionMemo(memoFormat: string, row: any) {
+function getTransactionMemo(memoFormat: string, row: { [x: string]: string }) {
     Object.keys(row).map((k) => {
         memoFormat = memoFormat.replaceAll(`{${k}}`, row[k]);
     });

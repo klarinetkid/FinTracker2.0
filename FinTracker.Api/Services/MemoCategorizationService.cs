@@ -14,9 +14,55 @@ namespace FinTracker.Api.Services
                 .FirstOrDefault();
         }
 
-        public int BatchPatch(MemoCategorizationViewModel[] memoCategorizations)
+        public TblMemoCategorization CreateMemoCategorization(MemoCategorizationViewModel model)
         {
-            foreach (MemoCategorizationViewModel categorization in memoCategorizations)
+            TblMemoCategorization tblCategorization = model.ToTblMemoCategorization();
+            db.TblMemoCategorizations.Entry(tblCategorization).State = EntityState.Added;
+            db.SaveChanges();
+            return tblCategorization;
+        }
+
+        public TblMemoCategorization? PatchMemoCategorization(int id, MemoCategorizationViewModel model)
+        {
+            TblMemoCategorization? tblCategorization = db.TblMemoCategorizations.Find(id);
+            if (tblCategorization != null)
+            {
+                if (model.CategoryId == null) throw new ArgumentException();
+
+                tblCategorization.CategoryId = model.CategoryId.Value;
+                db.TblMemoCategorizations.Entry(tblCategorization).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return db.TblMemoCategorizations.Include(e => e.Category)
+                .FirstOrDefault(e => e.Id == id);
+        }
+
+        public void DeleteMemoCategorization(int id)
+        {
+            TblMemoCategorization? categorization = db.TblMemoCategorizations.Find(id);
+            if (categorization != null)
+            {
+                db.TblMemoCategorizations.Entry(categorization).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+        }
+
+        public MemoCategorizationGroupViewModel[] GetGrouped()
+        {
+            return db.TblMemoCategorizations
+                .Include(e => e.Category)
+                .AsEnumerable()
+                .GroupBy(e => e.Category)
+                .Where(g => g.Key != null)
+                .Select(g => new MemoCategorizationGroupViewModel(g.Key!, g.OrderBy(e => e.Memo)))
+                .OrderBy(g => g.Category.CategoryName)
+                .ToArray();
+        }
+
+        public int BatchPatch(MemoCategorizationViewModel[] categorizations)
+        {
+            foreach (MemoCategorizationViewModel categorization in categorizations)
             {
                 if (categorization.Memo == null || categorization.CategoryId == null) continue;
 

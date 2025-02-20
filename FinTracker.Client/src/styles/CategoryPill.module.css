@@ -13,3 +13,11 @@
         border: solid 1px #333333;
         color: #333333;
     }
+
+    .pill.clickable:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-decoration-skip-ink: all;
+        outline: solid 2px blue;
+        cursor: pointer;
+    }

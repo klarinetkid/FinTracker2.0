@@ -3,23 +3,25 @@ import ImportFileFormatViewModel from "../types/models/ImportFileFormatViewModel
 import BaseService from "./baseService";
 
 class ImportFileFormatService extends BaseService {
+    constructor() {
+        super("/ImportFileFormats");
+    }
+
     getFormats(): Promise<ImportFileFormat[]> {
-        return this.get("/ImportFileFormats");
+        return this.get("");
     }
 
-    createFormat(format: ImportFileFormatViewModel): Promise<ImportFileFormat> {
-        return this.post<ImportFileFormat>("/ImportFileFormats", format);
+    createFormat(model: ImportFileFormatViewModel): Promise<ImportFileFormat> {
+        return this.post<ImportFileFormat>("", model);
     }
 
-    putFormat(format: ImportFileFormatViewModel): Promise<ImportFileFormat> {
-        return this.put<ImportFileFormat>(
-            `/ImportFileFormats/${format.id}`,
-            format
-        );
+    putFormat(model: ImportFileFormatViewModel): Promise<ImportFileFormat> {
+        const { id, ...values } = model;
+        return this.put<ImportFileFormat>(`/${id}`, values);
     }
 
-    deleteFormat(formatId: number): Promise<void> {
-        return this.delete(`/ImportFileFormats/${formatId}`);
+    deleteFormat(id: number): Promise<void> {
+        return this.delete(`/${id}`);
     }
 }
 

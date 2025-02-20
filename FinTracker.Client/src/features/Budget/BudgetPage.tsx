@@ -75,11 +75,13 @@ function BudgetPage() {
             await BudgetItemService.putBudgetItem(model);
         }
 
+        if (event.target instanceof HTMLButtonElement) event.target.blur();
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }
     async function deleteFormat() {
-        await BudgetItemService.deleteBudgetItem(formValues);
+        if (!formValues.categoryId) return;
+        await BudgetItemService.deleteBudgetItem(formValues.categoryId);
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }
