@@ -12,19 +12,19 @@ namespace FinTracker.Api.Models
         public CategoryTotal[] CategoryTotals { get; set; }
         private IEnumerable<TblTransaction> transactions;
         
-        public int TotalIn
+        public Int64 TotalIn
         {
             get
             {
-                return transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
+                return transactions.Where(t => t.Amount > 0).Sum(t => (Int64)t.Amount);
             }
         }
 
-        public int TotalOut
+        public Int64 TotalOut
         {
             get
             {
-                return transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+                return transactions.Where(t => t.Amount < 0).Sum(t => (Int64)t.Amount);
             }
         }
 

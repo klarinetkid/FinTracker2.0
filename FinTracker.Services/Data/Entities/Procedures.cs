@@ -9,12 +9,12 @@ namespace FinTracker.Services.Data.Entities
         [NotMapped]
         public TblCategory? Category { get; set; }
 
-        public int Total { get; set; }
+        public Int64 Total { get; set; }
 
         public double? PercentOfIncome { get; set; }
         public double? PercentOfSpend { get; set; }
         
-        public int? Budget { get; set; }
-        public int? BudgetDeviation { get; set; }
+        public Int64? Budget { get; set; }
+        public Int64? BudgetDeviation { get; set; }
     }
 }
