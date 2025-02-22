@@ -5,6 +5,6 @@ namespace FinTracker.Api.Services
 {
     public class BaseService
     {
-        internal ApplicationDbContext db = Helper.GetDbContext();
+        internal ApplicationDbContext db = new ApplicationDbContext(Helper.AppConfig.ConnectionString);
     }
 }

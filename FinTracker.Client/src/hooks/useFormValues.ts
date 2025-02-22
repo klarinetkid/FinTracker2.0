@@ -1,33 +1,46 @@
 import { useState } from "react";
+import { ErrorResponse } from "../services/baseService";
 
-export default function useFormValues<T>(
-    defaultValues: T
-): [
-    T,
-    React.Dispatch<React.SetStateAction<T>>,
-    (
+export type FormValues<T> = {
+    values: T;
+    setValues: React.Dispatch<React.SetStateAction<T>>;
+    updateValue: (
         event:
             | React.ChangeEvent<HTMLInputElement>
             | React.ChangeEvent<HTMLSelectElement>
-    ) => void,
-] {
-    const [formValues, setFormValues] = useState<T>(defaultValues);
+    ) => void;
 
-    const updateFormValues = (
+    getFieldError: (field: string) => string | undefined;
+    setErrors: React.Dispatch<React.SetStateAction<ErrorResponse | undefined>>;
+};
+
+export function useFormValues<T>(defaultValues: T): FormValues<T> {
+    const [values, setValues] = useState<T>(defaultValues);
+    const [errorResponse, setErrors] = useState<ErrorResponse>();
+
+    const updateValue = (
         event:
             | React.ChangeEvent<HTMLInputElement>
             | React.ChangeEvent<HTMLSelectElement>
     ) => {
         const { name, value } = event.target;
-        //console.log({
-        //    ...formValues,
-        //    [event.target.name]: value,
-        //});
-        setFormValues({
-            ...formValues,
+
+        setValues({
+            ...values,
             [name]: value,
         });
     };
 
-    return [formValues, setFormValues, updateFormValues];
+    const getFieldError = (field: string): string | undefined => {
+        const errors = errorResponse?.errors?.[field];
+        return errors ? errors[0] : undefined;
+    };
+
+    return {
+        values,
+        setValues,
+        updateValue,
+        getFieldError,
+        setErrors,
+    };
 }

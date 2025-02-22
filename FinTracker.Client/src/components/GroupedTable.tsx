@@ -1,4 +1,4 @@
-import style from "../styles/GroupedTable.module.css";
+import styles from "../styles/GroupedTable.module.css";
 import Table from "./Table";
 
 interface GroupedTableProps {
@@ -6,7 +6,7 @@ interface GroupedTableProps {
 }
 
 function GroupedTable(props: GroupedTableProps) {
-    return <Table className={style.table}>{props.children}</Table>;
+    return <Table className={styles.table}>{props.children}</Table>;
 }
 
 export default GroupedTable;

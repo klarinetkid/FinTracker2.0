@@ -1,19 +1,17 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import Drawer from "../../components/Drawer";
-import useFormValues from "../../hooks/useFormValues";
-import CategoryService from "../../services/CategoryService";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
-import CategoryForm from "./CategoryForm";
-import CategoryTable from "./CategoryTable";
-import { CategoryTransactionCount } from "../../types/Category";
+import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
-import CategoryFormValues, {
-    CategoryFormDefaults,
-    CategoryFormValuesToModel,
-    CategoryToFormValues,
-} from "../../types/forms/CategoryFormValues";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import { useFormValues } from "../../hooks/useFormValues";
+import CategoryService from "../../services/CategoryService";
+import { CategoryTransactionCount } from "../../types/Category";
+import CategoryViewModel from "../../types/CategoryViewModel";
+import CategoryForm from "./CategoryForm";
+import CategoryTable from "./CategoryTable";
+import { AxiosError } from "axios";
+import { ErrorResponse } from "../../services/baseService";
 
 function CategoriesPage() {
     const [categories, setCategories] = useState<CategoryTransactionCount[]>(
@@ -21,16 +19,14 @@ function CategoriesPage() {
     );
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);
-
-    const [formValues, setFormValues, updateFormValues] =
-        useFormValues<CategoryFormValues>(CategoryFormDefaults);
+    const formValues = useFormValues<CategoryViewModel>({});
 
     useEffect(() => {
         CategoryService.getCategoryTransactionCounts().then(setCategories);
     }, [isRefreshed]);
 
     return (
-        <Page width={600}>
+        <Page width={800}>
             <Row justifyContent="space-between">
                 <h1>Categories</h1>
                 <IconButton
@@ -48,7 +44,6 @@ function CategoriesPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <CategoryForm
                     formValues={formValues}
-                    updateFormValues={updateFormValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteCategory}
                     onSubmit={submitCategory}
@@ -58,29 +53,36 @@ function CategoriesPage() {
     );
 
     function newCategory() {
-        setFormValues(CategoryFormDefaults);
+        formValues.setErrors(undefined);
+        formValues.setValues({});
         setIsDrawerOpen(true);
     }
     function editCategory(category: CategoryTransactionCount) {
-        setFormValues(CategoryToFormValues(category));
+        formValues.setErrors(undefined);
+        formValues.setValues(category);
         setIsDrawerOpen(true);
     }
-    async function submitCategory(event: SyntheticEvent) {
+    function submitCategory(event: SyntheticEvent) {
         event.preventDefault();
-        const model = CategoryFormValuesToModel(formValues);
 
-        if (formValues.id === 0) {
-            await CategoryService.createCategory(model);
-        } else {
-            await CategoryService.putCategory(model);
-        }
+        if (!formValues.values) return;
 
-        if (event.target instanceof HTMLButtonElement) event.target.blur();
-        setIsRefreshed(!isRefreshed);
-        setIsDrawerOpen(false);
+        (formValues.values.id
+            ? CategoryService.putCategory(formValues.values)
+            : CategoryService.createCategory(formValues.values)
+        )
+            .then(() => {
+                if (event.target instanceof HTMLButtonElement) event.target.blur();
+                setIsRefreshed(!isRefreshed);
+                setIsDrawerOpen(false);
+            })
+            .catch((error: AxiosError<ErrorResponse>) => {
+                formValues.setErrors(error.response?.data);
+            });
     }
     async function deleteCategory() {
-        await CategoryService.deleteCategory(formValues.id);
+        if (!formValues.values.id) return;
+        await CategoryService.deleteCategory(formValues.values.id);
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

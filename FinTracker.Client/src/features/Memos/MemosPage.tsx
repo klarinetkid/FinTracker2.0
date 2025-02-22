@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
-import MemoCategorizationService from "../../services/MemoCategorizationService";
-import MemoCategorizationGroupViewModel from "../../types/models/MemoCategorizationGroupViewModel";
+import { SyntheticEvent, useEffect, useState } from "react";
+import Drawer from "../../components/Drawer";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import MemoTable from "./MemoTable";
-import Drawer from "../../components/Drawer";
+import { useFormValues } from "../../hooks/useFormValues";
+import MemoService from "../../services/MemoService";
+import Category from "../../types/Category";
+import Grouping from "../../types/Grouping";
+import Memo from "../../types/Memo";
+import MemoViewModel from "../../types/MemoViewModel";
 import MemoForm from "./MemoForm";
-import MemoCatgorizationViewModel from "../../types/models/MemoCategorizationViewModel";
+import MemoTable from "./MemoTable";
 
 function MemosPage() {
-    const [groupedMemos, setGroupedMemos] = useState<MemoCategorizationGroupViewModel[]>([]);
+    const [groupedMemos, setGroupedMemos] = useState<
+        Grouping<Category, Memo>[]
+    >([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);
 
-    //const [formValues, setFormValues, updateFormValues] =
-    //    useFormValues<BudgetItemFormValues>(BudgetItemFormDefaults);
+    const formValues = useFormValues<MemoViewModel>({});
 
     useEffect(() => {
-        MemoCategorizationService.getGrouped().then(setGroupedMemos);
+        MemoService.getGrouped().then(setGroupedMemos);
     }, [isRefreshed]);
 
     return (
@@ -29,28 +33,32 @@ function MemosPage() {
             <MemoTable memos={groupedMemos} editMemo={editMemo} />
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-                <MemoForm />
+                <MemoForm
+                    formValues={formValues}
+                    onSubmit={submitMemo}
+                    onCancel={() => setIsDrawerOpen(false)}
+                    onDelete={deleteMemo}
+                />
             </Drawer>
         </Page>
     );
 
-    function editMemo(memo: MemoCatgorizationViewModel) {
-        //setFormValues(BudgetItemToFormValues(budgetItem));
+    function editMemo(memo: MemoViewModel) {
+        formValues.setValues(memo);
         setIsDrawerOpen(true);
     }
     async function submitMemo(event: SyntheticEvent) {
         event.preventDefault();
 
-        const model = {}; // BudgetFormValuesToModel(formValues);
-        await MemoCategorizationService.patchCategorization(model);
+        await MemoService.patchCategorization(formValues.values);
 
         if (event.target instanceof HTMLButtonElement) event.target.blur();
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }
     async function deleteMemo() {
-        //if (!formValues.categoryId) return;
-        //await MemoCategorizationService.deleteCategorization(formValues.categoryId);
+        if (!formValues.values.id) return;
+        await MemoService.deleteMemo(formValues.values.id);
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

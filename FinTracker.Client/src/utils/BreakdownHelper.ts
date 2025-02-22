@@ -19,7 +19,7 @@ export function breakdownParamsAreValid(start: Moment, end: Moment) {
     return start.isValid() && end.isValid() && end.isAfter(start);
 }
 
-export function toBreakdown(start: Moment | Date, end: Moment | Date) {
+export function toBreakdown(start: Moment | string, end: Moment | string) {
     return {
         pathname: Pages.Breakdown,
         search: createSearchParams({

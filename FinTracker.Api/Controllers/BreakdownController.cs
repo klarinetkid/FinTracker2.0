@@ -16,12 +16,26 @@ namespace FinTracker.Api.Controllers
             return service.GetBreakdown(query);
         }
 
+        [HttpGet("Weekly/{year?}")]
+        public IEnumerable<BreakdownViewModel> GetWeeklyBreakdownsForYear(int? year)
+        {
+            if (year == null) throw new ArgumentNullException();
+
+            return service.GetWeeklyBreakdownsForYear(year.Value);
+        }
+
         [HttpGet("Monthly/{year?}")]
         public IEnumerable<BreakdownViewModel> GetMonthlyBreakdownsForYear(int? year)
         {
             if (year == null) throw new ArgumentNullException();
 
             return service.GetMonthlyBreakdownsForYear(year.Value);
+        }
+
+        [HttpGet("Yearly")]
+        public IEnumerable<BreakdownViewModel> GetYearlyBreakdowns()
+        {
+            return service.GetYearlyBreakdowns();
         }
     }
 }

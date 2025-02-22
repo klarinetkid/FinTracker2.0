@@ -1,30 +1,32 @@
+import moment from "moment";
 import { SyntheticEvent, useEffect, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import useFormValues from "../../hooks/useFormValues";
-import BudgetItemService from "../../services/BudgetItemService";
-import BudgetItem, { BudgetItemGroup } from "../../types/BudgetItem";
-import BudgetItemFormValues, {
-    BudgetFormValuesToModel,
-    BudgetItemFormDefaults,
-    BudgetItemToFormValues,
-} from "../../types/forms/BudgetItemFormValues";
-import BudgetItemForm from "./BudgetItemForm";
+import { useFormValues } from "../../hooks/useFormValues";
+import BudgetService from "../../services/BudgetService";
+import Budget from "../../types/Budget";
+import BudgetViewModel from "../../types/BudgetViewModel";
+import Category from "../../types/Category";
+import Grouping from "../../types/Grouping";
+import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
+import { AxiosError } from "axios";
+import { ErrorResponse } from "../../services/baseService";
 
 function BudgetPage() {
-    const [groupedBudgets, setGroupedBudgets] = useState<BudgetItemGroup[]>([]);
+    const [groupedBudgets, setGroupedBudgets] = useState<
+        Grouping<Category, Budget>[]
+    >([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);
 
-    const [formValues, setFormValues, updateFormValues] =
-        useFormValues<BudgetItemFormValues>(BudgetItemFormDefaults);
+    const formValues = useFormValues<BudgetViewModel>({});
 
     useEffect(() => {
-        BudgetItemService.getGrouped().then(setGroupedBudgets);
+        BudgetService.getGrouped().then(setGroupedBudgets);
     }, [isRefreshed]);
 
     return (
@@ -34,54 +36,74 @@ function BudgetPage() {
                 <IconButton
                     title="New budget item"
                     icon={AddIcon}
-                    onClick={newBudgetItem}
+                    onClick={newBudget}
                 />
             </Row>
 
             <BudgetTable
                 groupedBudgets={groupedBudgets}
-                editBudgetItem={editBudgetItem}
+                editBudget={editBudget}
             />
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-                <BudgetItemForm
+                <BudgetForm
                     formValues={formValues}
-                    updateFormValues={updateFormValues}
-                    setFormValues={setFormValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteFormat}
-                    onSubmit={submitBudgetItem}
+                    onSubmit={submitBudget}
                 />
             </Drawer>
         </Page>
     );
 
-    function newBudgetItem() {
-        setFormValues(BudgetItemFormDefaults);
+    function newBudget() {
+        formValues.setErrors(undefined);
+        formValues.setValues({
+            amount: "0.00",
+            effectiveDate: moment().format("yyyy-MM-DD"),
+        });
         setIsDrawerOpen(true);
     }
-    function editBudgetItem(budgetItem: BudgetItem) {
-        setFormValues(BudgetItemToFormValues(budgetItem));
+    function editBudget(Budget: Budget) {
+        formValues.setErrors(undefined);
+        const model = {
+            ...Budget,
+            category: undefined,
+            amount: (Budget.amount / 100).toFixed(2),
+        };
+        formValues.setValues(model);
         setIsDrawerOpen(true);
     }
-    async function submitBudgetItem(event: SyntheticEvent) {
+    function submitBudget(event: SyntheticEvent) {
         event.preventDefault();
 
-        const model = BudgetFormValuesToModel(formValues);
+        // cast values
+        const model: BudgetViewModel = {
+            ...formValues.values,
+            amount:
+                Math.floor(
+                    Number(formValues.values?.amount?.toString() ?? NaN) * 100
+                ) ?? undefined,
+        };
 
-        if (formValues.id === 0) {
-            await BudgetItemService.createBudgetItem(model);
-        } else {
-            await BudgetItemService.putBudgetItem(model);
-        }
-
-        if (event.target instanceof HTMLButtonElement) event.target.blur();
-        setIsRefreshed(!isRefreshed);
-        setIsDrawerOpen(false);
+        (formValues.values.id
+            ? BudgetService.putBudget(model)
+            : BudgetService.createBudget(model)
+        )
+            .then(() => {
+                if (event.target instanceof HTMLButtonElement)
+                    event.target.blur();
+                setIsRefreshed(!isRefreshed);
+                setIsDrawerOpen(false);
+                formValues.setErrors(undefined);
+            })
+            .catch((error: AxiosError<ErrorResponse>) => {
+                formValues.setErrors(error.response?.data);
+            });
     }
     async function deleteFormat() {
-        if (!formValues.categoryId) return;
-        await BudgetItemService.deleteBudgetItem(formValues.categoryId);
+        if (!formValues.values.id) return;
+        await BudgetService.deleteBudget(formValues.values.id);
         setIsRefreshed(!isRefreshed);
         setIsDrawerOpen(false);
     }

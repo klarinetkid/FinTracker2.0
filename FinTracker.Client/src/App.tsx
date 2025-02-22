@@ -8,10 +8,11 @@ import CategoriesPage from "./features/Categories/CategoriesPage";
 import DashboardPage from "./features/Dashboard/DashboardPage";
 import FormatsPage from "./features/Formats/FormatsPage";
 import ImportPage from "./features/Import/ImportPage";
+import MemosPage from "./features/Memos/MemosPage";
+import TransactionsPage from "./features/Transactions/TransactionsPage";
 import "./styles/_global.css";
 import "./styles/_variables.css";
 import Pages from "./types/Pages";
-import MemosPage from "./features/Memos/MemosPage";
 
 function App() {
     return (
@@ -39,6 +40,10 @@ function App() {
                             }
                         />
                         <Route path={Pages.Memos} element={<MemosPage />} />
+                        <Route
+                            path={Pages.Transactions}
+                            element={<TransactionsPage />}
+                        />
                     </Route>
                 </Routes>
             </BrowserRouter>

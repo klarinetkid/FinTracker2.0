@@ -1,19 +1,15 @@
 import { SyntheticEvent } from "react";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
-import Spacer from "../../components/Spacer";
-import { FormatFormValues } from "../../types/forms/ImportFileFormatFormValues";
+import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
-import FormGroup from "../../components/FormGroup";
+import Spacer from "../../components/Spacer";
+import ImportFormatViewModel from "../../types/ImportFormatViewModel";
+import { FormValues } from "../../hooks/useFormValues";
 
 interface FormatsFormProps {
-    formValues: FormatFormValues;
-    updateFormValues: (
-        event:
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<HTMLSelectElement>
-    ) => void;
+    formValues: FormValues<ImportFormatViewModel>;
     onSubmit: (event: SyntheticEvent) => void;
     onDelete: () => void;
     onCancel: () => void;
@@ -23,72 +19,106 @@ function FormatForm(props: FormatsFormProps) {
     return (
         <form onSubmit={props.onSubmit}>
             <div>
-                <h2>{props.formValues.id === 0 ? "New" : "Edit"} Format</h2>
+                <h2>{props.formValues.values.id ? "Edit" : "New"} Format</h2>
 
                 <Spacer height={24} />
 
-                <input name="id" type="hidden" value={props.formValues.id} />
-                <FormGroup fieldName="Import File Format Name">
+                <input
+                    name="id"
+                    type="hidden"
+                    value={props.formValues.values.id ?? ""}
+                />
+                <FormGroup
+                    fieldName="Import File Format Name"
+                    error={props.formValues.getFieldError("ImportFormatName")}
+                >
                     <Input
-                        name="importFileFormatName"
-                        value={props.formValues.importFileFormatName}
-                        onChange={props.updateFormValues}
+                        name="importFormatName"
+                        value={props.formValues.values.importFormatName ?? ""}
+                        onChange={props.formValues.updateValue}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Date Key">
+                <FormGroup
+                    fieldName="Date Key"
+                    error={props.formValues.getFieldError("DateKey")}
+                >
                     <Input
                         name="dateKey"
-                        value={props.formValues.dateKey}
-                        onChange={props.updateFormValues}
+                        value={props.formValues.values.dateKey ?? ""}
+                        onChange={props.formValues.updateValue}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Memo Format">
+                <FormGroup
+                    fieldName="Memo Format"
+                    error={props.formValues.getFieldError("MemoFormat")}
+                >
                     <Input
                         name="memoFormat"
-                        value={props.formValues.memoFormat}
-                        onChange={props.updateFormValues}
+                        value={props.formValues.values.memoFormat ?? ""}
+                        onChange={props.formValues.updateValue}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Amount Key">
+                <FormGroup
+                    fieldName="Amount Key"
+                    error={props.formValues.getFieldError("AmountKey")}
+                >
                     <Input
                         name="amountKey"
-                        value={props.formValues.amountKey}
-                        onChange={props.updateFormValues}
+                        value={props.formValues.values.amountKey ?? ""}
+                        onChange={props.formValues.updateValue}
                         data-field-type="int"
                     />
                 </FormGroup>
-                <FormGroup fieldName="Invert Amounts">
+                <FormGroup
+                    fieldName="Invert Amounts"
+                    error={props.formValues.getFieldError("InvertAmounts")}
+                >
                     <Select
                         name="invertAmounts"
-                        value={props.formValues.invertAmounts.toString()}
-                        onChange={props.updateFormValues}
+                        value={
+                            props.formValues.values.invertAmounts?.toString() ??
+                            ""
+                        }
+                        onChange={props.formValues.updateValue}
                     >
                         <option>false</option>
                         <option>true</option>
                     </Select>
                 </FormGroup>
-                <FormGroup fieldName="Header Lines">
+                <FormGroup
+                    fieldName="Header Lines"
+                    error={props.formValues.getFieldError("HeaderLines")}
+                >
                     <Input
                         name="headerLines"
                         type="number"
-                        value={props.formValues.headerLines.toString()}
-                        onChange={props.updateFormValues}
+                        value={
+                            props.formValues.values.headerLines?.toString() ??
+                            ""
+                        }
+                        onChange={props.formValues.updateValue}
                         data-field-type="int"
                     />
                 </FormGroup>
-                <FormGroup fieldName="Delimiter">
+                <FormGroup
+                    fieldName="Delimiter"
+                    error={props.formValues.getFieldError("Delimiter")}
+                >
                     <Input
                         name="delimiter"
-                        value={props.formValues.delimiter}
-                        onChange={props.updateFormValues}
+                        value={props.formValues.values.delimiter ?? ""}
+                        onChange={props.formValues.updateValue}
                         maxLength={1}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Image">
+                <FormGroup
+                    fieldName="Image"
+                    error={props.formValues.getFieldError("Image")}
+                >
                     <Input
                         name="image"
-                        value={props.formValues.image}
-                        onChange={props.updateFormValues}
+                        value={props.formValues.values.image ?? ""}
+                        onChange={props.formValues.updateValue}
                     />
                 </FormGroup>
             </div>
@@ -100,12 +130,12 @@ function FormatForm(props: FormatsFormProps) {
                     <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
                 <div>
-                    {props.formValues.id === 0 ? (
-                        ""
-                    ) : (
+                    {props.formValues.values.id ? (
                         <Button type="button" onClick={props.onDelete}>
                             Delete
                         </Button>
+                    ) : (
+                        ""
                     )}
                 </div>
             </div>

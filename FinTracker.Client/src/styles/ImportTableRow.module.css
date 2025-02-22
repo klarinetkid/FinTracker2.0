@@ -24,11 +24,10 @@
         color: white;
     }
 
-/* select the category selector with > div */
-td.autofilled > div {
+.autofilled {
     background-color: rgba(230, 230, 255);
 }
 
-td.saveDefault > div {
+.saveDefault {
     background-color: var(--var-accent)
 }

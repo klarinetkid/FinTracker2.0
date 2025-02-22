@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinTracker.Services.Data.Entities
@@ -33,14 +34,15 @@ namespace FinTracker.Services.Data.Entities
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
+        public bool IsCashTransaction { get; set; }
     }
 
-    [Table("TblImportFileFormat")]
-    public class TblImportFileFormat
+    [Table("TblImportFormat")]
+    public class TblImportFormat
     {
         [Key]
         public int Id { get; set; }
-        public string ImportFileFormatName { get; set; }
+        public string ImportFormatName { get; set; }
         public string DateKey { get; set; }
         public string MemoFormat { get; set; }
         public string AmountKey { get; set; }
@@ -51,7 +53,7 @@ namespace FinTracker.Services.Data.Entities
     }
 
     [Table("TblMemoCategorization")]
-    public class TblMemoCategorization
+    public class TblMemo
     {
         [Key]
         public int Id { get; set; }

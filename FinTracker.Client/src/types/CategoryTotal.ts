@@ -1,13 +1,13 @@
 import Category from "./Category";
 
 type CategoryTotal = {
-    categoryId?: number | null;
-    category: Category | undefined | null;
     total: number;
+    categoryId?: number;
+    category?: Category;
     percentOfIncome?: number;
     percentOfSpend?: number;
-    budget?: number | null;
-    budgetDeviation?: number | null;
+    budget?: number;
+    budgetDeviation?: number;
 };
 
 export default CategoryTotal;

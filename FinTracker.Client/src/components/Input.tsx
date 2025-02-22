@@ -1,11 +1,21 @@
+import React from "react";
 import styles from "../styles/Control.module.css";
 import { classList } from "../utils/htmlHelper";
 
-function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    isError?: boolean;
+}
+
+function Input(props: InputProps) {
+    const { isError, ...rest } = props;
     return (
         <input
-            {...props}
-            className={classList(styles.control, props.className)}
+            {...rest}
+            className={classList(
+                styles.control,
+                isError ? styles.error : "",
+                props.className
+            )}
         />
     );
 }

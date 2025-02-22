@@ -1,7 +1,13 @@
 import styles from "../styles/Table.module.css";
 import { classList } from "../utils/htmlHelper";
 
-function Table(props: React.TableHTMLAttributes<HTMLTableElement>) {
+//React.TableHTMLAttributes<HTMLTableElement>
+function Table(
+    props: React.DetailedHTMLProps<
+        React.TableHTMLAttributes<HTMLTableElement>,
+        HTMLTableElement
+    >
+) {
     return (
         <table
             {...props}

@@ -7,11 +7,13 @@ import Pages from "../../types/Pages";
 import ImportTable from "./ImportTable";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 
 function ImportPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const transactionImport = useTransactionImport();
+    const globalDataCache = useGlobalDataCache();
 
     const locationStateIsValidForImport =
         location.state?.selectedFormat && location.state?.filesContent;
@@ -43,7 +45,7 @@ function ImportPage() {
     }, [location.state]);
 
     const numSelected = transactionImport.Transcations.filter(
-        (t) => t.selectedForImport
+        (t) => t.isSelectedForImport
     ).length;
 
     return (
@@ -95,6 +97,7 @@ function ImportPage() {
         setIsLoading(true);
 
         transactionImport.Submit().then((result: number) => {
+            globalDataCache.availableYears.refresh();
             navigate(Pages.Import, { state: { insertedRows: result } });
         });
     }

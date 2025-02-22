@@ -6,6 +6,7 @@ enum Pages {
     Budget = "/budget",
     Import = "/import",
     Memos = "/memos",
+    Transactions = "/transactions",
 }
 
 export default Pages;

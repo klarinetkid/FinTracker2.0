@@ -1,30 +1,36 @@
 import { useEffect, useRef, useState } from "react";
+import CloseRing from "../assets/close_ring.svg?react";
 import styles from "../styles/CategorySelector.module.css";
+import controlStyle from "../styles/Control.module.css";
 import Category, { Uncategorized } from "../types/Category";
 import { classList } from "../utils/htmlHelper";
 import CategoryPill from "./CategoryPill";
 
 interface CategorySelectorProps {
     categories: Category[]; // don't want this component dependent on global data cache context, so just pass the options
-    onChange?: (category: Category) => void;
-    onClose?: () => void;
-    value?: Category | undefined | null; // TODO: category needs to just be undefined, not null everywhere. null is uncategorized, which is a category
+    value?: Category | undefined;
     selectedId?: number;
     isOpen?: boolean;
     disabled?: boolean;
     tabIndex?: number;
+    className?: string;
+    allowEmpty?: boolean;
+    onChange?: (category: Category | undefined) => void;
+    onClose?: () => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 function CategorySelector(props: CategorySelectorProps) {
     const controlled = props.onChange ? true : false;
-    const defaultValue = props.value ?? Uncategorized;
+    const defaultValue =
+        props.value ?? props.allowEmpty ? undefined : Uncategorized;
 
     const selectorRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
     const [search, setSearch] = useState("");
-    const [selectedValue, setSelectedValue] = useState<Category>(
+    const [selectedValue, setSelectedValue] = useState<Category | undefined>(
         props.value ?? defaultValue
     );
 
@@ -47,24 +53,41 @@ function CategorySelector(props: CategorySelectorProps) {
     return (
         <div
             ref={selectorRef}
-            className={classList(
-                styles.selector,
-                isOpen ? styles.open : "",
-                props.disabled ? styles.disabled : ""
-            )}
             onClick={() => !props.disabled && setIsOpen(!isOpen)}
             tabIndex={props.tabIndex ?? 0}
             onKeyDown={onKeyDown}
-            onBlur={() => {
-                setIsOpen(false);
+            onBlur={(e) => {
+                if (!menuRef.current?.contains(e.relatedTarget as Node)) {
+                    setIsOpen(false);
+                }
             }}
+            className={classList(
+                styles.selector,
+                controlStyle.control,
+                isOpen ? styles.open : "",
+                props.disabled ? styles.disabled : "",
+                props.className
+            )}
         >
-            <CategoryPill category={value} />
+            {selectedValue ? (
+                <CategoryPill category={value} />
+            ) : (
+                <div className={styles.placeholder}>Select a category</div>
+            )}
 
-            <div ref={menuRef} className={styles.menu}>
-                {options.map((c, i) => (
+            {props.allowEmpty && selectedValue ? (
+                <CloseRing
+                    className={styles.clearBtn}
+                    onClick={clearSelection}
+                />
+            ) : (
+                ""
+            )}
+
+            <div ref={menuRef} className={styles.menu} tabIndex={-1}>
+                {options.map((c) => (
                     <div
-                        key={i}
+                        key={c.id ?? -1}
                         className={styles.option}
                         onClick={() => optionClick(c)}
                     >
@@ -92,11 +115,12 @@ function CategorySelector(props: CategorySelectorProps) {
             return;
         }
 
-        if (event.key.length !== 1) return;
+        if (event.key.length === 1)
+            trySetValueFromSearch(search + event.key) || // try adding to current search
+                trySetValueFromSearch(event.key) || // try new search with this key
+                setSearch(""); // if still none reset search
 
-        trySetValueFromSearch(search + event.key) || // try adding to current search
-            trySetValueFromSearch(event.key) || // try new search with this key
-            setSearch(""); // if still none reset search
+        if (props.onKeyDown) props.onKeyDown(event);
     }
 
     function trySetValueFromSearch(str: string): boolean {
@@ -113,9 +137,16 @@ function CategorySelector(props: CategorySelectorProps) {
         return false;
     }
 
-    function updateSelectedValue(category: Category) {
+    function updateSelectedValue(category: Category | undefined) {
         if (props.onChange) props.onChange(category);
         setSelectedValue(category);
+    }
+
+    function clearSelection(event: React.MouseEvent<SVGElement>) {
+        event.stopPropagation();
+        updateSelectedValue(undefined);
+        setIsOpen(false);
+        if (selectorRef.current) selectorRef.current.blur();
     }
 }
 

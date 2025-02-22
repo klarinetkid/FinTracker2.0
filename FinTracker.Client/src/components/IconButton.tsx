@@ -1,4 +1,4 @@
-import style from "../styles/IconButton.module.css";
+import styles from "../styles/IconButton.module.css";
 
 interface IconButtonProps {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -11,7 +11,7 @@ function IconButton(props: IconButtonProps) {
         <button
             title={props.title}
             type="button"
-            className={style.button}
+            className={styles.button}
             onClick={props.onClick}
         >
             <props.icon width={32} height={32} />

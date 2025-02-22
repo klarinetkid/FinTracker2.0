@@ -3,12 +3,13 @@ import GroupedTable from "../../components/GroupedTable";
 import GroupedTableRow from "../../components/GroupedTableRow";
 import GroupedTableRowSet from "../../components/GroupedTableRowSet";
 import Input from "../../components/Input";
-import MemoCategorization from "../../types/MemoCategorization";
-import MemoCategorizationGroupViewModel from "../../types/models/MemoCategorizationGroupViewModel";
+import Category from "../../types/Category";
+import Grouping from "../../types/Grouping";
+import Memo from "../../types/Memo";
 
 interface MemoTableProps {
-    memos: MemoCategorizationGroupViewModel[];
-    editMemo: (memo: MemoCategorization) => void;
+    memos: Grouping<Category, Memo>[];
+    editMemo: (memo: Memo) => void;
 }
 
 function MemoTable(props: MemoTableProps) {
@@ -22,18 +23,19 @@ function MemoTable(props: MemoTableProps) {
                     <th style={{ width: 0 }}></th>
                 </tr>
             </thead>
-            {props.memos.map((group, groupIndex) => (
-                <GroupedTableRowSet key={groupIndex}>
-                    <GroupedTableRow key={-1} rowIndex={0}>
+            {props.memos.map((grouping, groupIndex) => (
+                <GroupedTableRowSet key={grouping.group.id}>
+                    <GroupedTableRow key={grouping.group.id} rowIndex={0}>
                         <td className="bold centre">{groupIndex + 1}</td>
                         <td className="centre">
-                            <CategoryPill category={group.category} />(
-                            {group.memoCategorizations.length})
+                            <CategoryPill category={grouping.group} />{" "}
                         </td>
-                        <td></td>
+                        <td className="centre monospace bold">
+                            ({grouping.items.length})
+                        </td>
                     </GroupedTableRow>
-                    {group.memoCategorizations.map((memo, i) => (
-                        <GroupedTableRow key={i} rowIndex={i + 1}>
+                    {grouping.items.map((memo, i) => (
+                        <GroupedTableRow key={memo.id} rowIndex={i + 1}>
                             <td></td>
                             <td className="centre">
                                 <CategoryPill

@@ -1,11 +1,11 @@
 import { createContext } from "react";
 import { FileContent } from "use-file-picker/types";
-import MemoCategorizationService from "../services/MemoCategorizationService";
+import MemoService from "../services/MemoService";
 import TransactionService from "../services/TransactionService";
 import Category from "../types/Category";
-import ImportFileFormat from "../types/ImportFileFormat";
-import MemoCatgorizationViewModel from "../types/models/MemoCategorizationViewModel";
-import TransactionViewModel from "../types/models/TransactionViewModel";
+import ImportFormat from "../types/ImportFormat";
+import MemoViewModel from "../types/MemoViewModel";
+import TransactionViewModel from "../types/TransactionViewModel";
 import { prepareImport } from "../utils/ImportHelper";
 
 export class TransactionImportManager {
@@ -25,7 +25,7 @@ export class TransactionImportManager {
     }
 
     public async PrepareImport(
-        format?: ImportFileFormat,
+        format?: ImportFormat,
         filesContent?: FileContent<ArrayBuffer>[]
     ): Promise<void> {
         if (!format || !filesContent) return;
@@ -48,7 +48,7 @@ export class TransactionImportManager {
             newTransactions[id].categoryId = category.id;
             newTransactions[id].category = category;
 
-            if (newTransactions[id].saveDefault && newTransactions[id].memo)
+            if (newTransactions[id].isToSaveMemo && newTransactions[id].memo)
                 this.AddDefault(
                     newTransactions[id].memo,
                     newTransactions[id].category
@@ -62,7 +62,7 @@ export class TransactionImportManager {
         const id = rowNum - 1;
         if (this.Transcations[id]) {
             const newTransactions = [...this.Transcations];
-            newTransactions[id].selectedForImport = selected;
+            newTransactions[id].isSelectedForImport = selected;
 
             //if (newTransactions[id].memo)
             //    this.RemoveDefault(newTransactions[id].memo);
@@ -77,7 +77,7 @@ export class TransactionImportManager {
             if (transaction.memo === memo) {
                 transaction.category = category;
                 transaction.categoryId = category.id;
-                transaction.saveDefault = true;
+                transaction.isToSaveMemo = true;
             }
         }
         this.setTransactions(newTransactions);
@@ -87,7 +87,7 @@ export class TransactionImportManager {
         const newTransactions = [...this.Transcations];
         for (const transaction of newTransactions) {
             if (transaction.memo === memo) {
-                transaction.saveDefault = false;
+                transaction.isToSaveMemo = false;
             }
         }
         this.setTransactions(newTransactions);
@@ -95,7 +95,7 @@ export class TransactionImportManager {
 
     public async Submit(): Promise<number> {
         const newTransactions: TransactionViewModel[] =
-            this.Transcations.filter((t) => t.selectedForImport).map((t) => ({
+            this.Transcations.filter((t) => t.isSelectedForImport).map((t) => ({
                 date: t.date,
                 memo: t.memo,
                 amount: t.amount,
@@ -104,22 +104,21 @@ export class TransactionImportManager {
 
         if (newTransactions.length === 0) return 0;
 
-        const newDefaults: MemoCatgorizationViewModel[] =
-            this.Transcations.filter(
-                (t) => t.selectedForImport && t.saveDefault
+        const newDefaults: MemoViewModel[] = this.Transcations.filter(
+            (t) => t.isSelectedForImport && t.isToSaveMemo
+        )
+            // select distinct
+            .filter(
+                (e, i, arr) => arr.findIndex((e2) => e2.memo === e.memo) === i
             )
-                .filter(
-                    (e, i, arr) =>
-                        arr.findIndex((e2) => e2.memo === e.memo) === i
-                )
-                .map((t) => ({ memo: t.memo, categoryId: t.categoryId }));
+            .map((t) => ({ memo: t.memo, categoryId: t.categoryId }));
 
         const results = {
             transactionsInserted:
                 await TransactionService.createBatch(newTransactions),
             defaultsInserted:
                 newDefaults.length > 0
-                    ? await MemoCategorizationService.patchBatch(newDefaults)
+                    ? await MemoService.patchBatch(newDefaults)
                     : 0,
         };
 

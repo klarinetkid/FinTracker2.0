@@ -1,5 +1,6 @@
 ﻿using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace FinTracker.Services.Data
 {
@@ -8,8 +9,8 @@ namespace FinTracker.Services.Data
         public DbSet<TblCategory> TblCategories { get; set; }
         public DbSet<TblBudgetItem> TblBudgetItems { get; set; }
         public DbSet<TblTransaction> TblTransactions { get; set; }
-        public DbSet<TblImportFileFormat> TblImportFileFormats { get; set; }
-        public DbSet<TblMemoCategorization> TblMemoCategorizations { get; set; }
+        public DbSet<TblImportFormat> TblImportFormats { get; set; }
+        public DbSet<TblMemo> TblMemos { get; set; }
 
         // views
         public DbSet<VwCategoryTransactionCount> VwCategoryTransactionCount { get; set; }
@@ -22,7 +23,6 @@ namespace FinTracker.Services.Data
         {
             return new DbContextOptionsBuilder().UseSqlServer(connectionString).Options;
         }
-
 
         public CategoryTotal[] GetCategoryTotals(DateOnly start, DateOnly end)
         {

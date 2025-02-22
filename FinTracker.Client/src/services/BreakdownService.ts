@@ -19,8 +19,16 @@ class BreakdownService extends BaseService {
         });
     }
 
-    getYearSummaries(year: number): Promise<Breakdown[]> {
+    getWeeklyBreakdownsForYear(year: number): Promise<Breakdown[]> {
+        return this.get<Breakdown[]>(`/Weekly/${year}`);
+    }
+
+    getMonthlyBreakdownsForYear(year: number): Promise<Breakdown[]> {
         return this.get<Breakdown[]>(`/Monthly/${year}`);
+    }
+
+    getYearBreakdowns(): Promise<Breakdown[]> {
+        return this.get<Breakdown[]>(`/Yearly`);
     }
 }
 

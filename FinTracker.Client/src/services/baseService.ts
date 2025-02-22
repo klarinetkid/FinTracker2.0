@@ -5,6 +5,16 @@ import axios, {
     AxiosResponse,
 } from "axios";
 
+export type ErrorResponse = {
+    type: string;
+    title: string;
+    status: number;
+    errors: {
+        [field: string]: string[];
+    };
+    traceId: string;
+};
+
 const ApiBaseURL = "/api";
 
 class BaseService {
@@ -28,7 +38,7 @@ class BaseService {
         return response.data;
     }
 
-    private handleError(error: AxiosError) {
+    private handleError(error: AxiosError<ErrorResponse>) {
         // Handle errors here (e.g., logging, showing user-friendly messages)
         return Promise.reject(error);
     }

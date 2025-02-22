@@ -1,6 +1,6 @@
 import Checkbox from "../../components/Checkbox";
 import useCategorySelection from "../../hooks/useCategorySelection";
-import style from "../../styles/SpendingTable.module.css";
+import styles from "../../styles/SpendingTable.module.css";
 import Breakdown from "../../types/Breakdown";
 import { Total, Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
@@ -19,7 +19,7 @@ function SpendingTable(props: SpendingTableProps) {
         .sort((a, b) => a.total - b.total);
 
     return (
-        <table className={style.table}>
+        <table className={styles.table}>
             <thead>
                 <tr>
                     <th>

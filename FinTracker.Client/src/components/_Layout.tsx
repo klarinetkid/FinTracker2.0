@@ -7,7 +7,6 @@ import IconButton from "./IconButton";
 
 function Layout() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
-
     return (
         <>
             <div

@@ -1,6 +1,6 @@
 import CategoryPill from "../../components/CategoryPill";
 import useCategorySelection from "../../hooks/useCategorySelection";
-import style from "../../styles/IncomeCard.module.css";
+import styles from "../../styles/IncomeCard.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
 import { classList } from "../../utils/htmlHelper";
@@ -16,11 +16,11 @@ function IncomeCard(props: IncomeCardProps) {
     return (
         <div
             className={classList(
-                style.card,
+                styles.card,
                 categorySelection.isSelected(
                     props.categoryTotal.category ?? Uncategorized
                 )
-                    ? style.selected
+                    ? styles.selected
                     : ""
             )}
             onClick={() =>

@@ -1,5 +1,5 @@
 import React from "react";
-import style from "../styles/Drawer.module.css";
+import styles from "../styles/Drawer.module.css";
 import { classList } from "../utils/htmlHelper";
 
 interface DrawerProps {
@@ -12,15 +12,15 @@ function Drawer(props: DrawerProps) {
     return (
         <div
             className={classList(
-                style.container,
-                props.isOpen ? style.active : ""
+                styles.container,
+                props.isOpen ? styles.active : ""
             )}
         >
             <div
-                className={style.overlay}
+                className={styles.overlay}
                 onClick={() => props.setIsOpen(false)}
             ></div>
-            <div className={style.content}>{props.children}</div>
+            <div className={styles.content}>{props.children}</div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import ImportFileFormat from "../../types/ImportFileFormat";
+import ImportFormat from "../../types/ImportFormat";
 import Pages from "../../types/Pages";
 import MenuTile from "./MenuTile";
 
@@ -20,18 +20,18 @@ function ImportSubmenu() {
     });
 
     // need to use block scoped variable for this
-    let selectedFormat: ImportFileFormat | undefined;
+    let selectedFormat: ImportFormat | undefined;
 
-    return globalDataCache.importFileFormats.value.map((f, i) => (
+    return globalDataCache.importFormats.value.map((f, i) => (
         <MenuTile
             key={i}
-            title={f.importFileFormatName}
+            title={f.importFormatName}
             iconPath={f.image ? "/format-icons/" + f.image : undefined}
             onClick={() => selectFormat(f)}
         />
     ));
 
-    function selectFormat(format: ImportFileFormat) {
+    function selectFormat(format: ImportFormat) {
         selectedFormat = format;
         openFilePicker();
     }

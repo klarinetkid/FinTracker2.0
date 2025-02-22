@@ -2,11 +2,12 @@ import Category from "./Category";
 
 type Transaction = {
     id: number;
-    date: Date;
+    date: string;
     amount: number;
     memo: string;
-    categoryId: number | undefined;
-    category: Category | undefined;
+    categoryId?: number;
+    category?: Category;
+    isCashTransaction: boolean;
 };
 
 export default Transaction;

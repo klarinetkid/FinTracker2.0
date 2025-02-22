@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TransactionViewModel from "../types/models/TransactionViewModel";
+import TransactionViewModel from "../types/TransactionViewModel";
 import {
     TransactionImportContext,
     TransactionImportManager,

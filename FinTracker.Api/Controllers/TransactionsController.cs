@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Models;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Models;
 using FinTracker.Api.Services;
 using FinTracker.Services.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,13 @@ namespace FinTracker.Api.Controllers
     [Route("[controller]")]
     public class TransactionsController : Controller
     {
-        private readonly TransactionService service = new ();
+        private readonly TransactionService service = new();
+
+        [HttpGet]
+        public PaginatedResponse<TblTransaction> GetPaginatedTransactions([FromQuery] TransactionQuery? query)
+        {
+            return service.GetTransactions(query);
+        }
 
         [HttpPatch("{id?}")]
         public TblTransaction? PatchTransaction(int? id, TransactionViewModel model)

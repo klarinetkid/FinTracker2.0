@@ -1,4 +1,6 @@
-﻿using FinTracker.Services.Data.Entities;
+﻿using FinTracker.Api.Common;
+using FinTracker.Services.Data.Entities;
+using System.Globalization;
 
 namespace FinTracker.Api.Models
 {
@@ -8,14 +10,13 @@ namespace FinTracker.Api.Models
         public DateOnly End { get; set; }
 
         public CategoryTotal[] CategoryTotals { get; set; }
-        public TblTransaction[] Transactions { get; set; }
-        private IEnumerable<TblTransaction> _transactions;
+        private IEnumerable<TblTransaction> transactions;
         
         public int TotalIn
         {
             get
             {
-                return _transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
+                return transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
             }
         }
 
@@ -23,7 +24,43 @@ namespace FinTracker.Api.Models
         {
             get
             {
-                return _transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+                return transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+            }
+        }
+
+        public string Type
+        {
+            get
+            {
+                // if spans one week and start lines up with week from start of year
+                //if (Start.AddDays(7) == End && (Start.DayOfYear - 1) % 7 == 0)
+                int weekNum = ISOWeek.GetWeekOfYear(Start.ToDateTime(new TimeOnly(1, 1, 1)));
+                int weekYear = ISOWeek.GetYear(Start.ToDateTime(new TimeOnly(1, 1, 1)));
+                DateOnly firstDayOfWeek = DateOnly.FromDateTime(ISOWeek.GetYearStart(weekYear)).AddDays((weekNum-1) * 7); // Helper.FirstDateOfWeekISO8601(weekYear, weekNum);
+                if (Start.AddDays(7) == End && Start == firstDayOfWeek)
+                    return "Week";
+
+                if (Start.Day == 1)
+                {
+                    if (Start.AddMonths(1) == End)
+                        return "Month";
+
+                    if (Start.AddYears(1) == End)
+                        return "Year";
+
+                    if (End.Day == 1)
+                    {
+                        if (Start.Year == End.Year)
+                            return "MultiMonth";
+
+                        if (Start.Month == 1 && End.Month == 1)
+                            return "MultiYear";
+
+                        return "MultiYearMonth";
+                    }
+                }
+                
+                return "";
             }
         }
 
@@ -31,28 +68,50 @@ namespace FinTracker.Api.Models
         {
             get
             {
-                // possible values:
-                //      January 2024 (whole month)
-                //      Year 2024 (whole year)
-                //      January - March 2024 (months in the same year)
-                //      November 2023 - February 2024
-                if (End == Start.AddMonths(1))
-                    return Start.ToString("MMMM yyyy");
-                else if (End == Start.AddYears(1))
-                    return "Year " + Start.ToString("yyyy");
-                else
+                switch (Type)
                 {
-                    if (Start.Year == End.Year)
-                    {
-                        return Start.ToString("MMMM") + " - " +
-                            End.AddDays(-1).ToString("MMMM yyyy");
-                    }
-                    else
-                    {
-                        return Start.ToString("MMMM yyyy") + " - " +
-                            End.AddDays(-1).ToString("MMMM yyyy");
-                    }
+                    case "Week": //(Start.DayOfYear / 7 + 1)
+                        return Start.ToString("yyyy") + " Week " + ISOWeek.GetWeekOfYear(Start.ToDateTime(new TimeOnly(1, 1, 1)));
+                    case "Month":
+                        return Start.ToString("MMMM yyyy");
+                    case "Year":
+                        return "Year " + Start.ToString("yyyy");
+                    case "MultiMonth":
+                        return Start.ToString("MMMM") + " - " + End.AddDays(-1).ToString("MMMM yyyy");
+                    case "MultiYear":
+                        return "Years " + Start.ToString("yyyy") + " - " + End.AddDays(-1).ToString("yyyy");
+                    case "MultiYearMonth":
+                        return Start.ToString("MMMM yyyy") + " - " + End.AddDays(-1).ToString("MMMM yyyy");
                 }
+
+                return Start.ToString("MMMM d yyyy") + " - " + End.ToString("MMMM d yyyy");
+            }
+        }
+
+        public string Subtitle
+        {
+            get
+            {
+                TimeSpan Diff = (End.ToDateTime(new TimeOnly(1, 1, 1)) - Start.ToDateTime(new TimeOnly(1, 1, 1)));
+                switch (Type)
+                {
+                    case "Week":
+                        return Start.ToString("dddd, MMMM d") + 
+                            Helper.GetDateOrdinalIndication(Start.Day) + 
+                            " - " + 
+                            End.AddDays(-1).ToString("dddd, MMMM d") +
+                            Helper.GetDateOrdinalIndication(End.AddDays(-1).Day);
+                    case "Month":
+                    case "Year":
+                        return "";
+                    case "MultiMonth":
+                    case "MultiYearMonth":
+                        return (Diff.Days / 30) + " months";
+                    case "MultiYear":
+                        return (Diff.Days / 365) + " years";
+                }
+
+                return "";
             }
         }
 
@@ -61,16 +120,7 @@ namespace FinTracker.Api.Models
             Start = start;
             End = end;
             CategoryTotals = categoryTotals;
-
-            _transactions = transactions;
-
-            // to be requested explicitly
-            Transactions = [];
-        }
-
-        public void IncludeTransactions()
-        {
-            Transactions = _transactions.OrderBy(e => e.Date).ToArray();
+            this.transactions = transactions;
         }
     }
 }

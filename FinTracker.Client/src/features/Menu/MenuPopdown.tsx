@@ -14,7 +14,7 @@ import BudgetIcon from "../../assets/Wallet_fill.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import style from "../../styles/Menu.module.css";
+import styles from "../../styles/Menu.module.css";
 import Pages from "../../types/Pages";
 import CustomReportForm from "./CustomReportForm";
 import ImportSubmenu from "./ImportSubmenu";
@@ -51,14 +51,14 @@ function MenuPopdown(props: MenuProps) {
         <>
             <div
                 className={classList(
-                    style.popdown,
-                    props.isOpen ? style.active : ""
+                    styles.popdown,
+                    props.isOpen ? styles.active : ""
                 )}
                 onClick={handlePopdownClick}
             >
-                <div className={style.container}>
+                <div className={styles.container}>
                     <div
-                        className={style.backButton}
+                        className={styles.backButton}
                         style={{ visibility: submenu ? "visible" : "hidden" }}
                     >
                         <IconButton
@@ -71,7 +71,7 @@ function MenuPopdown(props: MenuProps) {
                             }
                         />
                     </div>
-                    <div className={style.tileContainer}>
+                    <div className={styles.tileContainer}>
                         {!submenu ? (
                             <>
                                 <MenuTile
@@ -100,10 +100,12 @@ function MenuPopdown(props: MenuProps) {
                                         icon={BudgetIcon}
                                     />
                                 </Link>
-                                <MenuTile
-                                    title="Transactions"
-                                    icon={TransactionsIcon}
-                                />
+                                <Link to={Pages.Transactions}>
+                                    <MenuTile
+                                        title="Transactions"
+                                        icon={TransactionsIcon}
+                                    />
+                                </Link>
                                 <MenuTile
                                     title="System"
                                     icon={SystemIcon}

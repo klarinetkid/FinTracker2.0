@@ -1,10 +1,12 @@
 import { FileContent } from "use-file-picker/types";
-import ImportFileFormat from "../types/ImportFileFormat";
-import TransactionViewModel from "../types/models/TransactionViewModel";
+import ImportFormat from "../types/ImportFormat";
+import TransactionViewModel from "../types/TransactionViewModel";
 import moment from "moment";
 
+type CsvRow = { [x: string]: string };
+
 export function prepareImport(
-    format: ImportFileFormat,
+    format: ImportFormat,
     files: FileContent<ArrayBuffer>[]
 ): TransactionViewModel[] {
     const allRows = files
@@ -14,10 +16,7 @@ export function prepareImport(
     return allRows.map((r) => csvRowToTransaction(format, r));
 }
 
-function parseCsv(
-    format: ImportFileFormat,
-    content: string
-): { [x: string]: string }[] {
+function parseCsv(format: ImportFormat, content: string): CsvRow[] {
     const lines = content.split(/[\r\n]+/);
     const header = lines[format.headerLines].split(format.delimiter);
 
@@ -32,8 +31,8 @@ function parseCsv(
 }
 
 function csvRowToTransaction(
-    format: ImportFileFormat,
-    row: { [x: string]: string }
+    format: ImportFormat,
+    row: CsvRow
 ): TransactionViewModel {
     return {
         date: moment(row[format.dateKey]).format("yyyy-MM-DD"),
@@ -46,7 +45,7 @@ function csvRowToTransaction(
     };
 }
 
-function getTransactionMemo(memoFormat: string, row: { [x: string]: string }) {
+function getTransactionMemo(memoFormat: string, row: CsvRow) {
     Object.keys(row).map((k) => {
         memoFormat = memoFormat.replaceAll(`{${k}}`, row[k]);
     });

@@ -1,4 +1,4 @@
-import style from "../../styles/MenuTile.module.css";
+import styles from "../../styles/MenuTile.module.css";
 
 interface MenuTileProps {
     title: string;
@@ -12,10 +12,10 @@ function MenuTile(props: MenuTileProps) {
 
     return (
         <div
-            className={style.tile}
+            className={styles.tile}
             onClick={(event) => props.onClick && props.onClick(event)}
         >
-            <div className={style.tileIconHolder}>
+            <div className={styles.tileIconHolder}>
                 {!props.icon ? (
                     ""
                 ) : (

@@ -28,31 +28,33 @@ Create table TblTransaction (
 	[Date] date NOT NULL,
 	[Amount] int NOT NULL,
 	[Memo] varchar(200),
-	[CategoryId] int references TblCategory(id)
+	[CategoryId] int references TblCategory(id),
+	[IsCashTransaction] bit NOT NULL DEFAULT 0
 );
 
 ----------------------------------
 ---- create TblImportFileFormat
 ----------------------------------
-drop table if exists TblImportFileFormat;
-Create table TblImportFileFormat (
+drop table if exists TblImportFormat;
+Create table TblImportFormat (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[ImportFileFormatName] varchar(100) NOT NULL,
-	[DateKey] varchar(100) NOT NULL,
-	[MemoFormat] varchar(100) NOT NULL,
-	[AmountKey] varchar(100) NOT NULL,
+	[ImportFormatName] varchar(50) NOT NULL,
+	[DateKey] varchar(25) NOT NULL,
+	[MemoFormat] varchar(50) NOT NULL,
+	[AmountKey] varchar(25) NOT NULL,
 	[InvertAmounts] bit NOT NULL,
 	[HeaderLines] int NOT NULL,
 	[Delimiter] varchar(1) NOT NULL,
-	[Image] varchar(100)
+	[Image] varchar(25)
 );
 
 ----------------------------------
 ---- create TblMemoCategorization
 ----------------------------------
-drop table if exists TblMemoCategorization;
-Create table TblMemoCategorization (
+drop table if exists TblMemo;
+Create table TblMemo (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[Memo] varchar(200) NOT NULL,
-	[CategoryId] int references TblCategory(id) NOT NULL
+	[CategoryId] int references TblCategory(id) NOT NULL,
+	constraint AK_Memo unique([Memo]),
 );

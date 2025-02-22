@@ -6,19 +6,19 @@ namespace FinTracker.Api.Services
 {
     public class BudgetItemService : BaseService
     {
-        public BudgetItemGroupViewModel[] GetBudgetItemGroups()
+        //public BudgetItemGroupViewModel[] GetBudgetItemGroups()
+        public IEnumerable<Grouping<TblCategory, TblBudgetItem>> GetBudgetItemGroups()
         {
             return db.TblBudgetItems
                 .Include(b => b.Category)
                 .GroupBy(b => b.Category)
                 .AsEnumerable()
                 .Where(g => g.Key != null)
-                .Select(g => new BudgetItemGroupViewModel(g.Key!, g.OrderByDescending(e => e.EffectiveDate)))
-                .OrderBy(g => g.Category.CategoryName)
-                .ToArray();
+                .Select(g => new Grouping<TblCategory, TblBudgetItem>(g.Key!, g.OrderByDescending(e => e.EffectiveDate)))
+                .OrderBy(g => g.Group.CategoryName);
         }
 
-        public TblBudgetItem CreateBudgetItem(BudgetItemViewModel model)
+        public TblBudgetItem CreateBudgetItem(BudgetViewModel model)
         {
             TblBudgetItem tblBudgetItem = model.ToTblBudgetItem();
             db.TblBudgetItems.Entry(tblBudgetItem).State = EntityState.Added;
@@ -26,7 +26,7 @@ namespace FinTracker.Api.Services
             return tblBudgetItem;
         }
 
-        public TblBudgetItem PutBudgetItem(int budgetItemId, BudgetItemViewModel model)
+        public TblBudgetItem PutBudgetItem(int budgetItemId, BudgetViewModel model)
         {
             TblBudgetItem budgetItem = model.ToTblBudgetItem(budgetItemId);
             db.TblBudgetItems.Entry(budgetItem).State = EntityState.Modified;

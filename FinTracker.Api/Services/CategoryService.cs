@@ -6,6 +6,11 @@ namespace FinTracker.Api.Services
 {
     public class CategoryService : BaseService
     {
+        public TblCategory? GetCategory(int id)
+        {
+            return db.TblCategories.Find(id);
+        }
+
         public TblCategory[] GetCategories()
         {
             return db.TblCategories.OrderBy(e => e.CategoryName).ToArray();

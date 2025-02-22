@@ -4,24 +4,20 @@ import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import useFormValues from "../../hooks/useFormValues";
+import { useFormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import ImportFileFormatService from "../../services/ImportFileFormatService";
-import FormatFormValues, {
-    FormatFormDefaults,
-    FormatFormValuesToModel,
-    ImportFileFormatToFormValues,
-} from "../../types/forms/ImportFileFormatFormValues";
-import ImportFileFormat from "../../types/ImportFileFormat";
+import ImportFormatService from "../../services/ImportFormatService";
+import ImportFormat from "../../types/ImportFormat";
+import ImportFormatViewModel from "../../types/ImportFormatViewModel";
 import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
+import { AxiosError } from "axios";
+import { ErrorResponse } from "../../services/baseService";
 
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-    const [formValues, setFormValues, updateFormValues] =
-        useFormValues<FormatFormValues>(FormatFormDefaults);
+    const formValues = useFormValues<ImportFormatViewModel>({});
 
     return (
         <Page width={600}>
@@ -41,7 +37,6 @@ function FormatsPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <FormatForm
                     formValues={formValues}
-                    updateFormValues={updateFormValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteFormat}
                     onSubmit={submitFormat}
@@ -51,31 +46,44 @@ function FormatsPage() {
     );
 
     function newFormat() {
-        setFormValues(FormatFormDefaults);
+        formValues.setValues({});
         setIsDrawerOpen(true);
     }
-    function editFormat(format: ImportFileFormat) {
-        setFormValues(ImportFileFormatToFormValues(format));
+    function editFormat(format: ImportFormat) {
+        formValues.setValues(format);
         setIsDrawerOpen(true);
     }
-    async function submitFormat(event: SyntheticEvent) {
+    function submitFormat(event: SyntheticEvent) {
         event.preventDefault();
 
-        const model = FormatFormValuesToModel(formValues);
+        const model: ImportFormatViewModel = {
+            ...formValues.values,
+            invertAmounts:
+                formValues.values.invertAmounts?.toString().toLowerCase() ===
+                "true",
+            headerLines:
+                Number(formValues.values.headerLines?.toString() || NaN) ??
+                undefined,
+        };
 
-        if (formValues.id === 0) {
-            await ImportFileFormatService.createFormat(model);
-        } else {
-            await ImportFileFormatService.putFormat(model);
-        }
-
-        if (event.target instanceof HTMLButtonElement) event.target.blur();
-        globalDataCache.importFileFormats.refresh();
-        setIsDrawerOpen(false);
+        (formValues.values.id
+            ? ImportFormatService.createFormat(model)
+            : ImportFormatService.putFormat(model)
+        )
+            .then(() => {
+                if (event.target instanceof HTMLButtonElement)
+                    event.target.blur();
+                globalDataCache.importFormats.refresh();
+                setIsDrawerOpen(false);
+            })
+            .catch((error: AxiosError<ErrorResponse>) => {
+                formValues.setErrors(error.response?.data);
+            });
     }
     async function deleteFormat() {
-        await ImportFileFormatService.deleteFormat(formValues.id);
-        globalDataCache.importFileFormats.refresh();
+        if (!formValues.values.id) return;
+        await ImportFormatService.deleteFormat(formValues.values.id);
+        globalDataCache.importFormats.refresh();
         setIsDrawerOpen(false);
     }
 }

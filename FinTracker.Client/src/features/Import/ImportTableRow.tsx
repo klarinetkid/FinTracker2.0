@@ -6,9 +6,9 @@ import CategorySelector from "../../components/CategorySelector";
 import Checkbox from "../../components/Checkbox";
 import IconButton from "../../components/IconButton";
 import useTransactionImport from "../../hooks/useTransactionImport";
-import style from "../../styles/ImportTableRow.module.css";
+import styles from "../../styles/ImportTableRow.module.css";
 import Category from "../../types/Category";
-import TransactionViewModel from "../../types/models/TransactionViewModel";
+import TransactionViewModel from "../../types/TransactionViewModel";
 import { classList } from "../../utils/htmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
 import Row from "../../components/Row";
@@ -22,7 +22,7 @@ interface ImportTableRowProps {
 
 function ImportTableRow(props: ImportTableRowProps) {
     const [isAutofilled, setIsAutofilled] = useState(
-        props.transaction.isDefaultCategorized ?? false
+        props.transaction.isMemoCategorized ?? false
     );
     const transactionImport = useTransactionImport();
     const globalDataCache = useGlobalDataCache();
@@ -30,7 +30,7 @@ function ImportTableRow(props: ImportTableRowProps) {
     return (
         <tr
             className={
-                !props.transaction.selectedForImport ? style.unselected : ""
+                !props.transaction.isSelectedForImport ? styles.unselected : ""
             }
         >
             <td className="bold centre">{props.num + 1}</td>
@@ -45,7 +45,7 @@ function ImportTableRow(props: ImportTableRowProps) {
                 <Input readOnly value={props.transaction.memo} />
                 {props.transaction.isAlreadyImported ? (
                     <div
-                        className={style.alreadyImportedIndicator}
+                        className={styles.alreadyImportedIndicator}
                         title="A transaction already exists with the same date, memo, and amount."
                     ></div>
                 ) : (
@@ -59,33 +59,33 @@ function ImportTableRow(props: ImportTableRowProps) {
                     value={formatCurrency(props.transaction.amount ?? 0)}
                 />
             </td>
-            <td
-                className={classList(
-                    `${isAutofilled ? style.autofilled : ""}`,
-                    `${props.transaction.saveDefault ? style.saveDefault : ""}`
-                )}
-            >
+            <td>
                 <CategorySelector
                     tabIndex={1}
                     categories={globalDataCache.categories.value}
                     value={props.transaction.category}
                     onChange={updateCategory}
-                    disabled={!props.transaction.selectedForImport}
+                    disabled={!props.transaction.isSelectedForImport}
+                    className={classList(
+                        `${isAutofilled ? styles.autofilled : ""}`,
+                        `${props.transaction.isToSaveMemo ? styles.saveDefault : ""}`
+                    )}
+                    onKeyDown={categorySelectorKeyDown}
                 />
             </td>
             <td>
-                <Row style={{ gap: 6 }}>
+                <Row gap={6}>
                     <IconButton
                         title="Save as default categorization"
                         icon={
-                            props.transaction.saveDefault
+                            props.transaction.isToSaveMemo
                                 ? SaveFillIcon
                                 : SaveIcon
                         }
                         onClick={toggleSaveDefault}
                     />
                     <Checkbox
-                        checked={props.transaction.selectedForImport ?? false}
+                        checked={props.transaction.isSelectedForImport ?? false}
                         onChange={toggleSelected}
                     />
                 </Row>
@@ -93,8 +93,15 @@ function ImportTableRow(props: ImportTableRowProps) {
         </tr>
     );
 
-    function updateCategory(category: Category) {
-        if (!props.transaction.id) return;
+    function categorySelectorKeyDown(
+        event: React.KeyboardEvent<HTMLDivElement>
+    ) {
+        if (event.key === "Insert") toggleSaveDefault();
+        if (event.key === "Delete") toggleSelected();
+    }
+
+    function updateCategory(category: Category | undefined) {
+        if (!props.transaction.id || !category) return;
         transactionImport.SetCategory(props.transaction.id, category);
         setIsAutofilled(false);
     }
@@ -103,11 +110,11 @@ function ImportTableRow(props: ImportTableRowProps) {
         if (
             !props.transaction.memo ||
             !props.transaction.category ||
-            !props.transaction.selectedForImport
+            !props.transaction.isSelectedForImport
         )
             return;
 
-        if (props.transaction.saveDefault) {
+        if (props.transaction.isToSaveMemo) {
             transactionImport.RemoveDefault(props.transaction.memo);
         } else {
             transactionImport.AddDefault(
@@ -117,9 +124,12 @@ function ImportTableRow(props: ImportTableRowProps) {
         }
     }
 
-    function toggleSelected(value: boolean) {
+    function toggleSelected() {
         if (!props.transaction.id) return;
-        transactionImport.SetSelected(props.transaction.id, value);
+        transactionImport.SetSelected(
+            props.transaction.id,
+            !props.transaction.isSelectedForImport
+        );
     }
 }
 

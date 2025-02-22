@@ -1,5 +1,5 @@
 import Category, { CategoryTransactionCount } from "../types/Category";
-import CategoryViewModel from "../types/models/CategoryViewModel";
+import CategoryViewModel from "../types/CategoryViewModel";
 import BaseService from "./baseService";
 
 class CategoryService extends BaseService {

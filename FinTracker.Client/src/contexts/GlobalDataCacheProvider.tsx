@@ -7,8 +7,8 @@ import {
     GlobalDataCacheContextManager,
     GlobalDataCacheItem,
 } from "./GlobalDataCacheContext";
-import ImportFileFormat from "../types/ImportFileFormat";
-import ImportFileFormatService from "../services/ImportFileFormatService";
+import ImportFormat from "../types/ImportFormat";
+import ImportFormatService from "../services/ImportFormatService";
 
 export default function GlobalDataCacheProvider({
     children,
@@ -24,9 +24,9 @@ export default function GlobalDataCacheProvider({
             ...useState<Category[]>([]),
             CategoryService.getCategories.bind(CategoryService)
         ),
-        importFileFormats: new GlobalDataCacheItem(
-            ...useState<ImportFileFormat[]>([]),
-            ImportFileFormatService.getFormats.bind(ImportFileFormatService)
+        importFormats: new GlobalDataCacheItem(
+            ...useState<ImportFormat[]>([]),
+            ImportFormatService.getFormats.bind(ImportFormatService)
         ),
     });
 

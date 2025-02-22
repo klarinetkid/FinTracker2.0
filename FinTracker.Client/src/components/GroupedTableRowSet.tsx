@@ -1,6 +1,6 @@
 import React, { Children, useState } from "react";
 import { GroupedTableContext } from "../contexts/GroupedTableContext";
-import style from "../styles/GroupedTable.module.css";
+import styles from "../styles/GroupedTable.module.css";
 
 interface GroupedTableRowSetProps {
     children?: React.ReactNode;
@@ -13,9 +13,9 @@ function GroupedTableRowSet(props: GroupedTableRowSetProps) {
         <GroupedTableContext.Provider
             value={{ isExpanded, setIsExpanded, showExpand }}
         >
-            <tbody className={isExpanded ? style.active : ""}>
+            <tbody className={isExpanded ? styles.active : ""}>
                 {props.children}
-                <tr className={style.spacerRow}></tr>
+                <tr className={styles.spacerRow}></tr>
             </tbody>
         </GroupedTableContext.Provider>
     );

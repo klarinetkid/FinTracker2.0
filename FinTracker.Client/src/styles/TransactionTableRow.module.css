@@ -10,3 +10,7 @@
 .transactionRow:has(+ tr.selected) td {
     border-bottom: none;
 }
+
+.cashTransactionIcon {
+    float: right;
+}

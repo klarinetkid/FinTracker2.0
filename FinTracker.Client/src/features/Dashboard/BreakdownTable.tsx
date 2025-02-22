@@ -1,15 +1,21 @@
 import moment from "moment";
-import style from "../../styles/BreakdownTable.module.css";
-import Breakdown from "../../types/Breakdown";
-import { formatCurrency, toFixed } from "../../utils/NumberHelper";
-import Category from "../../types/Category";
+import { useNavigate } from "react-router-dom";
 import tinycolor from "tinycolor2";
 import InOutPills from "../../components/InOutPills";
+import styles from "../../styles/BreakdownTable.module.css";
+import Breakdown from "../../types/Breakdown";
+import { Uncategorized } from "../../types/Category";
+import CategoryTotal from "../../types/CategoryTotal";
 import { toBreakdown } from "../../utils/BreakdownHelper";
-import { useNavigate } from "react-router-dom";
+import { formatCurrency, toFixed } from "../../utils/NumberHelper";
 
 interface BreakdownTableProps {
     breakowns: Breakdown[];
+    dateFormat: string;
+    bandValueProperty:
+        | "percentOfIncome"
+        | "percentOfSpend"
+        | "percentOfYearlySpend";
 }
 
 function BreakdownTable(props: BreakdownTableProps) {
@@ -19,85 +25,114 @@ function BreakdownTable(props: BreakdownTableProps) {
         (b) => b.categoryTotals.length > 0
     );
 
+    const yearlyIncome = props.breakowns
+        .map((b) => b.categoryTotals)
+        .flat()
+        .filter((c) => c.total > 0)
+        .map((c) => c.total)
+        .reduce((curr, i) => curr + i);
+
     return (
-        <table className={style.table}>
-        <tbody>
-            {breakdowns.map((breakdown, i) => (
-                <tr key={i} onClick={() => openBreakdown(breakdown)}>
-                    <td className="ralign" width="100px">
-                        <h4>{moment(breakdown.start).format("MMMM")}</h4>
-                    </td>
-                    <td style={{ width: "80%" }}>
-                        <div className={style.bandHolder}>
-                            {getCategoryTotals(breakdown).map(
-                                (categoryTotal) => (
-                                    <div
-                                        key={categoryTotal.category.id}
-                                        className={style.band}
-                                        style={{
-                                            width:
-                                                Math.abs(
-                                                    categoryTotal.percentOfIncome
-                                                ) + "%",
-                                            background: categoryTotal.category
-                                                ? getBandGradient(
-                                                      categoryTotal.category
-                                                  )
-                                                : "grey",
-                                        }}
-                                    >
-                                        <div className={style.tooltip}>
-                                            {
-                                                categoryTotal.category
-                                                    .categoryName
-                                            }
-                                            :{" "}
-                                            {formatCurrency(
-                                                categoryTotal.total,
-                                                true
-                                            )}{" "}
-                                            (
-                                            {toFixed(
-                                                Math.abs(
-                                                    categoryTotal.percentOfIncome
-                                                ),
-                                                1
-                                            )}
-                                            %)
+        <table className={styles.table}>
+            <tbody>
+                {breakdowns.map((breakdown, i) => (
+                    <tr key={i} onClick={() => openBreakdown(breakdown)}>
+                        <td className="ralign">
+                            <h4>
+                                {moment(breakdown.start).format(
+                                    props.dateFormat
+                                )}
+                            </h4>
+                        </td>
+                        <td className={styles.bandHolderCell}>
+                            <div className={styles.bandHolder}>
+                                {spendingTotalsSorted(breakdown).map(
+                                    (categoryTotal, i) => (
+                                        <div
+                                            key={i}
+                                            className={styles.band}
+                                            style={getBandStyle(categoryTotal)}
+                                        >
+                                            <div className={styles.tooltip}>
+                                                {getTooltipText(categoryTotal)}
+                                            </div>
                                         </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </td>
-                    <td>
-                        <InOutPills
-                            totalIn={breakdown.totalIn}
-                            totalOut={breakdown.totalOut}
-                            showLabels={false}
-                        />
-                    </td>
-                </tr>
-            ))}
+                                    )
+                                )}
+                            </div>
+                        </td>
+                        <td>
+                            <InOutPills
+                                totalIn={breakdown.totalIn}
+                                totalOut={breakdown.totalOut}
+                                showLabels={false}
+                            />
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     );
 
-    function getCategoryTotals(breakdown: Breakdown) {
+    function spendingTotalsSorted(breakdown: Breakdown) {
         return breakdown.categoryTotals
-            .filter((c) => c.category && c.total < 0 && c.percentOfIncome)
+            .filter(
+                (c) => c.category && c.total < 0 && getCategoryPercentage(c)
+            )
             .sort((a, b) => a.total - b.total);
     }
 
-    function getBandGradient(category: Category): string {
-        const colour = tinycolor(category.colour);
+    function getBandStyle(categoryTotal: CategoryTotal) {
+        const colour = categoryTotal.category?.colour ?? "grey";
+        return {
+            width: Math.abs(getCategoryPercentage(categoryTotal) ?? 0) + "%",
+            background: getBandGradient(colour),
+        };
+    }
 
-        if (!colour.isValid()) return "grey";
-
+    function getBandGradient(colour: string): string {
+        const c = tinycolor(colour);
+        const validColour = c.isValid() ? c : tinycolor("grey");
         const spread = 30;
-        const darkened = colour.clone().darken(spread);
-        const lightened = colour.clone().lighten(spread);
-        return `linear-gradient(to bottom, ${darkened.toRgbString()}, ${colour.toRgbString()}, ${colour.toRgbString()}, ${lightened.toRgbString()})`;
+        const darkened = validColour.clone().darken(spread);
+        const lightened = validColour.clone().lighten(spread);
+        return `linear-gradient(to bottom, ${darkened.toRgbString()}, 
+            ${validColour.toRgbString()}, ${validColour.toRgbString()}, ${lightened.toRgbString()})`;
+    }
+
+    function getTooltipText(categoryTotal: CategoryTotal) {
+        const categoryName =
+            categoryTotal.category?.categoryName ?? Uncategorized.categoryName;
+        const total = formatCurrency(categoryTotal.total, true);
+        const pct = toFixed(
+            Math.abs(getCategoryPercentage(categoryTotal) ?? 0),
+            1
+        );
+        //return `${categoryName}: ${total} (${pct}%)`;
+        return (
+            <>
+                {categoryName}
+                <br />
+                {total} ({pct}%)
+            </>
+        );
+    }
+
+    function getCategoryPercentage(
+        categoryTotal: CategoryTotal
+    ): number | undefined {
+        switch (props.bandValueProperty) {
+            case "percentOfIncome":
+                return categoryTotal.percentOfIncome;
+            case "percentOfSpend":
+                return categoryTotal.percentOfSpend;
+            case "percentOfYearlySpend":
+                return (
+                    ((categoryTotal.total * breakdowns.length) /
+                        (yearlyIncome || 1)) *
+                    100
+                );
+        }
     }
 
     function openBreakdown(breakdown: Breakdown) {

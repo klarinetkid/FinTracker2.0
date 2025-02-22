@@ -1,16 +1,16 @@
 import Table from "../../components/Table";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import ImportFileFormat from "../../types/ImportFileFormat";
+import ImportFormat from "../../types/ImportFormat";
 
 interface FormatTableProps {
-    editFormat: (format: ImportFileFormat) => void;
+    editFormat: (format: ImportFormat) => void;
 }
 
 function FormatTable(props: FormatTableProps) {
     const globalDataCache = useGlobalDataCache();
 
     return (
-        <Table selectable={true}>
+        <Table>
             <thead>
                 <tr>
                     <th></th>
@@ -19,12 +19,10 @@ function FormatTable(props: FormatTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {globalDataCache.importFileFormats.value.map((format, i) => (
+                {globalDataCache.importFormats.value.map((format, i) => (
                     <tr onClick={() => props.editFormat(format)}>
                         <td className="bold centre">{i + 1}</td>
-                        <td className="centre">
-                            {format.importFileFormatName}
-                        </td>
+                        <td className="centre">{format.importFormatName}</td>
                         <td className="centre">
                             {!format.image ? (
                                 ""

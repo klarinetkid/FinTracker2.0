@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import Category from "../types/Category";
-import ImportFileFormat from "../types/ImportFileFormat";
+import ImportFormat from "../types/ImportFormat";
 
 export class GlobalDataCacheItem<T> {
     public value: T;
@@ -17,34 +17,37 @@ export class GlobalDataCacheItem<T> {
         this.getValue = getValue;
     }
 
-    public refresh() {
-        if (this.getValue && this.setValue) this.getValue().then(this.setValue);
+    public async refresh() {
+        if (this.getValue && this.setValue) {
+            const value = await this.getValue();
+            this.setValue(value);
+        }
     }
 }
 
 export class GlobalDataCacheContextManager {
     public availableYears: GlobalDataCacheItem<number[]>;
     public categories: GlobalDataCacheItem<Category[]>;
-    public importFileFormats: GlobalDataCacheItem<ImportFileFormat[]>;
+    public importFormats: GlobalDataCacheItem<ImportFormat[]>;
 
     constructor(params?: {
         availableYears: GlobalDataCacheItem<number[]>;
         categories: GlobalDataCacheItem<Category[]>;
-        importFileFormats: GlobalDataCacheItem<ImportFileFormat[]>;
+        importFormats: GlobalDataCacheItem<ImportFormat[]>;
     }) {
         this.availableYears =
             params?.availableYears ?? new GlobalDataCacheItem<number[]>([]);
         this.categories =
             params?.categories ?? new GlobalDataCacheItem<Category[]>([]);
-        this.importFileFormats =
-            params?.importFileFormats ??
-            new GlobalDataCacheItem<ImportFileFormat[]>([]);
+        this.importFormats =
+            params?.importFormats ??
+            new GlobalDataCacheItem<ImportFormat[]>([]);
     }
 
     public initializeData() {
-        [this.availableYears, this.categories, this.importFileFormats].map(
-            (d) => d.refresh()
-        );
+        [this.availableYears, this.categories, this.importFormats].map((d) => {
+            d.refresh();
+        });
     }
 }
 

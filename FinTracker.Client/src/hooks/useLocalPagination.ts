@@ -6,7 +6,7 @@ export default function useLocalPagination<T>(
     pageSize: number
 ): LocalPagination<T> {
     const [currentPage, setCurrentPage] = useState(0);
-    const pageCount = Math.ceil(items.length / pageSize);
+    const totalPages = Math.ceil(items.length / pageSize);
     const currentItems = items
         .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
         .map((item, index) => ({
@@ -14,5 +14,5 @@ export default function useLocalPagination<T>(
             index: currentPage * pageSize + index,
         }));
 
-    return { pageSize, currentPage, setCurrentPage, pageCount, currentItems };
+    return { pageSize, currentPage, setCurrentPage, totalPages, currentItems };
 }

@@ -1,4 +1,4 @@
-import style from "../styles/Page.module.css";
+import styles from "../styles/Page.module.css";
 
 interface PageProps {
     children?: React.ReactNode;
@@ -7,7 +7,7 @@ interface PageProps {
 
 function Page(props: PageProps) {
     return (
-        <div className={style.page} style={{ width: props.width }}>
+        <div className={styles.page} style={{ width: props.width }}>
             {props.children}
         </div>
     );
