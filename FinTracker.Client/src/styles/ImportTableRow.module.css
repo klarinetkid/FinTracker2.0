@@ -28,6 +28,6 @@
     background-color: rgba(230, 230, 255);
 }
 
-.saveDefault {
+.saveMemo {
     background-color: var(--var-accent)
 }

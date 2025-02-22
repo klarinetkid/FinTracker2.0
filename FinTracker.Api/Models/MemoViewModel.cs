@@ -6,6 +6,7 @@ namespace FinTracker.Api.Models
     {
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
+        public bool? IsImported { get; set; }
 
         public TblMemo ToTblMemo(int id = 0)
         {
@@ -13,7 +14,8 @@ namespace FinTracker.Api.Models
             {
                 Id = id,
                 Memo = Memo,
-                CategoryId = CategoryId.HasValue ? CategoryId.Value : 0, // TODO: should throw exception?
+                CategoryId = CategoryId, // TODO: should throw exception?
+                IsImported = IsImported.HasValue ? IsImported.Value : true
             };
         }
     }

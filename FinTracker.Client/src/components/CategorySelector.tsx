@@ -69,13 +69,13 @@ function CategorySelector(props: CategorySelectorProps) {
                 props.className
             )}
         >
-            {selectedValue ? (
+            {value ? (
                 <CategoryPill category={value} />
             ) : (
                 <div className={styles.placeholder}>Select a category</div>
             )}
 
-            {props.allowEmpty && selectedValue ? (
+            {props.allowEmpty && value ? (
                 <CloseRing
                     className={styles.clearBtn}
                     onClick={clearSelection}

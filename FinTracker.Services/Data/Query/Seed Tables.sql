@@ -9,10 +9,10 @@ insert into dbo.TblCategory (CategoryName, Colour) values ('Entertainment', '9bd
 insert into dbo.TblCategory (CategoryName, Colour) values ('Transportation', 'D0B8A8'); -- 6
 insert into dbo.TblCategory (CategoryName, Colour) values ('Clothes', 'D37676'); -- 7
 
-delete from dbo.TblBudgetItem;
-insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (3, 34000, '2000-01-01');
-insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (4, 20000, '2000-01-01');
-insert into dbo.TblBudgetItem (CategoryId, Amount, EffectiveDate) values (5, 9000, '2000-01-01');
+delete from dbo.TblBudget;
+insert into dbo.TblBudget (CategoryId, Amount, EffectiveDate) values (3, 34000, '2000-01-01');
+insert into dbo.TblBudget (CategoryId, Amount, EffectiveDate) values (4, 20000, '2000-01-01');
+insert into dbo.TblBudget (CategoryId, Amount, EffectiveDate) values (5, 9000, '2000-01-01');
 
 delete from dbo.TblImportFileFormat
 insert into dbo.TblImportFileFormat ([ImportFileFormatName], [DateKey], [MemoFormat], [AmountKey], [InvertAmounts], [HeaderLines], [Delimiter], [Image])

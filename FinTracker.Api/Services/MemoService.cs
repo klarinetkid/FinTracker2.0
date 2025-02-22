@@ -6,11 +6,13 @@ namespace FinTracker.Api.Services
 {
     public class MemoService : BaseService
     {
-        public TblCategory? GetMemoCategory(string memo)
+        public TblMemo? GetMemo(string? memo)
         {
+            if (memo == null) return null;
+
             return db.TblMemos
                 .Where(e => e.Memo == memo)
-                .Select(e => e.Category)
+                .Include(e => e.Category)
                 .FirstOrDefault();
         }
 
@@ -24,13 +26,12 @@ namespace FinTracker.Api.Services
 
         public TblMemo? PatchMemo(int id, MemoViewModel model)
         {
-            TblMemo? tblCategorization = db.TblMemos.Find(id);
-            if (tblCategorization != null)
+            TblMemo? tblMemo = db.TblMemos.Find(id);
+            if (tblMemo != null)
             {
-                if (model.CategoryId == null) throw new ArgumentException();
-
-                tblCategorization.CategoryId = model.CategoryId.Value;
-                db.TblMemos.Entry(tblCategorization).State = EntityState.Modified;
+                tblMemo.CategoryId = model.CategoryId ?? null;
+                tblMemo.IsImported = model.IsImported ?? false;
+                db.TblMemos.Entry(tblMemo).State = EntityState.Modified;
                 db.SaveChanges();
             }
 
@@ -60,7 +61,7 @@ namespace FinTracker.Api.Services
         {
             foreach (MemoViewModel memo in memos)
             {
-                if (memo.Memo == null || memo.CategoryId == null) continue;
+                if (memo.Memo == null) continue;
 
                 TblMemo? existing = db.TblMemos
                     .FirstOrDefault(e => e.Memo == memo.Memo);
@@ -69,10 +70,9 @@ namespace FinTracker.Api.Services
                 {
                     db.TblMemos.Add(memo.ToTblMemo());
                 }
-                else if (existing.CategoryId != memo.CategoryId.Value)
+                else
                 {
-                    existing.CategoryId = memo.CategoryId.Value;
-                    db.TblMemos.Update(existing);
+                    PatchMemo(existing.Id, memo);
                 }
             }
 

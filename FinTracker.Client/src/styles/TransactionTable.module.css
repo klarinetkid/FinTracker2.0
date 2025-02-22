@@ -1,0 +1,36 @@
+.transactionRow td {
+    transition: background-color ease-in 0.1s
+}
+
+.transactionRow.selected td {
+    background-color: var(--var-selected-highlight);
+    border: solid 1px #333333
+}
+
+.transactionRow:has(+ tr.selected) td {
+    border-bottom: none;
+}
+
+.cashTransactionIcon {
+    float: right;
+}
+
+.table th {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+    .table th img {
+        visibility: hidden;
+        position: absolute;
+        right: 10px;
+    }
+
+        .table th img.activeOrder, .table th:hover img {
+            visibility: visible;
+        }
+
+            .table th:hover img:not(.activeOrder) {
+                opacity: 0.5;
+            }

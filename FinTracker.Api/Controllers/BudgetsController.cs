@@ -9,23 +9,23 @@ namespace FinTracker.Api.Controllers
     [Route("[controller]")]
     public class BudgetsController : Controller
     {
-        private readonly BudgetItemService service = new ();
+        private readonly BudgetService service = new ();
 
         [HttpGet("Grouped")]
         //public BudgetItemGroupViewModel[] Grouped()
-        public Grouping<TblCategory, TblBudgetItem>[] Grouped()
+        public Grouping<TblCategory, TblBudget>[] Grouped()
         {
             return service.GetBudgetItemGroups().ToArray();
         }
 
         [HttpPost]
-        public TblBudgetItem Create(BudgetViewModel model)
+        public TblBudget Create(BudgetViewModel model)
         {
             return service.CreateBudgetItem(model);
         }
 
         [HttpPut("{id?}")]
-        public TblBudgetItem? Patch(int? id, BudgetViewModel model)
+        public TblBudget? Patch(int? id, BudgetViewModel model)
         {
             if (id == null) throw new Exception("Id is null");
             return service.PutBudgetItem(id.Value, model);

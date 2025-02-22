@@ -20,7 +20,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <Input
                     placeholder="Search"
                     name="search"
-                    value={props.formValues.values.search}
+                    value={props.formValues.values.search ?? ""}
                     onChange={props.formValues.updateValue}
                 />
             </FormGroup>
@@ -46,7 +46,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <Input
                     type="date"
                     name="after"
-                    value={props.formValues.values.after}
+                    value={props.formValues.values.after ?? ""}
                     onChange={props.formValues.updateValue}
                 />
             </FormGroup>
@@ -54,7 +54,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <Input
                     type="date"
                     name="before"
-                    value={props.formValues.values.before}
+                    value={props.formValues.values.before ?? ""}
                     onChange={props.formValues.updateValue}
                 />
             </FormGroup>

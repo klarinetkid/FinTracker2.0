@@ -33,15 +33,19 @@ export class TransactionImportManager {
         const prepared = prepareImport(format, filesContent);
 
         const transactions = await TransactionService.prepareImport(prepared);
-        const transactionModels = transactions.map((t, i) => ({
-            ...t,
-            id: i + 1,
-            selectedForImport: !t.isAlreadyImported,
-        }));
+        const transactionModels = transactions.map(
+            (trx, i): TransactionViewModel => ({
+                ...trx,
+                id: i + 1,
+                isSelectedForImport:
+                    !trx.isAlreadyImported &&
+                    (trx.savedMemo?.isImported ?? true),
+            })
+        );
         this.setTransactions(transactionModels);
     }
 
-    public SetCategory(rowNum: number, category: Category): void {
+    public UpdateTransactionCategory(rowNum: number, category: Category): void {
         const id = rowNum - 1;
         if (this.Transcations[id]) {
             const newTransactions = [...this.Transcations];
@@ -49,80 +53,112 @@ export class TransactionImportManager {
             newTransactions[id].category = category;
 
             if (newTransactions[id].isToSaveMemo && newTransactions[id].memo)
-                this.AddDefault(
-                    newTransactions[id].memo,
-                    newTransactions[id].category
-                );
+                this.AddMemo(newTransactions[id]);
 
             this.setTransactions(newTransactions);
         }
     }
 
+    public ToggleSelected(transaction: TransactionViewModel) {
+        if (!transaction.id) return;
+        this.SetSelected(transaction.id, !transaction.isSelectedForImport);
+    }
     public SetSelected(rowNum: number, selected: boolean): void {
         const id = rowNum - 1;
         if (this.Transcations[id]) {
             const newTransactions = [...this.Transcations];
             newTransactions[id].isSelectedForImport = selected;
 
-            //if (newTransactions[id].memo)
-            //    this.RemoveDefault(newTransactions[id].memo);
+            if (newTransactions[id].isToSaveMemo)
+                this.RemoveMemo(newTransactions[id]);
 
             this.setTransactions(newTransactions);
         }
     }
 
-    public AddDefault(memo: string, category: Category): void {
+    public ToggleMemoSave(transaction: TransactionViewModel): void {
+        if (
+            !transaction.isSelectedForImport ||
+            (transaction.isSelectedForImport && transaction.category)
+        ) {
+            if (transaction.isToSaveMemo) {
+                this.RemoveMemo(transaction);
+            } else {
+                this.AddMemo(transaction);
+            }
+        }
+    }
+    public AddMemo(transaction: TransactionViewModel): void {
+        if (!transaction.memo) return;
+
         const newTransactions = [...this.Transcations];
-        for (const transaction of newTransactions) {
-            if (transaction.memo === memo) {
-                transaction.category = category;
-                transaction.categoryId = category.id;
-                transaction.isToSaveMemo = true;
+        for (const trx of newTransactions) {
+            if (trx.memo === transaction.memo) {
+                trx.category = transaction.category;
+                trx.categoryId = transaction.category?.id;
+                trx.isToSaveMemo = true;
+                trx.isSelectedForImport = transaction.isSelectedForImport;
             }
         }
         this.setTransactions(newTransactions);
     }
+    public RemoveMemo(transaction: TransactionViewModel): void {
+        if (!transaction.memo) return;
 
-    public RemoveDefault(memo: string): void {
         const newTransactions = [...this.Transcations];
-        for (const transaction of newTransactions) {
-            if (transaction.memo === memo) {
-                transaction.isToSaveMemo = false;
+        for (const t of newTransactions) {
+            if (t.memo === transaction.memo) {
+                t.isToSaveMemo = false;
             }
         }
         this.setTransactions(newTransactions);
     }
 
     public async Submit(): Promise<number> {
-        const newTransactions: TransactionViewModel[] =
-            this.Transcations.filter((t) => t.isSelectedForImport).map((t) => ({
-                date: t.date,
-                memo: t.memo,
-                amount: t.amount,
-                categoryId: t.categoryId,
-            }));
+        const newTransactions = this.getTransactionsToSubmit();
 
         if (newTransactions.length === 0) return 0;
 
-        const newDefaults: MemoViewModel[] = this.Transcations.filter(
-            (t) => t.isSelectedForImport && t.isToSaveMemo
-        )
-            // select distinct
-            .filter(
-                (e, i, arr) => arr.findIndex((e2) => e2.memo === e.memo) === i
-            )
-            .map((t) => ({ memo: t.memo, categoryId: t.categoryId }));
+        const newMemos: MemoViewModel[] = this.getMemosToSubmit();
 
         const results = {
             transactionsInserted:
                 await TransactionService.createBatch(newTransactions),
             defaultsInserted:
-                newDefaults.length > 0
-                    ? await MemoService.patchBatch(newDefaults)
+                newMemos.length > 0
+                    ? await MemoService.patchBatch(newMemos)
                     : 0,
         };
 
         return results.transactionsInserted;
+    }
+
+    private getTransactionsToSubmit(): TransactionViewModel[] {
+        return this.Transcations.filter((trx) => trx.isSelectedForImport).map(
+            (trx) => ({
+                date: trx.date,
+                memo: trx.memo,
+                amount: trx.amount,
+                categoryId: trx.categoryId,
+            })
+        );
+    }
+    private getMemosToSubmit(): MemoViewModel[] {
+        return (
+            this.Transcations.filter((trx) => trx.isToSaveMemo)
+                // select distinct on memo
+                .filter(
+                    (e, i, arr) =>
+                        arr.findIndex((e2) => e2.memo === e.memo) === i
+                )
+                .map((trx) => ({
+                    memo: trx.memo,
+                    categoryId: trx.isSelectedForImport
+                        ? trx.categoryId
+                        : undefined,
+                    isImported: trx.isSelectedForImport,
+                }))
+        );
     }
 }
 

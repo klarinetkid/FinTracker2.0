@@ -13,8 +13,8 @@ namespace FinTracker.Services.Data.Entities
         public string Colour { get; set; }
     }
 
-    [Table("TblBudgetItem")]
-    public class TblBudgetItem
+    [Table("TblBudget")]
+    public class TblBudget
     {
         [Key]
         public int Id { get; set; }
@@ -52,13 +52,14 @@ namespace FinTracker.Services.Data.Entities
         public string? Image { get; set; }
     }
 
-    [Table("TblMemoCategorization")]
+    [Table("TblMemo")]
     public class TblMemo
     {
         [Key]
         public int Id { get; set; }
         public string Memo { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
+        public bool IsImported { get; set; }
     }
 }

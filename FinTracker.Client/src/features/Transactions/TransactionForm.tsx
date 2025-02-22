@@ -39,7 +39,7 @@ function CashTransactionForm(props: CashTransactionFormProps) {
                 <FormGroup fieldName="Amount">
                     <Input
                         readOnly={!props.formValues.values.isCashTransaction}
-                        type="number"
+                        type="text"
                         name="amount"
                         value={props.formValues.values.amount ?? ""}
                         onChange={props.formValues.updateValue}

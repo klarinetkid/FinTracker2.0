@@ -14,12 +14,12 @@ import { AxiosError } from "axios";
 import { ErrorResponse } from "../../services/baseService";
 
 function CategoriesPage() {
-    const [categories, setCategories] = useState<CategoryTransactionCount[]>(
-        []
-    );
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);
     const formValues = useFormValues<CategoryViewModel>({});
+    const [categories, setCategories] = useState<CategoryTransactionCount[]>(
+        []
+    );
 
     useEffect(() => {
         CategoryService.getCategoryTransactionCounts().then(setCategories);
@@ -32,13 +32,13 @@ function CategoriesPage() {
                 <IconButton
                     title="New category"
                     icon={AddIcon}
-                    onClick={newCategory}
+                    onClick={() => openCategoryForm({})}
                 />
             </Row>
 
             <CategoryTable
                 categories={categories}
-                editCategory={editCategory}
+                editCategory={(c) => openCategoryForm(c)}
             />
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
@@ -52,12 +52,7 @@ function CategoriesPage() {
         </Page>
     );
 
-    function newCategory() {
-        formValues.setErrors(undefined);
-        formValues.setValues({});
-        setIsDrawerOpen(true);
-    }
-    function editCategory(category: CategoryTransactionCount) {
+    function openCategoryForm(category: CategoryViewModel) {
         formValues.setErrors(undefined);
         formValues.setValues(category);
         setIsDrawerOpen(true);

@@ -31,7 +31,7 @@ create function FnGetCategoryBudgetForRange(@categoryId int, @start Date, @end D
 							effectivedate
 					) as NextBudgetEffectiveDate
 				from
-					dbo.TblBudgetItem
+					dbo.TblBudget
 				where
 					CategoryId = @categoryId
 					and EffectiveDate < @end

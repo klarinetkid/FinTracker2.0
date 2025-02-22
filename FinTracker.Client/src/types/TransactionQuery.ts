@@ -4,6 +4,8 @@ type TransactionQuery = {
     categoryId?: number;
     before?: string;
     after?: string;
+    orderBy?: string;
+    order?: string;
 };
 
 export default TransactionQuery;

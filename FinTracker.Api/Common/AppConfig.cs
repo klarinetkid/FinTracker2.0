@@ -5,6 +5,8 @@
         public string ConnectionString { get; set; }
 
         public int ResponsePageSize { get; set; }
+        public int MaxBreakdownYears { get; set; }
+        public int MaxMonthlyBudget { get; set; }
 
         public AppConfig(ConfigurationManager config)
         {

@@ -2,6 +2,7 @@ import { FileContent } from "use-file-picker/types";
 import ImportFormat from "../types/ImportFormat";
 import TransactionViewModel from "../types/TransactionViewModel";
 import moment from "moment";
+import { isEmpty } from "./StringHelper";
 
 type CsvRow = { [x: string]: string };
 
@@ -13,7 +14,9 @@ export function prepareImport(
         .map((f) => parseCsv(format, f.content.toString()))
         .flat();
 
-    return allRows.map((r) => csvRowToTransaction(format, r));
+    return allRows
+        .map((r) => csvRowToTransaction(format, r))
+        .filter((t) => t !== null);
 }
 
 function parseCsv(format: ImportFormat, content: string): CsvRow[] {
@@ -33,7 +36,13 @@ function parseCsv(format: ImportFormat, content: string): CsvRow[] {
 function csvRowToTransaction(
     format: ImportFormat,
     row: CsvRow
-): TransactionViewModel {
+): TransactionViewModel | null {
+    const date = row[format.dateKey];
+    const amount = row[format.amountKey];
+    const memo = getTransactionMemo(format.memoFormat, row);
+
+    if (!areCsvValuesValid(date, memo, amount)) return null;
+
     return {
         date: moment(row[format.dateKey]).format("yyyy-MM-DD"),
         amount: Math.floor(
@@ -46,8 +55,31 @@ function csvRowToTransaction(
 }
 
 function getTransactionMemo(memoFormat: string, row: CsvRow) {
-    Object.keys(row).map((k) => {
-        memoFormat = memoFormat.replaceAll(`{${k}}`, row[k]);
-    });
+    const placeholders = memoFormat.match(/{\w+}/);
+    if (!placeholders) return memoFormat;
+
+    for (const placeholder of placeholders) {
+        memoFormat = memoFormat.replaceAll(
+            placeholder,
+            row[placeholder.substring(1, placeholder.length - 1)]
+        );
+    }
+    //Object.keys(row).map((k) => {
+    //    memoFormat = memoFormat.replaceAll(`{${k}}`, row[k]);
+    //});
     return memoFormat;
+}
+
+function areCsvValuesValid(
+    date: string,
+    memo: string,
+    amount: string
+): boolean {
+    return (
+        !isEmpty(date) &&
+        !isEmpty(memo) &&
+        !isEmpty(amount) &&
+        !isNaN(Number(amount.trim())) &&
+        moment(date).isValid()
+    );
 }

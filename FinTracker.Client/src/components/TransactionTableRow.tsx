@@ -6,7 +6,7 @@ import CategorySelector from "../components/CategorySelector";
 import useCategorySelection from "../hooks/useCategorySelection";
 import useGlobalDataCache from "../hooks/useGlobalDataCache";
 import TransactionService from "../services/TransactionService";
-import styles from "../styles/TransactionTableRow.module.css";
+import styles from "../styles/TransactionTable.module.css";
 import Category, { Uncategorized } from "../types/Category";
 import TransactionViewModel from "../types/TransactionViewModel";
 import { classList } from "../utils/htmlHelper";

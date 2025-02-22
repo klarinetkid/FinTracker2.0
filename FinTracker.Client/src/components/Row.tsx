@@ -1,7 +1,7 @@
 import styles from "../styles/Row.module.css";
 
 interface RowProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     justifyContent?: string;
     gap?: number;
     style?: React.CSSProperties;

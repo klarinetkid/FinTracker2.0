@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import CategoryPill from "../../components/CategoryPill";
 import Table from "../../components/Table";
 import { CategoryTransactionCount } from "../../types/Category";
+import Pages from "../../types/Pages";
 
 interface CategoryTableProps {
     categories: CategoryTransactionCount[];
@@ -29,7 +31,17 @@ function CategoryTable(props: CategoryTableProps) {
                             />
                         </td>
                         <td className="centre monospace">{category.colour}</td>
-                        <td className="ralign">{category.transactionCount}</td>
+                        <td className="ralign">
+                            {category.transactionCount > 0 ? (
+                                <Link
+                                    to={`${Pages.Transactions}?category=${category.id}`}
+                                >
+                                    {category.transactionCount}
+                                </Link>
+                            ) : (
+                                category.transactionCount
+                            )}
+                        </td>
                     </tr>
                 ))}
             </tbody>

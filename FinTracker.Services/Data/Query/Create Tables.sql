@@ -9,14 +9,17 @@ Create table TblCategory (
 );
 
 ----------------------------------
----- create TblBudgetItem
+---- create TblBudget
 ----------------------------------
-drop table if exists TblBudgetItem;
-Create table TblBudgetItem (
+drop table if exists TblBudget;
+Create table TblBudget (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[CategoryId] int references TblCategory(Id) NOT NULL,
 	[Amount] int NOT NULL,
-	[EffectiveDate] date NOT NULL
+	[EffectiveDate] date NOT NULL,
+	constraint CK_Budget_Amount_Range check (
+	   [Amount] >= -1000000 AND [Amount] <= 1000000
+	)
 );
 
 ----------------------------------
@@ -33,7 +36,7 @@ Create table TblTransaction (
 );
 
 ----------------------------------
----- create TblImportFileFormat
+---- create TblImportFormat
 ----------------------------------
 drop table if exists TblImportFormat;
 Create table TblImportFormat (
@@ -49,12 +52,13 @@ Create table TblImportFormat (
 );
 
 ----------------------------------
----- create TblMemoCategorization
+---- create TblMemo
 ----------------------------------
 drop table if exists TblMemo;
 Create table TblMemo (
 	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
 	[Memo] varchar(200) NOT NULL,
-	[CategoryId] int references TblCategory(id) NOT NULL,
+	[CategoryId] int references TblCategory(id) NULL,
+	[IsImported] bit NOT NULL default 1,
 	constraint AK_Memo unique([Memo]),
 );

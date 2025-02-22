@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Validation;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Validation;
 using FinTracker.Services.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +13,7 @@ namespace FinTracker.Api.Models
         public int? CategoryId { get; set; }
 
         [Required]
+        [Range(-1_000_000, 1_000_000)]
         public int? Amount { get; set; }
 
         [Required]
@@ -29,9 +31,9 @@ namespace FinTracker.Api.Models
             throw new ArgumentException();
         }
 
-        public TblBudgetItem ToTblBudgetItem(int id = 0)
+        public TblBudget ToTblBudget(int id = 0)
         {
-            return new TblBudgetItem()
+            return new TblBudget()
             {
                 Id = id,
                 CategoryId = CategoryId.HasValue ? CategoryId.Value : throw new Exception("Category ID is required"),

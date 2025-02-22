@@ -17,10 +17,15 @@ namespace FinTracker.Api.Services
             return new BreakdownViewModel(query.Start.Value, query.End.Value, transactions, categoryTotals);
         }
 
+        public BreakdownViewModel GetBreakdown(DateOnly start, DateOnly end)
+        {
+            return GetBreakdown(new BreakdownQuery() { Start = start, End = end });
+        }
+
         public IEnumerable<BreakdownViewModel> GetMonthlyBreakdownsForYear(int year)
         {
             IEnumerable<DateOnly> months = Enumerable.Range(1, 12).Select(m => new DateOnly(year, m, 1));
-            return months.Select(m => GetBreakdown(new BreakdownQuery() { Start = m, End = m.AddMonths(1) }));
+            return months.Select(m => GetBreakdown(m, m.AddMonths(1)));
         }
 
         public IEnumerable<BreakdownViewModel> GetWeeklyBreakdownsForYear(int year)
@@ -28,7 +33,7 @@ namespace FinTracker.Api.Services
             DateOnly yearStart = DateOnly.FromDateTime(ISOWeek.GetYearStart(year));
             int numWeeks = ISOWeek.GetWeeksInYear(year);
             IEnumerable<DateOnly> weekStarts = Enumerable.Range(0, numWeeks).Select(weekNum => yearStart.AddDays(weekNum * 7));
-            return weekStarts.Select(w => GetBreakdown(new BreakdownQuery() { Start = w, End = w.AddDays(7) }));
+            return weekStarts.Select(w => GetBreakdown(w, w.AddDays(7)));
         }
 
         public IEnumerable<BreakdownViewModel> GetYearlyBreakdowns()
@@ -36,7 +41,7 @@ namespace FinTracker.Api.Services
             int[] availableYears = new MetadataService().GetAvailableYears();
             return availableYears
                 .Select(year => new DateOnly(year, 1, 1))
-                .Select(year => GetBreakdown(new BreakdownQuery() { Start = year, End = year.AddYears(1) }));
+                .Select(year => GetBreakdown(year, year.AddYears(1)));
         }
     }
 

@@ -7,7 +7,7 @@ namespace FinTracker.Services.Data
     public class ApplicationDbContext : DbContext
     {
         public DbSet<TblCategory> TblCategories { get; set; }
-        public DbSet<TblBudgetItem> TblBudgetItems { get; set; }
+        public DbSet<TblBudget> TblBudgets { get; set; }
         public DbSet<TblTransaction> TblTransactions { get; set; }
         public DbSet<TblImportFormat> TblImportFormats { get; set; }
         public DbSet<TblMemo> TblMemos { get; set; }

@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import moment from "moment";
 import { SyntheticEvent, useEffect, useState } from "react";
 import AddIcon from "../../assets/Add_round_fill_light.svg?react";
@@ -6,6 +7,7 @@ import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import { useFormValues } from "../../hooks/useFormValues";
+import { ErrorResponse } from "../../services/baseService";
 import BudgetService from "../../services/BudgetService";
 import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
@@ -13,8 +15,6 @@ import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
-import { AxiosError } from "axios";
-import { ErrorResponse } from "../../services/baseService";
 
 function BudgetPage() {
     const [groupedBudgets, setGroupedBudgets] = useState<
@@ -64,12 +64,12 @@ function BudgetPage() {
         });
         setIsDrawerOpen(true);
     }
-    function editBudget(Budget: Budget) {
+    function editBudget(budget: Budget) {
         formValues.setErrors(undefined);
         const model = {
-            ...Budget,
+            ...budget,
             category: undefined,
-            amount: (Budget.amount / 100).toFixed(2),
+            amount: (budget.amount / 100).toFixed(2),
         };
         formValues.setValues(model);
         setIsDrawerOpen(true);

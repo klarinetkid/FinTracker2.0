@@ -94,6 +94,8 @@ function BreakdownPage() {
                                 before: moment(breakdown.end).format(
                                     "yyyy-MM-DD"
                                 ),
+                                orderBy: "date",
+                                order: "asc",
                             }}
                             onChange={refreshBreakdown}
                         />

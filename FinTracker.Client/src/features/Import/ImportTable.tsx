@@ -3,8 +3,9 @@ import { useLocation } from "react-router-dom";
 import ThreeDBoxIconRefresh from "../../assets/3d_box_fill_refresh.svg?react";
 import IconButton from "../../components/IconButton";
 import PaginationNav from "../../components/PaginationNav";
+import PillToggle from "../../components/PillToggle";
 import Row from "../../components/Row";
-import Select from "../../components/Select";
+import Spacer from "../../components/Spacer";
 import Table from "../../components/Table";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useLocalPagination from "../../hooks/useLocalPagination";
@@ -15,77 +16,50 @@ interface ImportTableProps {
     transactions: TransactionViewModel[];
 }
 
-type ImportFilter =
-    | "all"
-    | "selected"
-    | "uncategorized"
-    | "unselected"
-    | "unsaved";
+const importFilters = [
+    "View All",
+    "Selected",
+    "Uncategorized",
+    "Unselected",
+    "Unsaved",
+] as const;
+type ImportFilter = (typeof importFilters)[number];
 
 function ImportTable(props: ImportTableProps) {
     const globalDataCache = useGlobalDataCache();
-    const [filter, setFilter] = useState<ImportFilter>("all");
+    const [filter, setFilter] = useState<ImportFilter>("View All");
     const pagination = useLocalPagination(transactionsFiltered(filter), 25);
     const location = useLocation();
 
-    useEffect(() => pagination.setCurrentPage(0), [location.state]);
+    useEffect(() => pagination.setCurrentPage(0), [filter, location.state]);
 
-    if (filter !== "all" && transactionsFiltered(filter).length === 0) {
-        setFilter("all");
+    if (filter !== "View All" && transactionsFiltered(filter).length === 0) {
+        setFilter("View All");
         pagination.setCurrentPage(0);
     }
-
-    const numSelected = transactionsFiltered("selected").length;
-    const numUnselected = transactionsFiltered("unselected").length;
-    const numUncategorized = transactionsFiltered("uncategorized").length;
-    const numUnsaved = transactionsFiltered("unsaved").length;
 
     return (
         <div>
             <Row justifyContent="space-between">
-                <p>
-                    There {numUncategorized === 1 ? "is" : "are"}{" "}
-                    <b>{numUncategorized}</b> uncategorized transaction
-                    {numUncategorized === 1 ? "" : "s"} selected for import.
-                </p>
-                <div style={{ display: "flex", gap: 10 }}>
-                    {/*TODO: better icon for this*/}
-                    <IconButton
-                        title="Refresh categories"
-                        icon={ThreeDBoxIconRefresh}
-                        onClick={() => globalDataCache.categories.refresh()}
-                    />
-                    <Select
-                        value={filter}
-                        onChange={(e) => {
-                            setFilter(e.target.value as ImportFilter);
-                            pagination.setCurrentPage(0);
-                        }}
-                    >
-                        <option value="all">
-                            View all ({props.transactions.length})
-                        </option>
-                        <option value="selected" disabled={numSelected === 0}>
-                            Selected ({numSelected})
-                        </option>
-                        <option
-                            value="unselected"
-                            disabled={numUnselected === 0}
-                        >
-                            Unselected ({numUnselected})
-                        </option>
-                        <option
-                            value="uncategorized"
-                            disabled={numUncategorized === 0}
-                        >
-                            Uncategorized ({numUncategorized})
-                        </option>
-                        <option value="unsaved" disabled={numUnsaved === 0}>
-                            Unsaved ({numUnsaved})
-                        </option>
-                    </Select>
-                </div>
+                <Row gap={10}>
+                    {importFilters.map((f) => (
+                        <PillToggle
+                            key={f}
+                            title={`${f} (${transactionsFiltered(f).length})`}
+                            isActive={filter === f}
+                            onToggle={() => setFilter(f)}
+                            disabled={transactionsFiltered(f).length === 0}
+                        />
+                    ))}
+                </Row>
+                <IconButton
+                    title="Refresh categories"
+                    icon={ThreeDBoxIconRefresh}
+                    onClick={() => globalDataCache.categories.refresh()}
+                />
             </Row>
+
+            <Spacer height={6} />
             <Table>
                 <thead>
                     <tr>
@@ -119,24 +93,21 @@ function ImportTable(props: ImportTableProps) {
         filter: ImportFilter
     ): TransactionViewModel[] {
         switch (filter) {
-            case "selected":
+            case "View All":
+                return props.transactions;
+            case "Selected":
                 return props.transactions.filter((t) => t.isSelectedForImport);
-            case "unselected":
+            case "Unselected":
                 return props.transactions.filter((t) => !t.isSelectedForImport);
-            case "uncategorized":
-                return props.transactions.filter(
-                    (t) => t.isSelectedForImport && !t.categoryId
-                );
-            case "unsaved":
+            case "Uncategorized":
+                return props.transactions.filter((t) => !t.categoryId);
+            case "Unsaved":
                 return props.transactions.filter(
                     (t) =>
-                        t.isSelectedForImport &&
-                        !t.isToSaveMemo &&
-                        !t.isMemoCategorized &&
-                        !t.isAlreadyImported
+                        t.savedMemo === null &&
+                        !t.isAlreadyImported &&
+                        !t.isToSaveMemo
                 );
-            default:
-                return props.transactions;
         }
     }
 }

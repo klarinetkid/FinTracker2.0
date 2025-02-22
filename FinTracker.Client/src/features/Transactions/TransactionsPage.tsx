@@ -9,10 +9,17 @@ import Drawer from "../../components/Drawer";
 import TransactionForm from "./TransactionForm";
 import { useFormValues } from "../../hooks/useFormValues";
 import TransactionViewModel from "../../types/TransactionViewModel";
+import { useSearchParams } from "react-router-dom";
 
 function TransactionsPage() {
     const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-    const filterValues = useFormValues<TransactionQuery>({});
+    const [searchParams] = useSearchParams();
+
+    const filterValues = useFormValues<TransactionQuery>({
+        categoryId: Number(searchParams.get("category")) || undefined,
+        orderBy: "date",
+        order: "desc",
+    });
     const formValues = useFormValues<TransactionViewModel>({});
 
     return (
@@ -26,6 +33,11 @@ function TransactionsPage() {
 
             <TransactionFilters formValues={filterValues} />
 
+            <TransactionTable
+                query={filterValues.values}
+                onRowSelect={editTransaction}
+            />
+
             <Drawer isOpen={drawerIsOpen} setIsOpen={setDrawerIsOpen}>
                 <TransactionForm
                     formValues={formValues}
@@ -34,11 +46,6 @@ function TransactionsPage() {
                     onDelete={deleteTransaction}
                 />
             </Drawer>
-
-            <TransactionTable
-                query={filterValues.values}
-                onRowSelect={editTransaction}
-            />
         </Page>
     );
 

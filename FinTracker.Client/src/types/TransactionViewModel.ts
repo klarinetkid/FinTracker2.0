@@ -1,4 +1,5 @@
 import Category from "./Category";
+import Memo from "./Memo";
 
 type TransactionViewModel = {
     id?: number;
@@ -9,10 +10,16 @@ type TransactionViewModel = {
     category?: Category;
     isCashTransaction?: boolean;
 
-    isMemoCategorized?: boolean;
+    // for import, from server
     isAlreadyImported?: boolean;
+    savedMemo?: Memo;
+
+    // for client
     isToSaveMemo?: boolean;
     isSelectedForImport?: boolean;
+
+    //isToSaveMemoCategory?: boolean;
+    //isToSaveMemoNotImported?: boolean;
 };
 
 export default TransactionViewModel;

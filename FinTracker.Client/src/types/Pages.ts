@@ -10,5 +10,3 @@ enum Pages {
 }
 
 export default Pages;
-
-export type ViewEditDelete = "view" | "edit" | "new";

@@ -5,6 +5,7 @@ type MemoViewModel = {
     memo?: string;
     categoryId?: number;
     category?: Category;
+    isImported?: boolean;
 };
 
 export default MemoViewModel;

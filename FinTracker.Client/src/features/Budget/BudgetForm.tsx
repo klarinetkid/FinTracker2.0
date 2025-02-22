@@ -59,7 +59,7 @@ function BudgetForm(props: BudgetFormProps) {
                 >
                     <Input
                         name="amount"
-                        type="number"
+                        type="text"
                         className="ralign"
                         value={props.formValues.values.amount?.toString() ?? ""}
                         onChange={props.formValues.updateValue}

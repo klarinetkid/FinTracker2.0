@@ -45,6 +45,7 @@
     pointer-events: auto;
     padding: 8px 16px;
     cursor: pointer;
+    min-width: 150px;
     border-bottom: solid 1px var(--var-light-border);
 }
 

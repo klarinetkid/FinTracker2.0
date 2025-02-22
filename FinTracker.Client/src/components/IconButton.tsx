@@ -13,6 +13,7 @@ function IconButton(props: IconButtonProps) {
             type="button"
             className={styles.button}
             onClick={props.onClick}
+            onContextMenu={(e) => e.preventDefault()}
         >
             <props.icon width={32} height={32} />
         </button>

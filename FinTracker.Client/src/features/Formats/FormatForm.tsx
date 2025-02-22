@@ -91,7 +91,7 @@ function FormatForm(props: FormatsFormProps) {
                 >
                     <Input
                         name="headerLines"
-                        type="number"
+                        type="text"
                         value={
                             props.formValues.values.headerLines?.toString() ??
                             ""

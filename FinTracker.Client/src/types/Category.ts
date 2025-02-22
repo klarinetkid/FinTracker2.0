@@ -16,6 +16,12 @@ export const Total: Category = {
     colour: "330033",
 };
 
+export const NeverImport: Category = {
+    id: undefined,
+    categoryName: "Never import",
+    colour: "#990000",
+};
+
 export type CategoryTransactionCount = {
     id: number;
     categoryName: string;
