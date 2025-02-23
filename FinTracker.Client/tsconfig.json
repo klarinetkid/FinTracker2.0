@@ -6,7 +6,6 @@
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": [ "vite-plugin-svgr/client" ],
-    "lib": [ "ES2021.String" ]
+    "types": [ "vite-plugin-svgr/client" ]
   }
 }

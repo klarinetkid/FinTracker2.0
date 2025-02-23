@@ -19,8 +19,8 @@ interface ImportTableProps {
 const importFilters = [
     "View All",
     "Selected",
-    "Uncategorized",
     "Unselected",
+    "Uncategorized",
     "Unsaved",
 ] as const;
 type ImportFilter = (typeof importFilters)[number];

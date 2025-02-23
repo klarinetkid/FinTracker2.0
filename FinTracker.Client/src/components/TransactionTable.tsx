@@ -31,7 +31,8 @@ function TransactionTable(props: TransactionTableProps) {
     useEffect(() => {
         const query: TransactionQuery = {
             ...props.query,
-            ...formValues.values,
+            order: formValues.values.order ?? props.query?.order,
+            orderBy: formValues.values.orderBy ?? props.query?.orderBy,
             pageNumber: currentPage,
         };
         TransactionService.getTransactions(query).then(setPage);
@@ -53,7 +54,7 @@ function TransactionTable(props: TransactionTableProps) {
                         <TransactionTableHeaderCell
                             formValues={formValues}
                             columnName="Date"
-                            width="5.5em"
+                            width="6em"
                         />
                         <TransactionTableHeaderCell
                             formValues={formValues}

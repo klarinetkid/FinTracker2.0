@@ -31,7 +31,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     onChange={(c: Category | undefined) => {
                         const categoryId = c && c.id === undefined ? -1 : c?.id;
                         props.formValues.setValues({
-                            ...props.formValues,
+                            ...props.formValues.values,
                             categoryId: categoryId,
                         });
                     }}
