@@ -9,6 +9,8 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg);
+    color: var(--fg);
 }
 
 html {
@@ -44,7 +46,12 @@ h1 {
     font-size: 3.2em;
     line-height: 1.1;
 }
-
+svg *[stroke] {
+    stroke: var(--icon);
+}
+svg *[fill] {
+    fill: var(--icon);
+}
 
 /*
     Quick property classes

@@ -44,7 +44,6 @@ function TransactionFilters(props: TransactionFiltersProps) {
             </FormGroup>
             <FormGroup fieldName="After">
                 <Input
-                    type="date"
                     name="after"
                     value={props.formValues.values.after ?? ""}
                     onChange={props.formValues.updateValue}
@@ -52,7 +51,6 @@ function TransactionFilters(props: TransactionFiltersProps) {
             </FormGroup>
             <FormGroup fieldName="Before">
                 <Input
-                    type="date"
                     name="before"
                     value={props.formValues.values.before ?? ""}
                     onChange={props.formValues.updateValue}

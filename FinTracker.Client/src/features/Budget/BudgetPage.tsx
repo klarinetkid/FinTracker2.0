@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import moment from "moment";
 import { SyntheticEvent, useEffect, useState } from "react";
-import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
@@ -13,6 +12,7 @@ import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
+import { AddRoundLightFillIcon } from "../../utils/Icons";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
 
@@ -35,7 +35,7 @@ function BudgetPage() {
                 <h1>Budget</h1>
                 <IconButton
                     title="New budget item"
-                    icon={AddIcon}
+                    icon={AddRoundLightFillIcon}
                     onClick={newBudget}
                 />
             </Row>

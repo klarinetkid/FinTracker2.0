@@ -1,13 +1,13 @@
-.transactionRow td {
+.table tr td {
     transition: background-color ease-in 0.1s
 }
 
-.transactionRow.selected td {
-    background-color: var(--var-selected-highlight);
-    border: solid 1px #333333
+.table tr.selected td {
+    background-color: var(--highlight);
+    border: solid 1px var(--border-400);
 }
 
-.transactionRow:has(+ tr.selected) td {
+.table tr:has(+ tr.selected) td {
     border-bottom: none;
 }
 
@@ -21,7 +21,7 @@
     user-select: none;
 }
 
-    .table th img {
+    .table th .orderBtn {
         opacity: 0;
         position: absolute;
         right: 10px;
@@ -29,11 +29,11 @@
         transition: top 0.05s ease-in, opacity 0.1s ease-in;
     }
 
-        .table th img.activeOrder, .table th:hover img {
+        .table th .orderBtn.activeOrder, .table th:hover .orderBtn {
             opacity: 1;
             top: 15%;
         }
 
-            .table th:hover img:not(.activeOrder) {
-                opacity: 0.4;
-            }
+    .table th:hover .orderBtn:not(.activeOrder) {
+        opacity: 0.4;
+    }

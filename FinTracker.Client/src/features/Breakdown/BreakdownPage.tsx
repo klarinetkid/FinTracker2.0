@@ -1,7 +1,6 @@
 import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import BackIcon from "../../assets/Back.svg?react";
 import IconButton from "../../components/IconButton";
 import InOutPills from "../../components/InOutPills";
 import Page from "../../components/Page";
@@ -14,6 +13,8 @@ import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
 import TransactionTable from "../../components/TransactionTable";
+import { isEmpty } from "../../utils/StringHelper";
+import { BackIcon } from "../../utils/Icons";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -47,9 +48,9 @@ function BreakdownPage() {
         <Page width={1000}>
             <div className={styles.header}>
                 <IconButton
-                    title="Go back"
+                    title="Back to dashboard"
                     icon={BackIcon}
-                    onClick={() => navigate(-1)}
+                    onClick={backClick}
                 />
                 <div>
                     <h1>{breakdown ? breakdown.title : "Loading..."}</h1>
@@ -109,6 +110,20 @@ function BreakdownPage() {
 
     function refreshBreakdown() {
         setIsUpdated(!isUpdated);
+    }
+
+    function backClick() {
+        const year = moment(breakdown?.start).format("yyyy");
+        switch (breakdown?.type) {
+            case "Week":
+                navigate(`/?year=${year}&view=weekly`);
+                return;
+            case "Month":
+                navigate(`/?year=${year}`);
+                return;
+        }
+
+        navigate("/");
     }
 }
 

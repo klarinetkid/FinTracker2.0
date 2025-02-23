@@ -47,14 +47,19 @@ namespace FinTracker.Api.Services
             db.SaveChanges();
         }
 
-        public IEnumerable<Grouping<TblCategory, TblMemo>> GetGrouped()
+        public IEnumerable<Grouping<TblCategory?, TblMemo>> GetGrouped()
         {
             return db.TblMemos
                 .Include(e => e.Category)
+                .GroupBy(e => e.IsImported)
                 .AsEnumerable()
-                .GroupBy(e => e.Category)
-                .Where(e => e.Key != null)
-                .Select(e => new Grouping<TblCategory, TblMemo>(e.Key!, e.OrderBy(e => e.Memo)));
+                .SelectMany(g => 
+                    g.GroupBy(e => e.Category).Select(e => 
+                        new Grouping<TblCategory?, TblMemo>(e.Key!, e.OrderBy(e => e.Memo))
+                    )
+                )
+                .OrderBy(g => g.Group == null)
+                .ThenBy(g => g.Group != null ? g.Group.CategoryName : "");
         }
 
         public int BatchPatch(MemoViewModel[] memos)

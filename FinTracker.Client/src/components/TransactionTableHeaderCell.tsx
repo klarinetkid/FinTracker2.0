@@ -1,9 +1,8 @@
-import SortDescIcon from "../assets/Expand_down.svg";
-import SortAscIcon from "../assets/Expand_up.svg";
 import { FormValues } from "../hooks/useFormValues";
 import styles from "../styles/TransactionTable.module.css";
 import TransactionQuery from "../types/TransactionQuery";
 import { classList } from "../utils/htmlHelper";
+import { ExpandDownIcon, ExpandUpIcon } from "../utils/Icons";
 
 interface TransactionTableHeaderCellProps {
     formValues: FormValues<TransactionQuery>;
@@ -19,8 +18,11 @@ function TransactionTableHeaderCell(props: TransactionTableHeaderCellProps) {
     // always show asc if not active
     const currentOrder =
         !isActive || formValues.values.order === "asc" ? "asc" : "desc";
-    const icon = currentOrder === "asc" ? SortAscIcon : SortDescIcon;
     const targetOrder = !isActive || currentOrder === "desc" ? "asc" : "desc";
+    const iconClass = classList(
+        styles.orderBtn,
+        isActive ? styles.activeOrder : ""
+    );
 
     return (
         <th
@@ -30,13 +32,11 @@ function TransactionTableHeaderCell(props: TransactionTableHeaderCellProps) {
         >
             {props.columnName}
 
-            <img
-                src={icon}
-                className={classList(
-                    styles.orderBtnHolder,
-                    isActive ? styles.activeOrder : ""
-                )}
-            />
+            {currentOrder === "asc" ? (
+                <ExpandUpIcon className={iconClass} />
+            ) : (
+                <ExpandDownIcon className={iconClass} />
+            )}
         </th>
     );
 

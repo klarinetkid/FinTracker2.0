@@ -15,44 +15,44 @@
     }
 
     .table tr td:first-child {
-        border: solid 3px #00000000;
+        border: solid 3px var(--transparent);
         border-right: none;
     }
 
     .table tr td:not(:first-child), .table tr:hover td:not(:last-child) {
-        border-top: solid 3px #00000000;
-        border-bottom: solid 3px #00000000;
+        border-top: solid 3px var(--transparent);
+        border-bottom: solid 3px var(--transparent);
     }
 
     .table tr td:last-child {
-        border: solid #00000000;
+        border: solid var(--transparent);
         border-left: none;
     }
 
     .table tr:hover td:first-child {
         border-start-start-radius: 12px;
         border-end-start-radius: 12px;
-        border: solid 3px rgb(0, 96, 223);
+        border: solid 3px var(--control-focus);
         border-right: none;
     }
     .table tr:hover td:not(:first-child), .table tr:hover td:not(:last-child) {
-        border-top: solid 3px rgb(0, 96, 223);
-        border-bottom: solid 3px rgb(0, 96, 223);
+        border-top: solid 3px var(--control-focus);
+        border-bottom: solid 3px var(--control-focus);
     }
     .table tr:hover td:last-child {
         border-start-end-radius: 12px;
         border-end-end-radius: 12px;
-        border: solid 3px rgb(0, 96, 223);
+        border: solid 3px var(--control-focus);
         border-left: none;
     }
 
     .table tr:hover td  {
-        background-color: #cce6ff;
+        background-color: var(--light-blue);
         cursor: pointer;
     }
 
     .table tr:active td  {
-        background-color: #4da6ff;
+        background-color: var(--blue);
     }
 
 td.bandHolderCell {
@@ -65,7 +65,7 @@ td.bandHolderCell {
     display: flex;
     height: 20px;
     width: 100%;
-    border: ridge 3px #444444;
+    border: ridge 3px var(--border-400);
     border-radius: 6px;
     width: 100%;
 }
@@ -82,7 +82,7 @@ td.bandHolderCell {
         white-space: nowrap;
         /*width: 120px;*/
         background-color: black;
-        color: #fff;
+        color: white;
         text-align: center;
         border-radius: 6px;
         padding: 5px 10px;

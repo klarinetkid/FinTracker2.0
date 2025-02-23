@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import CloseRing from "../assets/close_ring.svg?react";
 import styles from "../styles/CategorySelector.module.css";
 import controlStyle from "../styles/Control.module.css";
 import Category, { Uncategorized } from "../types/Category";
 import { classList } from "../utils/htmlHelper";
 import CategoryPill from "./CategoryPill";
+import { CloseRingIcon } from "../utils/Icons";
+
 
 interface CategorySelectorProps {
     categories: Category[]; // don't want this component dependent on global data cache context, so just pass the options
@@ -69,14 +70,14 @@ function CategorySelector(props: CategorySelectorProps) {
                 props.className
             )}
         >
-            {value ? (
+            {value || !props.allowEmpty ? (
                 <CategoryPill category={value} />
             ) : (
                 <div className={styles.placeholder}>Select a category</div>
             )}
 
             {props.allowEmpty && value ? (
-                <CloseRing
+                <CloseRingIcon
                     className={styles.clearBtn}
                     onClick={clearSelection}
                 />

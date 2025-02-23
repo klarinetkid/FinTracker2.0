@@ -1,5 +1,4 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import AddIcon from "../../assets/Add_round_fill_light.svg?react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
@@ -12,6 +11,7 @@ import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "../../services/baseService";
+import { AddRoundLightFillIcon } from "../../utils/Icons";
 
 function CategoriesPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -31,7 +31,7 @@ function CategoriesPage() {
                 <h1>Categories</h1>
                 <IconButton
                     title="New category"
-                    icon={AddIcon}
+                    icon={AddRoundLightFillIcon}
                     onClick={() => openCategoryForm({})}
                 />
             </Row>

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import HomeIcon from "../assets/Home.svg?react";
-import MenuIcon from "../assets/darhboard.svg?react";
 import MenuPopdown from "../features/Menu/MenuPopdown";
+import { HomeIcon, MenuIcon } from "../utils/Icons";
 import IconButton from "./IconButton";
+import DarkModeToggle from "./DarkModeToggle";
 
 function Layout() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     return (
         <>
+            <DarkModeToggle />
             <div
                 style={{
                     float: "right",
@@ -30,7 +31,6 @@ function Layout() {
             <Outlet />
         </>
     );
-
     function menuIconClick() {
         if (!menuIsOpen) setMenuIsOpen(!menuIsOpen);
     }

@@ -1,6 +1,5 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
-import CashIcon from "../assets/Money_fill.svg?react";
 import CategoryPill from "../components/CategoryPill";
 import CategorySelector from "../components/CategorySelector";
 import useCategorySelection from "../hooks/useCategorySelection";
@@ -11,6 +10,7 @@ import Category, { Uncategorized } from "../types/Category";
 import TransactionViewModel from "../types/TransactionViewModel";
 import { classList } from "../utils/htmlHelper";
 import { formatCurrency } from "../utils/NumberHelper";
+import { MoneyFillIcon } from "../utils/Icons";
 
 interface TransactionTableRowProps {
     transaction: TransactionViewModel;
@@ -30,17 +30,12 @@ function TransactionTableRow(props: TransactionTableRowProps) {
         patchTransaction();
     }, [newCategory]);
 
+    const isSelected = categorySelection.isSelected(
+        transaction.category ?? Uncategorized
+    );
+
     return (
-        <tr
-            className={classList(
-                styles.transactionRow,
-                categorySelection.isSelected(
-                    transaction.category ?? Uncategorized
-                )
-                    ? styles.selected
-                    : ""
-            )}
-        >
+        <tr className={isSelected ? styles.selected : undefined}>
             <td className="bold centre">{props.num + 1}</td>
             <td className="nobreak">
                 {moment(transaction.date).isValid()
@@ -57,7 +52,7 @@ function TransactionTableRow(props: TransactionTableRowProps) {
                 {transaction.memo}
 
                 {transaction.isCashTransaction ? (
-                    <CashIcon className={styles.cashTransactionIcon} />
+                    <MoneyFillIcon className={styles.cashTransactionIcon} />
                 ) : (
                     ""
                 )}

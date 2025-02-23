@@ -1,11 +1,11 @@
 .tile {
-    background-color: var(--var-light-bg);
+    background-color: var(--light-bg);
     text-align: center;
     width: 200px;
     height: 200px;
     margin: 12px;
     border-radius: 6px;
-    box-shadow: 2px 2px 3px 0px #BFBFBF;
+    box-shadow: 2px 2px 3px 0px var(--box-shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,12 +13,12 @@
     cursor: pointer;
     user-select: none;
     transition: box-shadow ease-out 0.1s;
-    color: rgb(33, 53, 71) !important;
+    color: var(--icon) !important;
 }
 
     .tile:hover {
         text-decoration: underline;
-        box-shadow: 4px 4px 3px 0px #aaaaaa;
+        box-shadow: 4px 4px 3px 0px var(--box-shadow);
     }
 
     .tile .tileIconHolder {

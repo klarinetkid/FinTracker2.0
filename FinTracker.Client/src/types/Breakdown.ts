@@ -5,6 +5,7 @@ type Breakdown = {
     end: string;
     title: string;
     subtitle: string;
+    type: string;
     totalIn: number;
     totalOut: number;
     categoryTotals: CategoryTotal[];

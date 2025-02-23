@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import ArrowLeft from "../../assets/arrow-left-square.svg?react";
-import ArrowRight from "../../assets/arrow-right-square.svg?react";
 import InOutPills from "../../components/InOutPills";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
@@ -13,6 +11,7 @@ import Breakdown from "../../types/Breakdown";
 import { getTotalIn, getTotalOut } from "../../utils/BreakdownHelper";
 import BreakdownTable from "./BreakdownTable";
 import DashboardIncrementButton from "./DashboardIncrementButton";
+import { ArrowLeftSquareIcon, ArrowRightSquareIcon } from "../../utils/Icons";
 
 function DashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -63,7 +62,7 @@ function DashboardPage() {
                     {viewType !== "yearly" ? (
                         <DashboardIncrementButton
                             title="Previous year"
-                            icon={ArrowLeft}
+                            icon={ArrowLeftSquareIcon}
                             increment={-1}
                             currentYear={year}
                         />
@@ -79,7 +78,7 @@ function DashboardPage() {
                     {viewType !== "yearly" ? (
                         <DashboardIncrementButton
                             title="Next year"
-                            icon={ArrowRight}
+                            icon={ArrowRightSquareIcon}
                             increment={1}
                             currentYear={year}
                         />

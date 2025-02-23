@@ -2,13 +2,13 @@
 .table {
     width: 100%;
     border-collapse: separate;
-    background-color: #eeeeee;
+    background-color: var(--light-bg);
     border-spacing: 0;
     border-radius: 10px;
 }
 
     .table tbody {
-        background-color: white;
+        background-color: var(--bg);
     }
 
         .table tbody td {
@@ -29,8 +29,8 @@
         }
 
         .table tbody tr:first-child td {
-            background-color: #ffeecc;
-            border: solid #1a1100 2px;
+            background-color: var(--tan);
+            border: solid var(--brown) 2px;
             border-spacing: 0
         }
 

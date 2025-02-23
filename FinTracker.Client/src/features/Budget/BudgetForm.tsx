@@ -73,7 +73,6 @@ function BudgetForm(props: BudgetFormProps) {
                     <Input
                         name="effectiveDate"
                         className="ralign"
-                        type="date"
                         value={props.formValues.values.effectiveDate ?? ""}
                         onChange={props.formValues.updateValue}
                     />

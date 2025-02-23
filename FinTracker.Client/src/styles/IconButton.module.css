@@ -1,6 +1,6 @@
 .button {
     cursor: pointer;
-    background-color: white;
+    background-color: var(--bg);
     transition: all 0.1s ease 0s;
     border-radius: 6px;
     padding: 3px;
@@ -9,9 +9,9 @@
 }
 
     .button:hover {
-        background-color: var(--var-light-bg);
+        background-color: var(--light-bg);
     }
 
     .button:active {
-        background-color: rgb(234, 234, 234)
+        background-color: var(--button-active)
     }

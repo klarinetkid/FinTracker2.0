@@ -10,15 +10,12 @@
     }
 
     .formGroup.error > :nth-child(2) {
-        outline: solid red 2px;
+        outline: solid var(--red) 2px;
     }
 
 .errorMessage {
-    color: red;
+    color: var(--red);
     font-weight: bold;
     font-size: 80%;
-    /*position: absolute;*/
-    /*text-align: right;*/
-    /*width: 100%;*/
-    float:right;
+    float: right;
 }

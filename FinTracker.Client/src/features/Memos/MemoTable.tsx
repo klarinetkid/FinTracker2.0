@@ -3,12 +3,12 @@ import GroupedTable from "../../components/GroupedTable";
 import GroupedTableRow from "../../components/GroupedTableRow";
 import GroupedTableRowSet from "../../components/GroupedTableRowSet";
 import Input from "../../components/Input";
-import Category from "../../types/Category";
+import Category, { NeverImport } from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import Memo from "../../types/Memo";
 
 interface MemoTableProps {
-    memos: Grouping<Category, Memo>[];
+    memos: Grouping<Category | undefined, Memo>[];
     editMemo: (memo: Memo) => void;
 }
 
@@ -24,11 +24,16 @@ function MemoTable(props: MemoTableProps) {
                 </tr>
             </thead>
             {props.memos.map((grouping, groupIndex) => (
-                <GroupedTableRowSet key={grouping.group.id}>
-                    <GroupedTableRow key={grouping.group.id} rowIndex={0}>
+                <GroupedTableRowSet key={grouping.group?.id ?? -1}>
+                    <GroupedTableRow
+                        key={grouping.group?.id ?? -1}
+                        rowIndex={0}
+                    >
                         <td className="bold centre">{groupIndex + 1}</td>
                         <td className="centre">
-                            <CategoryPill category={grouping.group} />{" "}
+                            <CategoryPill
+                                category={grouping.group ?? NeverImport}
+                            />
                         </td>
                         <td className="centre monospace bold">
                             ({grouping.items.length})
@@ -38,13 +43,14 @@ function MemoTable(props: MemoTableProps) {
                         <GroupedTableRow key={memo.id} rowIndex={i + 1}>
                             <td></td>
                             <td className="centre">
-                                <CategoryPill
-                                    category={memo.category}
-                                    onClick={() => props.editMemo(memo)}
-                                />
+                                <CategoryPill category={memo.category ?? NeverImport} />
                             </td>
                             <td>
-                                <Input readOnly value={memo.memo} />
+                                <Input
+                                    readOnly
+                                    value={memo.memo}
+                                    onClick={() => props.editMemo(memo)}
+                                />
                             </td>
                         </GroupedTableRow>
                     ))}

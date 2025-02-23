@@ -18,7 +18,7 @@ class MemoService extends BaseService {
         return this.delete(`/${id}`);
     }
 
-    getGrouped(): Promise<Grouping<Category, Memo>[]> {
+    getGrouped(): Promise<Grouping<Category | undefined, Memo>[]> {
         return this.get("/Grouped");
     }
 

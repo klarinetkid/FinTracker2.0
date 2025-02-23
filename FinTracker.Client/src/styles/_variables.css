@@ -1,10 +1,67 @@
 :root {
-    --var-light-bg: #eeeeee;
-    --var-selected-highlight: #ffd480;
-    --var-light-border: #ddd;
-    --var-success: rgb(25, 135, 84);
-    --var-warning: rgb(255, 193, 7);
-    --var-danger: rgb(220, 53, 69);
-    --var-accent: #ffeecc;
-    --var-overlay-colour: #000000aa; 
+    --bg: white;
+    --fg: black;
+    --icon: #33363F;
+    --light-bg: #eeeeee;
+    /* borders */
+    --border-100: #eaeaea;
+    --border-200: #ddd;
+    --border-300: #767676;
+    --border-400: #333333;
+    /* misc */
+    --transparent: #00000000;
+    --overlay-colour: #000000aa;
+    --highlight: #ffd480;
+    --box-shadow: #aaaaaa;
+    /* colours */
+    --green: #198754;
+    --deep-green: #004d00;
+    --yellow: #ffc107;
+    --deep-yellow: #e9b82f;
+    --red: #dc3545;
+    --deep-red: #800000;
+    --blue: #4da6ff;
+    --light-blue: #cce6ff;
+    --tan: #ffeecc;
+    --brown: #1a1100;
+    --purple: #e6e6ff;
+    /* controls */
+    --control-focus: #0060df;
+    --placeholder-text: #757575;
+    --button-fill-disabled: rgb(0, 61, 153);
+    --button-fill-active: rgb(0, 71, 179);
+    --button-fill-hover: rgb(0, 92, 230);
+    --button-fill: rgb(0, 102, 255);
+    --button-fg: rgb(51, 51, 51);
+    --button-border: rgb(138, 136, 134);
+    --button-active: rgb(234, 234, 234);
+    --button-hover: rgb(244, 244, 244);
 }
+
+    /* (rgba?\((\d+,?\s*)+\))|(#\d+) */
+
+    /* dark mode */
+    :root.darkmode {
+        --bg: #242424;
+        --fg: rgba(255, 255, 255, 0.87);
+        --icon: #D1D1D1;
+        --light-bg: #666666;
+        /* borders */
+        --border-300: #ccc;
+        /* misc */
+        --highlight: #e69900;
+        /* colours */
+        --tan: #805500;
+        --purple: rebeccapurple;
+        --light-blue: #004f99;
+        /* controls */
+        --placeholder-text: #aaa;
+        /*--button-fill-disabled: rgb(0, 61, 153);
+        --button-fill-active: rgb(0, 71, 179);
+        --button-fill-hover: rgb(0, 92, 230);
+        --button-fill: rgb(0, 102, 255);*/
+        --button-fg: rgb(233, 233, 233);
+        /*--button-border: rgb(138, 136, 134);*/
+        --button-active: #444444;
+        --button-hover: #343434;
+    }

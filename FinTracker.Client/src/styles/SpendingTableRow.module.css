@@ -7,7 +7,7 @@
     }
 
     .spendingRowGroup.selected tr {
-        background-color: var(--var-selected-highlight)
+        background-color: var(--highlight)
     }
 
 .valueBarStart {
@@ -30,13 +30,13 @@
     }
 
 .spendingRowGroup:not(:last-child) .dataRow {
-    border-bottom: rgb(222, 226, 230) solid 1px;
+    border-bottom: var(--border-200) solid 1px;
 }
 
 .budgetOver {
-    color: var(--var-danger)
+    color: var(--red)
 }
 
 .budgetUnder {
-    color: var(--var-success)
+    color: var(--green)
 }

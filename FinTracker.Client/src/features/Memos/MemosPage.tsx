@@ -13,7 +13,7 @@ import MemoTable from "./MemoTable";
 
 function MemosPage() {
     const [groupedMemos, setGroupedMemos] = useState<
-        Grouping<Category, Memo>[]
+        Grouping<Category | undefined, Memo>[]
     >([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);

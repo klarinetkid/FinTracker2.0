@@ -8,7 +8,7 @@
     top: 12px;
     right: 14px;
     cursor: pointer;
-    background-color: rgb(255, 193, 7);
+    background-color: var(--yellow);
     font-weight: bold;
     text-align: center;
     width: 20px;
@@ -25,9 +25,9 @@
     }
 
 .autofilled {
-    background-color: rgba(230, 230, 255);
+    background-color: var(--purple);
 }
 
 .saveMemo {
-    background-color: var(--var-accent)
+    background-color: var(--tan);
 }

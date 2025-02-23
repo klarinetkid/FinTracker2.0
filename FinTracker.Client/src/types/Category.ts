@@ -7,13 +7,13 @@ type Category = {
 export const Uncategorized: Category = {
     id: undefined,
     categoryName: "uncategorized",
-    colour: "ffffff",
+    colour: "#ffffff",
 };
 
 export const Total: Category = {
     id: -1,
     categoryName: "Total",
-    colour: "330033",
+    colour: "#330033",
 };
 
 export const NeverImport: Category = {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ThreeDBoxIconRefresh from "../../assets/3d_box_fill_refresh.svg?react";
 import IconButton from "../../components/IconButton";
 import PaginationNav from "../../components/PaginationNav";
 import PillToggle from "../../components/PillToggle";
@@ -11,6 +10,7 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useLocalPagination from "../../hooks/useLocalPagination";
 import TransactionViewModel from "../../types/TransactionViewModel";
 import ImportTableRow from "./ImportTableRow";
+import { CategoryRefreshIcon } from "../../utils/Icons";
 
 interface ImportTableProps {
     transactions: TransactionViewModel[];
@@ -54,7 +54,7 @@ function ImportTable(props: ImportTableProps) {
                 </Row>
                 <IconButton
                     title="Refresh categories"
-                    icon={ThreeDBoxIconRefresh}
+                    icon={CategoryRefreshIcon}
                     onClick={() => globalDataCache.categories.refresh()}
                 />
             </Row>

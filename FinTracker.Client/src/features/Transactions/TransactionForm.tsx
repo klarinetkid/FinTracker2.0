@@ -30,7 +30,6 @@ function CashTransactionForm(props: CashTransactionFormProps) {
                 <FormGroup fieldName="Date">
                     <Input
                         readOnly={!props.formValues.values.isCashTransaction}
-                        type="date"
                         name="date"
                         value={props.formValues.values.date ?? ""}
                         onChange={props.formValues.updateValue}

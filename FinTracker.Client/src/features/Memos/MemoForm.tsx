@@ -7,7 +7,7 @@ import Input from "../../components/Input";
 import Spacer from "../../components/Spacer";
 import { FormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import Category from "../../types/Category";
+import Category, { NeverImport } from "../../types/Category";
 import MemoViewModel from "../../types/MemoViewModel";
 
 interface MemoFormProps {
@@ -19,6 +19,12 @@ interface MemoFormProps {
 
 function MemoForm(props: MemoFormProps) {
     const globalDataCache = useGlobalDataCache();
+
+    const catSelectorValue = props.formValues.values.isImported
+        ? globalDataCache.categories.value.filter(
+              (c) => c.id === props.formValues.values.categoryId
+          )[0]
+        : NeverImport;
 
     return (
         <form onSubmit={props.onSubmit}>
@@ -43,18 +49,14 @@ function MemoForm(props: MemoFormProps) {
                 <FormGroup fieldName="Category">
                     <CategorySelector
                         categories={globalDataCache.categories.value}
+                        value={catSelectorValue}
+                        disabled={!props.formValues.values.isImported}
                         onChange={(c: Category | undefined) => {
                             props.formValues.setValues({
-                                ...props.formValues,
+                                ...props.formValues.values,
                                 categoryId: c?.id,
                             });
                         }}
-                        value={
-                            globalDataCache.categories.value.filter(
-                                (c) =>
-                                    c.id === props.formValues.values.categoryId
-                            )[0]
-                        }
                     />
                 </FormGroup>
             </div>
@@ -63,7 +65,12 @@ function MemoForm(props: MemoFormProps) {
                     <Button type="button" onClick={props.onCancel}>
                         Cancel
                     </Button>
-                    <ButtonFill type="submit">Submit</ButtonFill>
+                    <ButtonFill
+                        type="submit"
+                        disabled={!props.formValues.values.isImported}
+                    >
+                        Submit
+                    </ButtonFill>
                 </div>
                 <div>
                     <Button type="button" onClick={props.onDelete}>

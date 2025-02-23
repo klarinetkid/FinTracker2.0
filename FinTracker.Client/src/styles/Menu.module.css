@@ -1,5 +1,5 @@
 .popdown {
-    background-color: var(--var-overlay-colour);
+    background-color: var(--overlay-colour);
     width: 100%;
     height: 100%;
     z-index: 10;
@@ -7,6 +7,7 @@
     left: 0;
     top: -100%;
     transition: top ease-in 0.2s;
+    overflow: hidden;
 }
 
     .popdown.active {
@@ -14,17 +15,27 @@
         transition: top ease-out 0.4s;
     }
 
-    .popdown.active .container {
-        max-height: calc(80vh - 112px);
+        .popdown.active .menu {
+            max-height: calc(80vh - 112px);
+        }
+
+    .popdown .backButton {
+        position: absolute;
+        left: -45px;
+        top: 12px;
+        visibility: hidden;
     }
 
+    .popdown.submenu .backButton {
+        visibility: visible;
+    }
 
-.container {
+.menu {
     position: relative;
     width: 700px;
     margin: 0 auto;
     margin-top: 100px;
-    background-color: white;
+    background-color: var(--bg);
     border-radius: 12px;
     padding: 6px;
     max-height: 0;
@@ -35,12 +46,4 @@
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-
-
-.container .backButton {
-    position: absolute;
-    left: -45px;
-    top: 12px;
 }

@@ -1,6 +1,4 @@
 import moment from "moment";
-import SaveIcon from "../../assets/Save.svg?react";
-import SaveFillIcon from "../../assets/Save_fill.svg?react";
 import CategoryPill from "../../components/CategoryPill";
 import CategorySelector from "../../components/CategorySelector";
 import Checkbox from "../../components/Checkbox";
@@ -14,6 +12,7 @@ import Category, { NeverImport } from "../../types/Category";
 import TransactionViewModel from "../../types/TransactionViewModel";
 import { classList } from "../../utils/htmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
+import { SaveFillIcon, SaveIcon } from "../../utils/Icons";
 
 interface ImportTableRowProps {
     transaction: TransactionViewModel;

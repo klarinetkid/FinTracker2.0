@@ -61,4 +61,11 @@ Create table TblMemo (
 	[CategoryId] int references TblCategory(id) NULL,
 	[IsImported] bit NOT NULL default 1,
 	constraint AK_Memo unique([Memo]),
+	constraint CK_IsImportedCategoryId check (
+		(
+			IsImported = 0
+			and CategoryId is null
+		)
+		or (IsImported = 1 and CategoryId is not null)
+	)
 );

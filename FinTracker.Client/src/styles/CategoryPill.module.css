@@ -10,8 +10,8 @@
 
     .pill.uncategorized {
         font-style: italic;
-        border: solid 1px #333333;
-        color: #333333;
+        border: solid 1px var(--border-400);
+        color: var(--border-400);
     }
 
     .pill.clickable:hover {

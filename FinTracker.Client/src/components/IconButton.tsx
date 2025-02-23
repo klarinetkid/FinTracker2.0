@@ -1,9 +1,11 @@
 import styles from "../styles/IconButton.module.css";
+import { classList } from "../utils/htmlHelper";
 
 interface IconButtonProps {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     title: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    className?: string;
 }
 
 function IconButton(props: IconButtonProps) {
@@ -11,7 +13,7 @@ function IconButton(props: IconButtonProps) {
         <button
             title={props.title}
             type="button"
-            className={styles.button}
+            className={classList(styles.button, props.className)}
             onClick={props.onClick}
             onContextMenu={(e) => e.preventDefault()}
         >
