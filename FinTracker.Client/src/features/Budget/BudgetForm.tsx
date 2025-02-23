@@ -40,7 +40,7 @@ function BudgetForm(props: BudgetFormProps) {
                         categories={globalDataCache.categories.value}
                         onChange={(c: Category | undefined) => {
                             props.formValues.setValues({
-                                ...props.formValues,
+                                ...props.formValues.values,
                                 categoryId: c?.id,
                             });
                         }}
