@@ -1,5 +1,5 @@
 import styles from "../styles/PillToggle.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface PillToggleProps {
     title: string;

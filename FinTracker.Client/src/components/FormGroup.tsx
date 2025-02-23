@@ -1,5 +1,5 @@
 import styles from "../styles/FormGroup.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface FormGroupProps {
     fieldName: string;

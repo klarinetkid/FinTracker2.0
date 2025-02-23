@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "../styles/CategorySelector.module.css";
 import controlStyle from "../styles/Control.module.css";
 import Category, { Uncategorized } from "../types/Category";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 import CategoryPill from "./CategoryPill";
 import { CloseRingIcon } from "../utils/Icons";
 

@@ -5,16 +5,15 @@ import IconButton from "../../components/IconButton";
 import InOutPills from "../../components/InOutPills";
 import Page from "../../components/Page";
 import Spacer from "../../components/Spacer";
+import TransactionTable from "../../components/TransactionTable";
 import CategorySelectionProvider from "../../contexts/CategorySelectionProvider";
 import BreakdownService from "../../services/BreakdownService";
 import styles from "../../styles/BreakdownPage.module.css";
 import Breakdown from "../../types/Breakdown";
 import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
+import { BackIcon } from "../../utils/Icons";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
-import TransactionTable from "../../components/TransactionTable";
-import { isEmpty } from "../../utils/StringHelper";
-import { BackIcon } from "../../utils/Icons";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -73,7 +72,9 @@ function BreakdownPage() {
                     <CategorySelectionProvider>
                         <div className={styles.details}>
                             <div className={styles.spendingTableHolder}>
-                                <SpendingTable breakdown={breakdown} />
+                                <SpendingTable
+                                    categoryTotals={breakdown.categoryTotals}
+                                />
                             </div>
                             <div className={styles.incomeColumn}>
                                 {breakdown.categoryTotals

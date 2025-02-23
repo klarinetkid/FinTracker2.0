@@ -1,5 +1,5 @@
 import styles from "../styles/IconButton.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface IconButtonProps {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

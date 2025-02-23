@@ -4,12 +4,12 @@ import Category, {
     CategoryTransactionCount,
     Uncategorized,
 } from "../types/Category";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface CategoryPillProps {
     category: Category | CategoryTransactionCount | undefined | null;
-    style?: React.CSSProperties;
     onClick?: () => void;
+    openTop?: boolean;
 }
 
 function CategoryPill(props: CategoryPillProps) {
@@ -17,7 +17,6 @@ function CategoryPill(props: CategoryPillProps) {
     const colour = tinycolor(cat.colour);
 
     const style = {
-        ...props.style,
         backgroundColor: colour.isValid() ? colour.toRgbString() : "black",
         color: colour.getLuminance() > 0.5 ? "black" : "white",
     };
@@ -27,7 +26,8 @@ function CategoryPill(props: CategoryPillProps) {
             className={classList(
                 styles.pill,
                 cat.id || cat.id === 0 ? "" : styles.uncategorized,
-                props.onClick ? styles.clickable : ""
+                props.onClick ? styles.clickable : "",
+                props.openTop ? styles.openTop : ""
             )}
             style={style}
             onClick={props.onClick}

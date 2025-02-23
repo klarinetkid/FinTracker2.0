@@ -6,7 +6,7 @@ import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import { useFormValues } from "../../hooks/useFormValues";
-import { ErrorResponse } from "../../services/baseService";
+import { ErrorResponse } from "../../services/BaseService";
 import BudgetService from "../../services/BudgetService";
 import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";

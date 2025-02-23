@@ -1,8 +1,8 @@
+import styles from "../styles/PaginationNav.module.css";
 import LocalPagination from "../types/LocalPagination";
 import PaginatedResponse from "../types/PaginatedResponse";
 import Button from "./Button";
 import ButtonFill from "./ButtonFill";
-import Row from "./Row";
 
 interface PaginationNavProps<T> {
     pagination: LocalPagination<T> | PaginatedResponse<T>;
@@ -10,11 +10,7 @@ interface PaginationNavProps<T> {
 }
 function PaginationNav<T>(props: PaginationNavProps<T>) {
     return (
-        <Row
-            justifyContent="center"
-            gap={10}
-            style={{ flexWrap: "wrap", marginTop: 20 }}
-        >
+        <div className={styles.pageNav}>
             {props.pagination.totalPages > 1
                 ? [...Array(props.pagination.totalPages).keys()].map((p) =>
                       props.pagination.currentPage === p ? (
@@ -31,7 +27,7 @@ function PaginationNav<T>(props: PaginationNavProps<T>) {
                       )
                   )
                 : ""}
-        </Row>
+        </div>
     );
 }
 

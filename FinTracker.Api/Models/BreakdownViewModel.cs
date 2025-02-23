@@ -84,7 +84,13 @@ namespace FinTracker.Api.Models
                         return Start.ToString("MMMM yyyy") + " - " + End.AddDays(-1).ToString("MMMM yyyy");
                 }
 
-                return Start.ToString("MMMM d yyyy") + " - " + End.ToString("MMMM d yyyy");
+                return Start.ToString("MMM d") +
+                    Helper.GetDateOrdinalIndication(Start.Day) +
+                    (Start.Year != End.Year ? " " + Start.Year : "") +
+                    " - " + 
+                    End.AddDays(-1).ToString("MMM d") +
+                    Helper.GetDateOrdinalIndication(End.AddDays(-1).Day)
+                    + " " + End.AddDays(-1).Year;
             }
         }
 

@@ -8,40 +8,28 @@ import { sum } from "../../utils/ArrayHelper";
 import SpendingTableRow from "./SpendingTableRow";
 
 interface SpendingTableProps {
-    breakdown: Breakdown;
+    categoryTotals: CategoryTotal[];
 }
 
 function SpendingTable(props: SpendingTableProps) {
     const categorySelection = useCategorySelection();
+    const { categoryTotals } = props;
 
-    const spendingCategories = props.breakdown.categoryTotals
+    const spendingCategories = categoryTotals
         .filter((c) => c.total < 0)
         .sort((a, b) => a.total - b.total);
+
+    const allAreSelected = categorySelection.selectedCategories.length > 0;
 
     return (
         <table className={styles.table}>
             <thead>
                 <tr>
                     <th>
-                        <div
-                            style={{
-                                position: "relative",
-                                top: 12,
-                                userSelect: "none",
-                            }}
-                        >
-                            <Checkbox
-                                key={(
-                                    categorySelection.selectedCategories
-                                        .length > 0
-                                ).toString()}
-                                checked={
-                                    categorySelection.selectedCategories
-                                        .length > 0
-                                }
-                                onChange={toggleAllCategories}
-                            />
-                        </div>
+                        <Checkbox
+                            checked={allAreSelected}
+                            onChange={toggleAllCategories}
+                        />
                     </th>
                     <th>Category</th>
                     <th>Total</th>
@@ -50,7 +38,7 @@ function SpendingTable(props: SpendingTableProps) {
                     <th>Budget</th>
                     <th></th>
                 </tr>
-                <tr style={{ height: "20px" }}></tr>
+                <tr></tr>
             </thead>
 
             {spendingCategories.length > 0 ? (
@@ -94,7 +82,7 @@ function SpendingTable(props: SpendingTableProps) {
     }
 
     function selectedSpendingCategories() {
-        return props.breakdown.categoryTotals
+        return categoryTotals
             .filter((c) =>
                 categorySelection.isSelected(c.category ?? Uncategorized)
             )

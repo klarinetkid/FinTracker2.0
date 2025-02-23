@@ -2,7 +2,7 @@ import Budget from "../types/Budget";
 import BudgetViewModel from "../types/BudgetViewModel";
 import Category from "../types/Category";
 import Grouping from "../types/Grouping";
-import BaseService from "./baseService";
+import BaseService from "./BaseService";
 
 class BudgetService extends BaseService {
     constructor() {

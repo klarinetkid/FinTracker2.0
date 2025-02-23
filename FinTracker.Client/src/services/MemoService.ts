@@ -2,7 +2,7 @@ import Category from "../types/Category";
 import Grouping from "../types/Grouping";
 import Memo from "../types/Memo";
 import MemoViewModel from "../types/MemoViewModel";
-import BaseService from "./baseService";
+import BaseService from "./BaseService";
 
 class MemoService extends BaseService {
     constructor() {

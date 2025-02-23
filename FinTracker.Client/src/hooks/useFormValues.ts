@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ErrorResponse } from "../services/baseService";
+import { ErrorResponse } from "../services/BaseService";
 
 type InputSelectChangeEvent =
     | React.ChangeEvent<HTMLInputElement>

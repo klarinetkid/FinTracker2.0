@@ -32,7 +32,7 @@
 
 .buttonFill {
     background-color: var(--button-fill);
-    color: white;
+    color: var(--button-fill-fg);
     border: solid var(--button-fill) 0.666667px;
 }
 

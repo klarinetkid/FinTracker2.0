@@ -1,6 +1,6 @@
 import ImportFormat from "../types/ImportFormat";
 import ImportFormatViewModel from "../types/ImportFormatViewModel";
-import BaseService from "./baseService";
+import BaseService from "./BaseService";
 
 class ImportFormatService extends BaseService {
     constructor() {

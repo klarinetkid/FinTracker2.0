@@ -1,6 +1,6 @@
 :root {
     --bg: white;
-    --fg: black;
+    --fg: #213547;
     --icon: #33363F;
     --light-bg: #eeeeee;
     /* borders */
@@ -32,6 +32,7 @@
     --button-fill-active: rgb(0, 71, 179);
     --button-fill-hover: rgb(0, 92, 230);
     --button-fill: rgb(0, 102, 255);
+    --button-fill-fg: white;
     --button-fg: rgb(51, 51, 51);
     --button-border: rgb(138, 136, 134);
     --button-active: rgb(234, 234, 234);

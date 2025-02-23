@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/Control.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     isError?: boolean;

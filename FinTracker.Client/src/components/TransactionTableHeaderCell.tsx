@@ -1,7 +1,7 @@
 import { FormValues } from "../hooks/useFormValues";
 import styles from "../styles/TransactionTable.module.css";
 import TransactionQuery from "../types/TransactionQuery";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 import { ExpandDownIcon, ExpandUpIcon } from "../utils/Icons";
 
 interface TransactionTableHeaderCellProps {

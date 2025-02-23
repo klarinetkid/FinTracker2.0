@@ -34,9 +34,9 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpPatch("$batch")]
-        public int BatchPatch(MemoViewModel[] categorizations)
+        public int BatchPatch(MemoViewModel[] memos)
         {
-            return service.BatchPatch(categorizations);
+            return service.BatchPatch(memos);
         }
     }
 }

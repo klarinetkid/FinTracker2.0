@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "../styles/DarkModeToggle.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 import { MoonIcon, SunIcon } from "../utils/Icons";
 
 const darkModeClass = "darkmode";

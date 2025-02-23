@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import styles from "../../styles/Menu.module.css";
-import { classList } from "../../utils/htmlHelper";
+import { classList } from "../../utils/HtmlHelper";
 import { BackIcon } from "../../utils/Icons";
 import CustomReportForm from "./CustomReportForm";
 import DashboardSubmenu from "./DashboardSubmenu";

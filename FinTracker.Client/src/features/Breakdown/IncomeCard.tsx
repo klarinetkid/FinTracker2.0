@@ -3,7 +3,7 @@ import useCategorySelection from "../../hooks/useCategorySelection";
 import styles from "../../styles/IncomeCard.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
-import { classList } from "../../utils/htmlHelper";
+import { classList } from "../../utils/HtmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
 
 interface IncomeCardProps {

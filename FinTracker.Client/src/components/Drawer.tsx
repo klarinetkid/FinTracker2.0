@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/Drawer.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface DrawerProps {
     isOpen: boolean;

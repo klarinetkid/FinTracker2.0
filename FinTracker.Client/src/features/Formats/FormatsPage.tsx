@@ -6,7 +6,7 @@ import Page from "../../components/Page";
 import Row from "../../components/Row";
 import { useFormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import { ErrorResponse } from "../../services/baseService";
+import { ErrorResponse } from "../../services/BaseService";
 import ImportFormatService from "../../services/ImportFormatService";
 import ImportFormat from "../../types/ImportFormat";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";

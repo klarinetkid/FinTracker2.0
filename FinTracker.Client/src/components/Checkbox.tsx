@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../styles/Checkbox.module.css";
 import { CheckRingCircleIcon, CheckRingIcon } from "../utils/Icons";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 interface CheckboxProps {
     checked?: boolean;
     onChange?: (value: boolean) => void;

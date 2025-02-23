@@ -2,7 +2,7 @@ import TransactionViewModel from "../types/TransactionViewModel";
 import PaginatedResponse from "../types/PaginatedResponse";
 import Transaction from "../types/Transaction";
 import TransactionQuery from "../types/TransactionQuery";
-import BaseService from "./baseService";
+import BaseService from "./BaseService";
 
 class TransactionService extends BaseService {
     constructor() {

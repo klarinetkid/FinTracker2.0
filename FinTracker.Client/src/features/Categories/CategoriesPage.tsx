@@ -10,7 +10,7 @@ import CategoryViewModel from "../../types/CategoryViewModel";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
 import { AxiosError } from "axios";
-import { ErrorResponse } from "../../services/baseService";
+import { ErrorResponse } from "../../services/BaseService";
 import { AddRoundLightFillIcon } from "../../utils/Icons";
 
 function CategoriesPage() {

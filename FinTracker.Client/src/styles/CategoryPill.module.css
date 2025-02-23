@@ -21,3 +21,9 @@
         outline: solid 2px blue;
         cursor: pointer;
     }
+
+    .pill.openTop {
+        border-start-end-radius: 0;
+        border-start-start-radius: 0;
+        border-top: none;
+    }

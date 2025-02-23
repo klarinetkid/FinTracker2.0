@@ -1,0 +1,5 @@
+.btnHolder {
+    float: right;
+    display: flex;
+    gap: 5px;
+}

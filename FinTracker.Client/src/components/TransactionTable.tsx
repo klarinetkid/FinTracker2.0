@@ -26,8 +26,6 @@ function TransactionTable(props: TransactionTableProps) {
 
     const formValues = useFormValues<TransactionQuery>(props.query ?? {});
 
-    // TODO: need to refresh from props query?
-
     useEffect(() => {
         const query: TransactionQuery = {
             ...props.query,

@@ -10,7 +10,7 @@ import useTransactionImport from "../../hooks/useTransactionImport";
 import styles from "../../styles/ImportTableRow.module.css";
 import Category, { NeverImport } from "../../types/Category";
 import TransactionViewModel from "../../types/TransactionViewModel";
-import { classList } from "../../utils/htmlHelper";
+import { classList } from "../../utils/HtmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
 import { SaveFillIcon, SaveIcon } from "../../utils/Icons";
 
@@ -33,7 +33,9 @@ function ImportTableRow(props: ImportTableRowProps) {
         trx.savedMemo && trx.categoryId === trx.savedMemo.categoryId;
 
     return (
-        <tr className={!trx.isSelectedForImport ? styles.unselected : ""}>
+        <tr
+            className={!trx.isSelectedForImport ? styles.unselected : undefined}
+        >
             <td className="bold centre">{props.num + 1}</td>
             <td>
                 <Input
@@ -73,8 +75,8 @@ function ImportTableRow(props: ImportTableRowProps) {
                         onChange={updateCategory}
                         disabled={!trx.isSelectedForImport}
                         className={classList(
-                            `${isAutofilled ? styles.autofilled : ""}`,
-                            `${trx.isToSaveMemo ? styles.saveMemo : ""}`
+                            isAutofilled ? styles.autofilled : "",
+                            trx.isToSaveMemo ? styles.saveMemo : ""
                         )}
                         onKeyDown={categorySelectKeyDown}
                     />

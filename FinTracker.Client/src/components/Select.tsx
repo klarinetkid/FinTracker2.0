@@ -1,5 +1,5 @@
 import styles from "../styles/Control.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
     return (

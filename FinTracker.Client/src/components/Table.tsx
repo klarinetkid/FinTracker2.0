@@ -1,5 +1,5 @@
 import styles from "../styles/Table.module.css";
-import { classList } from "../utils/htmlHelper";
+import { classList } from "../utils/HtmlHelper";
 
 //React.TableHTMLAttributes<HTMLTableElement>
 function Table(

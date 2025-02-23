@@ -1,6 +1,6 @@
 import moment from "moment";
 import Breakdown from "../types/Breakdown";
-import BaseService from "./baseService";
+import BaseService from "./BaseService";
 
 class BreakdownService extends BaseService {
     constructor() {

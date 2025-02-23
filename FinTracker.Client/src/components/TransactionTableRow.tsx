@@ -8,9 +8,8 @@ import TransactionService from "../services/TransactionService";
 import styles from "../styles/TransactionTable.module.css";
 import Category, { Uncategorized } from "../types/Category";
 import TransactionViewModel from "../types/TransactionViewModel";
-import { classList } from "../utils/htmlHelper";
-import { formatCurrency } from "../utils/NumberHelper";
 import { MoneyFillIcon } from "../utils/Icons";
+import { formatCurrency } from "../utils/NumberHelper";
 
 interface TransactionTableRowProps {
     transaction: TransactionViewModel;

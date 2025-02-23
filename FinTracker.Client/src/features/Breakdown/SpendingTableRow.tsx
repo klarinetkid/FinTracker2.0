@@ -5,7 +5,7 @@ import useCategorySelection from "../../hooks/useCategorySelection";
 import styles from "../../styles/SpendingTableRow.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
-import { classList } from "../../utils/htmlHelper";
+import { classList } from "../../utils/HtmlHelper";
 import { formatCurrency, toFixed } from "../../utils/NumberHelper";
 
 interface BreakdownTableRowProps {
@@ -38,9 +38,9 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
 
     return (
         <tbody
-            style={{ opacity: props.visible === false ? 0 : 100 }}
             className={classList(
                 styles.spendingRowGroup,
+                props.visible === false ? styles.hidden : "",
                 isSelected ? styles.selected : ""
             )}
         >
@@ -65,7 +65,6 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                             border: props.categoryTotal.category
                                 ? ""
                                 : "solid black 1px",
-                            width: "100%",
                         }}
                     ></div>
                 </td>
@@ -90,11 +89,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                 <td className="lalign">
                     <CategoryPill
                         category={props.categoryTotal.category}
-                        style={{
-                            borderStartEndRadius: 0,
-                            borderStartStartRadius: 0,
-                            borderTop: "none",
-                        }}
+                        openTop={true}
                     />
                 </td>
                 <td className="ralign">{total}</td>

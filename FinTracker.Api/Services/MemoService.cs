@@ -18,10 +18,10 @@ namespace FinTracker.Api.Services
 
         public TblMemo CreateMemo(MemoViewModel model)
         {
-            TblMemo tblCategorization = model.ToTblMemo();
-            db.TblMemos.Entry(tblCategorization).State = EntityState.Added;
+            TblMemo tblMemo = model.ToTblMemo();
+            db.TblMemos.Entry(tblMemo).State = EntityState.Added;
             db.SaveChanges();
-            return tblCategorization;
+            return tblMemo;
         }
 
         public TblMemo? PatchMemo(int id, MemoViewModel model)
@@ -41,9 +41,9 @@ namespace FinTracker.Api.Services
 
         public void DeleteMemo(int id)
         {
-            TblMemo? categorization = db.TblMemos.Find(id);
-            if (categorization == null) throw new InvalidDataException();
-            db.TblMemos.Entry(categorization).State = EntityState.Deleted;
+            TblMemo? memo = db.TblMemos.Find(id);
+            if (memo == null) throw new InvalidDataException();
+            db.TblMemos.Entry(memo).State = EntityState.Deleted;
             db.SaveChanges();
         }
 

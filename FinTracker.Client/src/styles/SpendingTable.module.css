@@ -5,8 +5,14 @@
 
     .table thead tr:last-child {
         border-bottom: var(--border-200) solid 1px;
+        height: 12px;
     }
 
 .table tbody td:last-child {
     padding-right: 6px;
 }
+
+    .table th:first-child button {
+        position: relative;
+        top: 6px;
+    }
