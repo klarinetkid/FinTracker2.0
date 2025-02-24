@@ -1,4 +1,4 @@
-import Category from "./Category";
+import { CategoryOrUncategorized } from "./Category";
 import Memo from "./Memo";
 
 type TransactionViewModel = {
@@ -7,7 +7,7 @@ type TransactionViewModel = {
     amount?: number;
     memo?: string;
     categoryId?: number;
-    category?: Category;
+    category?: CategoryOrUncategorized;
     isCashTransaction?: boolean;
 
     // for import, from server

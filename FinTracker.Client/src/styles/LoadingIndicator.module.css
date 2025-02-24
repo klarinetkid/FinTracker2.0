@@ -1,0 +1,22 @@
+.loading {
+    font-weight: bold;
+    font-style: italic;
+    color: var(--deep-yellow);
+    display: flex;
+    align-items: center;
+    /*height: 500px;*/
+    justify-content: center;
+    /*width: 100%;*/
+
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}

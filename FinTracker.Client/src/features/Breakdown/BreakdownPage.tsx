@@ -10,11 +10,17 @@ import CategorySelectionProvider from "../../contexts/CategorySelectionProvider"
 import BreakdownService from "../../services/BreakdownService";
 import styles from "../../styles/BreakdownPage.module.css";
 import Breakdown from "../../types/Breakdown";
-import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
+import {
+    breakdownParamsAreValid,
+    getIncomeCategories,
+    getSpendingCategories,
+} from "../../utils/BreakdownHelper";
 import { BackIcon } from "../../utils/Icons";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
 import Row from "../../components/Row";
+import { formatDateOnly } from "../../utils/DateHelper";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -33,11 +39,14 @@ function BreakdownPage() {
     useEffect(() => {
         (async () => {
             if (!paramsAreValid) return;
+            setBreakdown(undefined);
             const data = await BreakdownService.getBreakdown(start, end);
             setBreakdown(data);
         })();
     }, [paramsAreValid, start, end, isUpdated]);
 
+    const spendingCategories = getSpendingCategories(breakdown?.categoryTotals);
+    const incomeCategories = getIncomeCategories(breakdown?.categoryTotals);
 
     return !paramsAreValid ? (
         <Page>
@@ -79,40 +88,37 @@ function BreakdownPage() {
 
                     <CategorySelectionProvider>
                         <div className={styles.details}>
-                            <div className={styles.spendingTableHolder}>
-                                <SpendingTable
-                                    categoryTotals={breakdown.categoryTotals}
-                                />
-                            </div>
-                            <div className={styles.incomeColumn}>
-                                {breakdown.categoryTotals
-                                    .filter((c) => c.total > 0)
-                                    .sort((a, b) => b.total - a.total)
-                                    .map((c, i) => (
+                            {spendingCategories.length > 0 ? (
+                                <div className={styles.spendingTableHolder}>
+                                    <SpendingTable
+                                        spendingCategories={spendingCategories}
+                                    />
+                                </div>
+                            ) : (
+                                ""
+                            )}
+
+                            {incomeCategories.length > 0 ? (
+                                <div className={styles.incomeColumn}>
+                                    {incomeCategories.map((c, i) => (
                                         <IncomeCard key={i} categoryTotal={c} />
                                     ))}
-                            </div>
+                                </div>
+                            ) : (
+                                ""
+                            )}
                         </div>
 
                         <Spacer height={26} />
 
                         <TransactionTable
-                            query={{
-                                after: moment(breakdown.start).format(
-                                    "yyyy-MM-DD"
-                                ),
-                                before: moment(breakdown.end).format(
-                                    "yyyy-MM-DD"
-                                ),
-                                orderBy: "date",
-                                order: "asc",
-                            }}
+                            query={getTransactionQuery()}
                             onChange={refreshBreakdown}
                         />
                     </CategorySelectionProvider>
                 </>
             ) : (
-                ""
+                <LoadingIndicator />
             )}
         </Page>
     );
@@ -122,7 +128,7 @@ function BreakdownPage() {
     }
 
     function backClick() {
-        const year = moment(breakdown?.start).format("yyyy");
+        const year = moment(breakdown?.start).get("year");
         switch (breakdown?.type) {
             case "Week":
                 navigate(`/?year=${year}&view=weekly`);
@@ -133,6 +139,17 @@ function BreakdownPage() {
         }
 
         navigate("/");
+    }
+
+    function getTransactionQuery() {
+        if (!breakdown) return {};
+
+        return {
+            after: formatDateOnly(breakdown.start),
+            before: formatDateOnly(breakdown.end),
+            orderBy: "date",
+            order: "asc",
+        };
     }
 }
 

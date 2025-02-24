@@ -1,4 +1,3 @@
-import moment from "moment";
 import CategoryPill from "../../components/CategoryPill";
 import CategorySelector from "../../components/CategorySelector";
 import Checkbox from "../../components/Checkbox";
@@ -8,22 +7,23 @@ import Row from "../../components/Row";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
 import styles from "../../styles/ImportTableRow.module.css";
-import Category, { NeverImport } from "../../types/Category";
+import { CategoryOrUncategorized, NeverImport } from "../../types/Category";
 import TransactionViewModel from "../../types/TransactionViewModel";
+import { formatDateOnly } from "../../utils/DateHelper";
 import { classList } from "../../utils/HtmlHelper";
-import { formatCurrency } from "../../utils/NumberHelper";
 import { SaveFillIcon, SaveIcon } from "../../utils/Icons";
+import { formatCurrency } from "../../utils/NumberHelper";
 
 interface ImportTableRowProps {
     transaction: TransactionViewModel;
-    num: number;
+    rowNum: number;
 }
 
 function ImportTableRow(props: ImportTableRowProps) {
+    const { transaction: trx, rowNum } = props;
+
     const transactionImport = useTransactionImport();
     const globalDataCache = useGlobalDataCache();
-
-    const trx = props.transaction;
 
     const saveBtnTitle = trx.isSelectedForImport
         ? "Save memo category"
@@ -36,12 +36,12 @@ function ImportTableRow(props: ImportTableRowProps) {
         <tr
             className={!trx.isSelectedForImport ? styles.unselected : undefined}
         >
-            <td className="bold centre">{props.num + 1}</td>
+            <td className="bold centre">{rowNum + 1}</td>
             <td>
                 <Input
                     className="ralign"
                     readOnly
-                    value={moment(trx.date).format("yyyy-MM-DD")}
+                    value={formatDateOnly(trx.date)}
                 />
             </td>
             <td style={{ position: "relative" }}>
@@ -59,7 +59,7 @@ function ImportTableRow(props: ImportTableRowProps) {
                 <Input
                     className="ralign"
                     readOnly
-                    value={formatCurrency(trx.amount ?? 0)}
+                    value={formatCurrency(trx.amount)}
                 />
             </td>
             <td className="centre">
@@ -103,7 +103,7 @@ function ImportTableRow(props: ImportTableRowProps) {
         if (event.key === "Delete") toggleSelected();
     }
 
-    function updateCategory(category: Category | undefined) {
+    function updateCategory(category: CategoryOrUncategorized | undefined) {
         if (!trx.id || !category) return;
         transactionImport.UpdateTransactionCategory(trx.id, category);
     }

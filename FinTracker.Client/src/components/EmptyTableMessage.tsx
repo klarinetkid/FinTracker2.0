@@ -1,9 +1,15 @@
-function EmptyTableMessage() {
+interface EmptyTableMessageProps {
+    message?: string;
+}
+
+function EmptyTableMessage(props: EmptyTableMessageProps) {
+    const { message } = props;
+
     return (
         <tbody>
             <tr>
                 <td colSpan={100} className="centre">
-                    <h4>No items to show</h4>
+                    <h4>{message ?? "No data"}</h4>
                 </td>
             </tr>
         </tbody>

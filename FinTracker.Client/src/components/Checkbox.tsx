@@ -8,10 +8,14 @@ interface CheckboxProps {
 }
 
 function Checkbox(props: CheckboxProps) {
-    const [isChecked, setIsChecked] = useState(props.checked ?? false);
+    const { checked, onChange } = props;
+
+    const [isUncontrolledChecked, setIsUncontrolledChecked] = useState(
+        checked ?? false
+    );
 
     // controlled if onchange
-    const value = props.onChange ? props.checked : isChecked;
+    const value = onChange ? checked : isUncontrolledChecked;
 
     return (
         <button
@@ -23,9 +27,10 @@ function Checkbox(props: CheckboxProps) {
     );
 
     function toggleCheckboxState() {
-        if (props.onChange) {
-            setIsChecked(!isChecked);
-            props.onChange(!isChecked);
+        if (onChange) {
+            // TODO: shoudl this be using value?
+            setIsUncontrolledChecked(!isUncontrolledChecked);
+            onChange(!isUncontrolledChecked);
         }
     }
 }

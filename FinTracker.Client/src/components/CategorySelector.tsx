@@ -12,7 +12,6 @@ import CategoryPill from "./CategoryPill";
 interface CategorySelectorProps {
     categories: Category[]; // don't want this component dependent on global data cache context, so just pass the options
     value?: CategoryOrUncategorized | undefined;
-    selectedId?: number;
     isOpen?: boolean;
     disabled?: boolean;
     tabIndex?: number;
@@ -24,61 +23,71 @@ interface CategorySelectorProps {
 }
 
 function CategorySelector(props: CategorySelectorProps) {
-    const controlled = props.onChange ? true : false;
-    const defaultValue =
-        props.value ?? props.allowEmpty ? undefined : Uncategorized;
+    const {
+        categories,
+        value,
+        isOpen,
+        disabled,
+        tabIndex,
+        className,
+        allowEmpty,
+        onChange,
+        onClose,
+        onKeyDown,
+    } = props;
+
+    const controlled = onChange ? true : false;
+    const defaultValue = value ?? allowEmpty ? undefined : Uncategorized;
 
     const selectorRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
+    const [isMenuOpen, setIsMenuOpen] = useState(isOpen ?? false);
     const [search, setSearch] = useState("");
     const [selectedValue, setSelectedValue] = useState<
         CategoryOrUncategorized | undefined
-    >(props.value ?? defaultValue);
+    >(value ?? defaultValue);
 
     // focus if open by props
     useEffect(() => {
-        if (props.isOpen) selectorRef.current?.focus();
-    }, [props.isOpen]);
+        if (isOpen) selectorRef.current?.focus();
+    }, [isOpen]);
 
     // onclose, trigger event and scroll menu back to top
     useEffect(() => {
-        if (!isOpen) {
-            if (props.onClose) props.onClose();
+        if (!isMenuOpen) {
+            if (onClose) onClose();
             if (menuRef.current) menuRef.current.scrollTop = 0;
         }
-    }, [isOpen, props]);
+    }, [isMenuOpen, props]);
 
-    const options = [...props.categories, Uncategorized];
-    const value = controlled ? props.value : selectedValue;
+    const options = [...categories, Uncategorized];
+    const currentValue = controlled ? value : selectedValue;
 
     return (
         <div
             ref={selectorRef}
-            onClick={() => !props.disabled && setIsOpen(!isOpen)}
-            tabIndex={props.tabIndex ?? 0}
-            onKeyDown={onKeyDown}
-            onBlur={(e) => {
-                if (!menuRef.current?.contains(e.relatedTarget as Node)) {
-                    setIsOpen(false);
-                }
-            }}
+            onClick={_onClick}
+            onKeyDown={_onKeyDown}
+            onBlur={_onBlur}
+            tabIndex={tabIndex ?? 0}
             className={classList(
                 styles.selector,
                 controlStyle.control,
-                isOpen ? styles.open : "",
-                props.disabled ? styles.disabled : "",
-                props.className
+                isMenuOpen ? styles.open : "",
+                disabled ? styles.disabled : "",
+                className
             )}
         >
-            {value || !props.allowEmpty ? (
+            {/* show current value, or placeholder if allow empty */}
+            {currentValue || !allowEmpty ? (
                 <CategoryPill category={value} />
             ) : (
                 <div className={styles.placeholder}>Select a category</div>
             )}
 
-            {props.allowEmpty && value ? (
+            {/* show close btn if allow empty and no value */}
+            {allowEmpty && currentValue ? (
                 <CloseRingIcon
                     className={styles.clearBtn}
                     onClick={clearSelection}
@@ -103,17 +112,21 @@ function CategorySelector(props: CategorySelectorProps) {
 
     function optionClick(category: CategoryOrUncategorized) {
         updateSelectedValue(category);
-        setIsOpen(false);
+        setIsMenuOpen(false);
     }
 
-    function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-        if (event.key === "Enter" && !props.disabled) {
-            setIsOpen(!isOpen);
+    function _onClick() {
+        if(!disabled) setIsMenuOpen(!isMenuOpen);
+    }
+
+    function _onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+        if (event.key === "Enter" && !disabled) {
+            setIsMenuOpen(!isMenuOpen);
             return;
         }
 
         if (event.key === "Escape") {
-            setIsOpen(false);
+            setIsMenuOpen(false);
             event.currentTarget.blur();
             return;
         }
@@ -123,12 +136,18 @@ function CategorySelector(props: CategorySelectorProps) {
                 trySetValueFromSearch(event.key) || // try new search with this key
                 setSearch(""); // if still none reset search
 
-        if (props.onKeyDown) props.onKeyDown(event);
+        if (onKeyDown) onKeyDown(event);
+    }
+
+    function _onBlur(event: React.FocusEvent<HTMLDivElement, Element>) {
+        if (!menuRef.current?.contains(event.relatedTarget as Node)) {
+            setIsMenuOpen(false);
+        }
     }
 
     function trySetValueFromSearch(str: string): boolean {
         const testSeach = str.toLowerCase();
-        const found = props.categories.filter((c) =>
+        const found = categories.filter((c) =>
             c.categoryName.toLowerCase().startsWith(testSeach)
         );
         if (found.length > 0) {
@@ -143,14 +162,14 @@ function CategorySelector(props: CategorySelectorProps) {
     function updateSelectedValue(
         category: CategoryOrUncategorized | undefined
     ) {
-        if (props.onChange) props.onChange(category);
+        if (onChange) onChange(category);
         setSelectedValue(category);
     }
 
     function clearSelection(event: React.MouseEvent<SVGElement>) {
         event.stopPropagation();
         updateSelectedValue(undefined);
-        setIsOpen(false);
+        setIsMenuOpen(false);
         if (selectorRef.current) selectorRef.current.blur();
     }
 }

@@ -12,6 +12,7 @@ import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
+import { formatDateOnly } from "../../utils/DateHelper";
 import { AddRoundLightFillIcon } from "../../utils/Icons";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
@@ -60,7 +61,7 @@ function BudgetPage() {
         formValues.setErrors(undefined);
         formValues.setValues({
             amount: "0.00",
-            effectiveDate: moment().format("yyyy-MM-DD"),
+            effectiveDate: formatDateOnly(moment()),
         });
         setIsDrawerOpen(true);
     }

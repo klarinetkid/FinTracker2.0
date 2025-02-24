@@ -24,24 +24,26 @@ interface MenuProps {
 }
 
 function MenuPopdown(props: MenuProps) {
+    const { isOpen, setIsOpen } = props;
+
     const [submenu, setSubmenu] = useState<MenuState>();
     const location = useLocation();
     const [isCustomReportOpen, setIsCustomReportOpen] = useState(false);
 
     useEffect(() => {
-        props.setIsOpen(false);
+        setIsOpen(false);
     }, [location]);
 
     useEffect(() => {
         // transition is 0.4s, don't clear submenu until popdown hidden
         setTimeout(() => {
-            if (!props.isOpen) setSubmenu(undefined);
+            if (!isOpen) setSubmenu(undefined);
         }, 400);
-    }, [props.isOpen]);
+    }, [isOpen]);
 
     const popdownClass = classList(
         styles.popdown,
-        props.isOpen ? styles.active : "",
+        isOpen ? styles.active : "",
         submenu ? styles.submenu : ""
     );
 
@@ -91,7 +93,7 @@ function MenuPopdown(props: MenuProps) {
 
     function handlePopdownClick(event: React.MouseEvent) {
         if (event.target === event.currentTarget) {
-            props.setIsOpen(false);
+            setIsOpen(false);
         }
     }
 }

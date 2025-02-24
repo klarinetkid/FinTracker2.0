@@ -11,26 +11,20 @@ interface IncomeCardProps {
 }
 
 function IncomeCard(props: IncomeCardProps) {
+    const { categoryTotal } = props;
     const categorySelection = useCategorySelection();
+    const category = categoryTotal.category ?? Uncategorized;
 
     return (
         <div
             className={classList(
                 styles.card,
-                categorySelection.isSelected(
-                    props.categoryTotal.category ?? Uncategorized
-                )
-                    ? styles.selected
-                    : ""
+                categorySelection.isSelected(category) ? styles.selected : ""
             )}
-            onClick={() =>
-                categorySelection.toggleCategory(
-                    props.categoryTotal.category ?? Uncategorized
-                )
-            }
+            onClick={() => categorySelection.toggleCategory(category)}
         >
-            <CategoryPill category={props.categoryTotal.category} />
-            <h2>+{formatCurrency(props.categoryTotal.total)}</h2>
+            <CategoryPill category={categoryTotal.category} />
+            <h2>+{formatCurrency(categoryTotal.total)}</h2>
         </div>
     );
 }

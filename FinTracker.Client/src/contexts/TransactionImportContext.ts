@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { FileContent } from "use-file-picker/types";
 import MemoService from "../services/MemoService";
 import TransactionService from "../services/TransactionService";
-import Category from "../types/Category";
+import { CategoryOrUncategorized } from "../types/Category";
 import ImportFormat from "../types/ImportFormat";
 import MemoViewModel from "../types/MemoViewModel";
 import TransactionViewModel from "../types/TransactionViewModel";
@@ -45,7 +45,10 @@ export class TransactionImportManager {
         this.setTransactions(transactionModels);
     }
 
-    public UpdateTransactionCategory(rowNum: number, category: Category): void {
+    public UpdateTransactionCategory(
+        rowNum: number,
+        category: CategoryOrUncategorized
+    ): void {
         const id = rowNum - 1;
         if (this.Transcations[id]) {
             const newTransactions = [...this.Transcations];

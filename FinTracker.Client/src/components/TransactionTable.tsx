@@ -11,6 +11,7 @@ import TransactionTableRow from "./TransactionTableRow";
 import TransactionTableHeaderCell from "./TransactionTableHeaderCell";
 import { useFormValues } from "../hooks/useFormValues";
 import styles from "../styles/TransactionTable.module.css";
+import EmptyTableMessage from "./EmptyTableMessage";
 
 interface TransactionTableProps {
     query?: TransactionQuery;
@@ -19,27 +20,29 @@ interface TransactionTableProps {
 }
 
 function TransactionTable(props: TransactionTableProps) {
+    const { query, onChange, onRowSelect } = props;
+
     const tableHeadRef = useRef<HTMLTableRowElement>(null);
 
     const [page, setPage] = useState<PaginatedResponse<Transaction>>();
     const [currentPage, setCurrentPage] = useState(0);
 
-    const formValues = useFormValues<TransactionQuery>(props.query ?? {});
+    const formValues = useFormValues<TransactionQuery>(query ?? {});
 
     useEffect(() => {
-        const query: TransactionQuery = {
-            ...props.query,
-            order: formValues.values.order ?? props.query?.order,
-            orderBy: formValues.values.orderBy ?? props.query?.orderBy,
+        const combinedQuery: TransactionQuery = {
+            ...query,
+            order: formValues.values.order ?? query?.order,
+            orderBy: formValues.values.orderBy ?? query?.orderBy,
             pageNumber: currentPage,
         };
-        TransactionService.getTransactions(query).then(setPage);
-    }, [currentPage, props.query, formValues.values]);
+        TransactionService.getTransactions(combinedQuery).then(setPage);
+    }, [currentPage, query, formValues.values]);
 
     // refresh when query changes
     useEffect(() => {
         setCurrentPage(0);
-    }, [props.query, formValues.values]);
+    }, [query, formValues.values]);
 
     return (
         <>
@@ -78,29 +81,26 @@ function TransactionTable(props: TransactionTableProps) {
                                 key={t.id}
                                 transaction={t}
                                 num={i + page.pageSize * page.currentPage}
-                                onChange={props.onChange}
-                                onRowSelect={props.onRowSelect}
+                                onChange={onChange}
+                                onRowSelect={onRowSelect}
                             />
                         ))}
                     </tbody>
                 ) : (
                     ""
                 )}
+
+                {page && page.totalItems === 0 ? (
+                    <EmptyTableMessage message="The selected filters returns no results." />
+                ) : (
+                    ""
+                )}
             </Table>
             {page ? (
-                page.totalItems > 0 ? (
-                    <>
-                        <PaginationNav
-                            pagination={page}
-                            onNavigate={onPageNav}
-                        />
-                        <Spacer height={100} />
-                    </>
-                ) : (
-                    <h4 className="centre">
-                        The selected filters returns no results.
-                    </h4>
-                )
+                <>
+                    <PaginationNav pagination={page} onNavigate={onPageNav} />
+                    <Spacer height={100} />
+                </>
             ) : (
                 ""
             )}

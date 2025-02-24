@@ -47,3 +47,23 @@
         position: sticky;
         top: 0;
     }*/
+
+.ellipsis {
+    position: relative;
+}
+
+    .ellipsis:before {
+        content: ' ';
+        visibility: hidden;
+    }
+
+    .ellipsis .ellipsisContent {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 6px;
+        right: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } 

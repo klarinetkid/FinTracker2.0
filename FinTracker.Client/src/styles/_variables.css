@@ -51,9 +51,10 @@
         --border-300: #ccc;
         /* misc */
         --highlight: #e69900;
+        --box-shadow: #020202;
         /* colours */
         --tan: #805500;
-        --purple: rebeccapurple;
+        --purple: #402060;
         --light-blue: #004f99;
         /* controls */
         --placeholder-text: #aaa;

@@ -8,6 +8,8 @@ interface FormatTableProps {
 }
 
 function FormatTable(props: FormatTableProps) {
+    const { editFormat } = props;
+
     const globalDataCache = useGlobalDataCache();
 
     return (
@@ -21,7 +23,7 @@ function FormatTable(props: FormatTableProps) {
             </thead>
             <tbody>
                 {globalDataCache.importFormats.value.map((format, i) => (
-                    <tr onClick={() => props.editFormat(format)}>
+                    <tr onClick={() => editFormat(format)}>
                         <td className="bold centre">{i + 1}</td>
                         <td className="centre">{format.importFormatName}</td>
                         <td className="centre">

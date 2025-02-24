@@ -19,9 +19,9 @@ type CustomReport = {
 };
 
 function CustomReportForm(props: CustomReportFormProps) {
-    const navigate = useNavigate();
     const { isDrawerOpen, setIsDrawerOpen } = props;
 
+    const navigate = useNavigate();
     const formValues = useFormValues<CustomReport>({});
 
     useEffect(() => formValues.setValues({}), [isDrawerOpen]);

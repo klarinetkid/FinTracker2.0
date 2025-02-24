@@ -14,6 +14,8 @@ interface MemoTableProps {
 }
 
 function MemoTable(props: MemoTableProps) {
+    const { memos, editMemo } = props;
+
     return (
         <GroupedTable>
             <thead>
@@ -24,7 +26,7 @@ function MemoTable(props: MemoTableProps) {
                     <th style={{ width: 0 }}></th>
                 </tr>
             </thead>
-            {props.memos.map((grouping, groupIndex) => (
+            {memos.map((grouping, groupIndex) => (
                 <GroupedTableRowSet key={grouping.group?.id ?? -1}>
                     <GroupedTableRow
                         key={grouping.group?.id ?? -1}
@@ -56,7 +58,7 @@ function MemoTable(props: MemoTableProps) {
                                 <Input
                                     readOnly
                                     value={memo.memo}
-                                    onClick={() => props.editMemo(memo)}
+                                    onClick={() => editMemo(memo)}
                                 />
                             </td>
                         </GroupedTableRow>
@@ -64,7 +66,7 @@ function MemoTable(props: MemoTableProps) {
                 </GroupedTableRowSet>
             ))}
 
-            {props.memos.length === 0 ? <EmptyTableMessage /> : ""}
+            {memos.length === 0 ? <EmptyTableMessage /> : ""}
         </GroupedTable>
     );
 }

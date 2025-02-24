@@ -5,9 +5,13 @@ import { HomeIcon, MenuIcon } from "../utils/Icons";
 import IconButton from "./IconButton";
 import DarkModeToggle from "./DarkModeToggle";
 import styles from "../styles/Layout.module.css";
+import useGlobalDataCache from "../hooks/useGlobalDataCache";
+import LoadingIndicator from "./LoadingIndicator";
+import Page from "./Page";
 
 function Layout() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const globalDataCache = useGlobalDataCache();
     return (
         <>
             <DarkModeToggle />
@@ -23,7 +27,11 @@ function Layout() {
             </div>
             <MenuPopdown isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} />
 
-            <Outlet />
+            {globalDataCache.availableYears.value.length > 0 ? (
+                <Outlet />
+            ) : (
+                <LoadingIndicator />
+            )}
         </>
     );
     function menuIconClick() {

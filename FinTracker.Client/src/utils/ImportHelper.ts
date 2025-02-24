@@ -3,6 +3,7 @@ import ImportFormat from "../types/ImportFormat";
 import TransactionViewModel from "../types/TransactionViewModel";
 import moment from "moment";
 import { isEmpty } from "./StringHelper";
+import { formatDateOnly } from "./DateHelper";
 
 type CsvRow = { [x: string]: string };
 
@@ -44,7 +45,7 @@ function csvRowToTransaction(
     if (!areCsvValuesValid(date, memo, amount)) return null;
 
     return {
-        date: moment(row[format.dateKey]).format("yyyy-MM-DD"),
+        date: formatDateOnly(row[format.dateKey]),
         amount: Math.floor(
             parseFloat(row[format.amountKey]) *
                 (format.invertAmounts ? -1 : 1) *
@@ -64,9 +65,7 @@ function getTransactionMemo(memoFormat: string, row: CsvRow) {
             row[placeholder.substring(1, placeholder.length - 1)]
         );
     }
-    //Object.keys(row).map((k) => {
-    //    memoFormat = memoFormat.replaceAll(`{${k}}`, row[k]);
-    //});
+
     return memoFormat;
 }
 

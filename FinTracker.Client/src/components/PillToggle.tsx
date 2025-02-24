@@ -9,16 +9,18 @@ interface PillToggleProps {
 }
 
 function PillToggle(props: PillToggleProps) {
+    const { title, isActive, onToggle, disabled } = props;
+
     return (
         <button
             className={classList(
                 styles.pill,
-                props.isActive ? styles.active : "",
-                props.disabled ? styles.disabled : ""
+                isActive ? styles.active : "",
+                disabled ? styles.disabled : ""
             )}
-            onClick={() => props.onToggle && props.onToggle(!props.isActive)}
+            onClick={() => onToggle && onToggle(!isActive)}
         >
-            {props.title}
+            {title}
         </button>
     );
 }

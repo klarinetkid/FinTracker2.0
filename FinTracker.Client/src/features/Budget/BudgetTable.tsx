@@ -9,6 +9,7 @@ import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import { formatCurrency } from "../../utils/NumberHelper";
 import EmptyTableMessage from "../../components/EmptyTableMessage";
+import { formatDateOnly } from "../../utils/DateHelper";
 
 interface BudgetTableProps {
     groupedBudgets: Grouping<Category, Budget>[];
@@ -16,6 +17,8 @@ interface BudgetTableProps {
 }
 
 function BudgetTable(props: BudgetTableProps) {
+    const { groupedBudgets, editBudget } = props;
+
     return (
         <GroupedTable>
             <thead>
@@ -27,7 +30,7 @@ function BudgetTable(props: BudgetTableProps) {
                     <th></th>
                 </tr>
             </thead>
-            {props.groupedBudgets.map((group, groupIndex) => (
+            {groupedBudgets.map((group, groupIndex) => (
                 <GroupedTableRowSet key={groupIndex}>
                     {group.items.map((budget, i) => (
                         <GroupedTableRow key={i} rowIndex={i}>
@@ -37,7 +40,7 @@ function BudgetTable(props: BudgetTableProps) {
                             <td className="centre selectable">
                                 <CategoryPill
                                     category={budget.category}
-                                    onClick={() => props.editBudget(budget)}
+                                    onClick={() => editBudget(budget)}
                                 />
                             </td>
                             <td>
@@ -51,9 +54,7 @@ function BudgetTable(props: BudgetTableProps) {
                                 <Input
                                     className="ralign"
                                     readOnly
-                                    value={moment(budget.effectiveDate).format(
-                                        "yyyy-MM-DD"
-                                    )}
+                                    value={formatDateOnly(budget.effectiveDate)}
                                 />
                             </td>
                         </GroupedTableRow>
@@ -61,7 +62,7 @@ function BudgetTable(props: BudgetTableProps) {
                 </GroupedTableRowSet>
             ))}
 
-            {props.groupedBudgets.length === 0 ? <EmptyTableMessage /> : ""}
+            {groupedBudgets.length === 0 ? <EmptyTableMessage /> : ""}
         </GroupedTable>
     );
 }

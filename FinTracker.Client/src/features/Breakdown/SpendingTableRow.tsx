@@ -6,7 +6,7 @@ import styles from "../../styles/SpendingTableRow.module.css";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
 import { classList } from "../../utils/HtmlHelper";
-import { formatCurrency, toFixed } from "../../utils/NumberHelper";
+import { formatCurrency } from "../../utils/NumberHelper";
 
 interface BreakdownTableRowProps {
     categoryTotal: CategoryTotal;
@@ -16,37 +16,39 @@ interface BreakdownTableRowProps {
 }
 
 function SpendingTableRow(props: BreakdownTableRowProps) {
+    const { categoryTotal, noSelect, maxCategorySpend, visible } = props;
+
     const categorySelection = useCategorySelection();
 
-    const category = props.categoryTotal.category ?? Uncategorized;
+    const category = categoryTotal.category ?? Uncategorized;
     const isSelected = categorySelection.isSelected(category);
     const colour = tinycolor(category.colour).toRgbString();
 
-    const total = formatCurrency(props.categoryTotal.total);
-    const percentOfIncome = props.categoryTotal.percentOfIncome
-        ? props.categoryTotal.percentOfIncome < -1000
+    const total = formatCurrency(categoryTotal.total);
+
+    const percentOfIncome = categoryTotal.percentOfIncome
+        ? categoryTotal.percentOfIncome < -1000
             ? "< -1,000%"
-            : toFixed(props.categoryTotal.percentOfIncome, 1).toLocaleString() +
-              "%"
+            : categoryTotal.percentOfIncome.toFixed(1) + "%"
         : "";
-    const percentOfSpend = props.categoryTotal.percentOfSpend
-        ? toFixed(props.categoryTotal.percentOfSpend, 1) + "%"
+
+    const percentOfSpend = categoryTotal.percentOfSpend
+        ? categoryTotal.percentOfSpend.toFixed(1) + "%"
         : "";
-    const budget = props.categoryTotal.budget
-        ? formatCurrency(props.categoryTotal.budget)
-        : "";
+
+    const budget = formatCurrency(categoryTotal.budget);
 
     return (
         <tbody
             className={classList(
                 styles.spendingRowGroup,
-                props.visible === false ? styles.hidden : "",
+                visible === false ? styles.hidden : "",
                 isSelected ? styles.selected : ""
             )}
         >
             <tr>
                 <td rowSpan={2}>
-                    {!props.noSelect ? (
+                    {!noSelect ? (
                         <Checkbox
                             checked={isSelected}
                             onChange={() =>
@@ -62,7 +64,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                         className={styles.valueBarStart}
                         style={{
                             backgroundColor: colour,
-                            border: props.categoryTotal.category
+                            border: categoryTotal.category
                                 ? ""
                                 : "solid black 1px",
                         }}
@@ -73,13 +75,11 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                         className={styles.valueBar}
                         style={{
                             backgroundColor: colour,
-                            border: props.categoryTotal.category
+                            border: categoryTotal.category
                                 ? ""
                                 : "solid black 1px",
                             maxWidth:
-                                (props.categoryTotal.total /
-                                    props.maxCategorySpend) *
-                                    100 +
+                                (categoryTotal.total / maxCategorySpend) * 100 +
                                 "%",
                         }}
                     ></div>
@@ -88,7 +88,7 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
             <tr className={styles.dataRow}>
                 <td className="lalign">
                     <CategoryPill
-                        category={props.categoryTotal.category}
+                        category={categoryTotal.category}
                         openTop={true}
                     />
                 </td>
@@ -97,29 +97,23 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                 <td className="ralign">{percentOfSpend}</td>
                 <td className="ralign">{budget}</td>
                 <td className="ralign">
-                    {props.categoryTotal.budget &&
-                    props.categoryTotal.budgetDeviation ? (
+                    {categoryTotal.budget && categoryTotal.budgetDeviation ? (
                         <span
                             className={
-                                props.categoryTotal.budgetDeviation > 0
+                                categoryTotal.budgetDeviation > 0
                                     ? styles.budgetOver
                                     : styles.budgetUnder
                             }
                             title={formatCurrency(
-                                props.categoryTotal.budgetDeviation * -1
+                                categoryTotal.budgetDeviation * -1
                             )}
                         >
-                            {(props.categoryTotal.budgetDeviation > 0
-                                ? "+"
-                                : "-") +
-                                toFixed(
-                                    Math.abs(
-                                        (props.categoryTotal.budgetDeviation /
-                                            props.categoryTotal.budget) *
-                                            100
-                                    ),
-                                    1
-                                )}
+                            {(categoryTotal.budgetDeviation > 0 ? "+" : "-") +
+                                Math.abs(
+                                    (categoryTotal.budgetDeviation /
+                                        categoryTotal.budget) *
+                                        100
+                                ).toFixed(1)}
                             %
                         </span>
                     ) : (

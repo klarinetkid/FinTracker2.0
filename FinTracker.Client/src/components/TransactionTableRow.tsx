@@ -1,4 +1,3 @@
-import moment from "moment";
 import { useEffect, useState } from "react";
 import CategoryPill from "../components/CategoryPill";
 import CategorySelector from "../components/CategorySelector";
@@ -6,8 +5,9 @@ import useCategorySelection from "../hooks/useCategorySelection";
 import useGlobalDataCache from "../hooks/useGlobalDataCache";
 import TransactionService from "../services/TransactionService";
 import styles from "../styles/TransactionTable.module.css";
-import Category, { Uncategorized } from "../types/Category";
+import { CategoryOrUncategorized, Uncategorized } from "../types/Category";
 import TransactionViewModel from "../types/TransactionViewModel";
+import { formatDateOnly } from "../utils/DateHelper";
 import { MoneyFillIcon } from "../utils/Icons";
 import { formatCurrency } from "../utils/NumberHelper";
 
@@ -18,10 +18,14 @@ interface TransactionTableRowProps {
     onRowSelect?: (transaction: TransactionViewModel) => void;
 }
 
+// TODO: does this really need a state? I guess it prevents the category
+// flashing back momentarily before table is refreshed when updated
 function TransactionTableRow(props: TransactionTableRowProps) {
+    const { transaction, num, onChange, onRowSelect } = props;
+
     const [isEditingCat, setIsEditingCat] = useState(false);
-    const [newCategory, setNewCategory] = useState<Category>();
-    const [transaction, setTransaction] = useState(props.transaction);
+    const [newCategory, setNewCategory] = useState<CategoryOrUncategorized>();
+    const [transactionLocal, setTransactionLocal] = useState(transaction);
     const categorySelection = useCategorySelection();
     const globalDataCache = useGlobalDataCache();
 
@@ -30,67 +34,68 @@ function TransactionTableRow(props: TransactionTableRowProps) {
     }, [newCategory]);
 
     const isSelected = categorySelection.isSelected(
-        transaction.category ?? Uncategorized
+        transactionLocal.category ?? Uncategorized
     );
 
     return (
         <tr className={isSelected ? styles.selected : undefined}>
-            <td className="bold centre">{props.num + 1}</td>
-            <td className="nobreak">
-                {moment(transaction.date).isValid()
-                    ? moment(transaction.date).format("yyyy-MM-DD")
-                    : ""}
-            </td>
+            <td className="bold centre">{num + 1}</td>
+            <td className="nobreak">{formatDateOnly(transactionLocal.date)}</td>
             <td
-                className="ellipsis-overflow lalign"
+                className={styles.ellipsis}
                 style={{ maxWidth: "70%", position: "relative" }}
-                onClick={() =>
-                    props.onRowSelect && props.onRowSelect(transaction)
-                }
+                onClick={_onClick}
             >
-                {transaction.memo}
+                <span className={styles.ellipsisContent}>
+                    {transactionLocal.memo}
+                </span>
 
-                {transaction.isCashTransaction ? (
+                {transactionLocal.isCashTransaction ? (
                     <MoneyFillIcon className={styles.cashTransactionIcon} />
                 ) : (
                     ""
                 )}
             </td>
             <td className="ralign">
-                {transaction.amount ? formatCurrency(transaction.amount) : ""}
+                {formatCurrency(transactionLocal.amount)}
             </td>
-            <td
-                className="centre noselect"
-                onDoubleClick={() => setIsEditingCat(true)}
-            >
+            <td className="centre noselect" onDoubleClick={_categoryDblClick}>
                 {isEditingCat ? (
                     <CategorySelector
                         categories={globalDataCache.categories.value}
                         onChange={setNewCategory}
-                        value={transaction.category}
+                        value={transactionLocal.category}
                         isOpen={true}
                         onClose={() => setIsEditingCat(false)}
                     />
                 ) : (
-                    <CategoryPill category={transaction.category} />
+                    <CategoryPill category={transactionLocal.category} />
                 )}
             </td>
         </tr>
     );
 
+    function _onClick() {
+        if (onRowSelect) onRowSelect(transactionLocal);
+    }
+
+    function _categoryDblClick() {
+        setIsEditingCat(true);
+    }
+
     async function patchTransaction() {
         if (newCategory === undefined) return;
 
         const payload = {
-            id: transaction.id,
+            id: transactionLocal.id,
             categoryId: newCategory.id,
         };
         const updatedTransaction =
             await TransactionService.patchTransaction(payload);
-        setTransaction(updatedTransaction);
+        setTransactionLocal(updatedTransaction);
 
         setIsEditingCat(false);
-        if (props.onChange) props.onChange();
+        if (onChange) onChange();
     }
 }
 

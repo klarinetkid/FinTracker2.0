@@ -105,3 +105,9 @@ td.bandHolderCell {
     .band:hover .tooltip {
         visibility: visible;
     }
+
+@media only screen and (max-width: 600px) {
+    .table .inOutCell {
+        display: none;
+    }
+}

@@ -26,6 +26,8 @@ const importFilters = [
 type ImportFilter = (typeof importFilters)[number];
 
 function ImportTable(props: ImportTableProps) {
+    const { transactions } = props;
+
     const globalDataCache = useGlobalDataCache();
     const [filter, setFilter] = useState<ImportFilter>("View All");
     const pagination = useLocalPagination(transactionsFiltered(filter), 25);
@@ -75,7 +77,7 @@ function ImportTable(props: ImportTableProps) {
                     {pagination.currentItems.map((t) => (
                         <ImportTableRow
                             key={t.item.id}
-                            num={t.index}
+                            rowNum={t.index}
                             transaction={t.item}
                         />
                     ))}
@@ -94,15 +96,15 @@ function ImportTable(props: ImportTableProps) {
     ): TransactionViewModel[] {
         switch (filter) {
             case "View All":
-                return props.transactions;
+                return transactions;
             case "Selected":
-                return props.transactions.filter((t) => t.isSelectedForImport);
+                return transactions.filter((t) => t.isSelectedForImport);
             case "Unselected":
-                return props.transactions.filter((t) => !t.isSelectedForImport);
+                return transactions.filter((t) => !t.isSelectedForImport);
             case "Uncategorized":
-                return props.transactions.filter((t) => !t.categoryId);
+                return transactions.filter((t) => !t.categoryId);
             case "Unsaved":
-                return props.transactions.filter(
+                return transactions.filter(
                     (t) =>
                         t.savedMemo === null &&
                         !t.isAlreadyImported &&

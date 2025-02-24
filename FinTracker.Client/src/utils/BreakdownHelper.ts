@@ -3,17 +3,17 @@ import { createSearchParams } from "react-router-dom";
 import Breakdown from "../types/Breakdown";
 import Pages from "../types/Pages";
 import { sum } from "./ArrayHelper";
+import CategoryTotal from "../types/CategoryTotal";
+import { formatDateOnly } from "./DateHelper";
 
 export function getTotalIn(summaries: Breakdown[] | undefined): number {
-    return !summaries || summaries.length === 0
-        ? 0
-        : summaries.map((s) => s.totalIn).reduce((sum, i) => sum + i);
+    if (!summaries) return 0;
+    return sum(summaries.map((s) => s.totalIn));
 }
 
 export function getTotalOut(summaries: Breakdown[] | undefined): number {
-    return !summaries || summaries.length === 0
-        ? 0
-        : summaries.map((s) => s.totalOut).reduce((sum, i) => sum + i);
+    if (!summaries) return 0;
+    return sum(summaries.map((s) => s.totalOut));
 }
 
 export function breakdownParamsAreValid(start: Moment, end: Moment) {
@@ -24,18 +24,36 @@ export function toBreakdown(start: Moment | string, end: Moment | string) {
     return {
         pathname: Pages.Breakdown,
         search: createSearchParams({
-            start: moment(start).format("yyyy-MM-DD"),
-            end: moment(end).format("yyyy-MM-DD"),
+            start: formatDateOnly(start),
+            end: formatDateOnly(end),
         }).toString(),
     };
 }
 
-export function getTotalIncome(breakdowns: Breakdown[]): number {
+export function getIncomeCategoriesTotal(breakdowns: Breakdown[]): number {
     return sum(
         breakdowns
-            .map((b) => b.categoryTotals)
+            .map((b) =>
+                getIncomeCategories(b.categoryTotals).map((c) => c.total)
+            )
             .flat()
-            .filter((c) => c.total > 0)
-            .map((c) => c.total)
     );
+}
+
+export function getSpendingCategories(
+    categoryTotals: CategoryTotal[] | undefined
+) {
+    if (!categoryTotals) return [];
+    return categoryTotals
+        .filter((c) => c.total < 0)
+        .sort((a, b) => a.total - b.total);
+}
+
+export function getIncomeCategories(
+    categoryTotals: CategoryTotal[] | undefined
+) {
+    if (!categoryTotals) return [];
+    return categoryTotals
+        .filter((c) => c.total > 0)
+        .sort((a, b) => a.total - b.total);
 }

@@ -8,16 +8,12 @@ import { sum } from "../../utils/ArrayHelper";
 import SpendingTableRow from "./SpendingTableRow";
 
 interface SpendingTableProps {
-    categoryTotals: CategoryTotal[];
+    spendingCategories: CategoryTotal[];
 }
 
 function SpendingTable(props: SpendingTableProps) {
+    const { spendingCategories } = props;
     const categorySelection = useCategorySelection();
-    const { categoryTotals } = props;
-
-    const spendingCategories = categoryTotals
-        .filter((c) => c.total < 0)
-        .sort((a, b) => a.total - b.total);
 
     const allAreSelected = categorySelection.selectedCategories.length > 0;
 
@@ -76,7 +72,7 @@ function SpendingTable(props: SpendingTableProps) {
     }
 
     function selectedSpendingCategories() {
-        return categoryTotals
+        return spendingCategories
             .filter((c) =>
                 categorySelection.isSelected(c.category ?? Uncategorized)
             )

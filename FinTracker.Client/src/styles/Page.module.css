@@ -1,6 +1,6 @@
 .page {
     margin: 0 auto;
-    width: 1000px;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }

@@ -8,21 +8,14 @@ interface FormGroupProps {
 }
 
 function FormGroup(props: FormGroupProps) {
-    return (
-        <div
-            className={classList(
-                styles.formGroup,
-                props.error ? styles.error : ""
-            )}
-        >
-            <h4>{props.fieldName}</h4>
-            {props.children}
+    const { fieldName, children, error } = props;
 
-            {props.error ? (
-                <div className={styles.errorMessage}>{props.error}</div>
-            ) : (
-                ""
-            )}
+    return (
+        <div className={classList(styles.formGroup, error ? styles.error : "")}>
+            <h4>{fieldName}</h4>
+            {children}
+
+            {error ? <div className={styles.errorMessage}>{error}</div> : ""}
         </div>
     );
 }

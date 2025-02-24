@@ -43,6 +43,7 @@ namespace FinTracker.Services.Data
 
         public bool DoesTransactionExist(DateOnly date, string memo, int amount)
         {
+            // columns in this order to take advantage of index on date, memo, amount
             return TblTransactions.Any(t => t.Date == date && t.Memo == memo && t.Amount == amount);
         }
     }

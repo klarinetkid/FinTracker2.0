@@ -17,7 +17,7 @@ Create table TblBudget (
 	[CategoryId] int references TblCategory(Id) NOT NULL,
 	[Amount] int NOT NULL,
 	[EffectiveDate] date NOT NULL,
-	constraint CK_Budget_Amount_Range check (
+	constraint CK_TblBudget_Amount_Range check (
 	   [Amount] >= -1000000 AND [Amount] <= 1000000
 	)
 );
@@ -32,7 +32,8 @@ Create table TblTransaction (
 	[Amount] int NOT NULL,
 	[Memo] varchar(200),
 	[CategoryId] int references TblCategory(id),
-	[IsCashTransaction] bit NOT NULL DEFAULT 0
+	[IsCashTransaction] bit NOT NULL DEFAULT 0,
+	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount])
 );
 
 ----------------------------------
@@ -60,8 +61,8 @@ Create table TblMemo (
 	[Memo] varchar(200) NOT NULL,
 	[CategoryId] int references TblCategory(id) NULL,
 	[IsImported] bit NOT NULL default 1,
-	constraint AK_Memo unique([Memo]),
-	constraint CK_IsImportedCategoryId check (
+	constraint AK_TblMemo_Memo unique([Memo]),
+	constraint CK_TblMemo_IsImportedCategoryId check (
 		(
 			IsImported = 0
 			and CategoryId is null

@@ -4,9 +4,9 @@
 */
 const fs = require("fs");
 
-const year = 2025;
-const month = 4;
-const monthCount = 1;
+const year = 1990;
+const month = 1;
+const monthCount = 1200;
 
 const categories = [
     {

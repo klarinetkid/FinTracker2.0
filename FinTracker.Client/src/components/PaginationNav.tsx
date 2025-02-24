@@ -9,19 +9,18 @@ interface PaginationNavProps<T> {
     onNavigate: (page: number) => void;
 }
 function PaginationNav<T>(props: PaginationNavProps<T>) {
+    const { pagination, onNavigate } = props;
+
     return (
         <div className={styles.pageNav}>
-            {props.pagination.totalPages > 1
-                ? [...Array(props.pagination.totalPages).keys()].map((p) =>
-                      props.pagination.currentPage === p ? (
-                          <ButtonFill
-                              key={p}
-                              onClick={() => props.onNavigate(p)}
-                          >
+            {pagination.totalPages > 1
+                ? [...Array(pagination.totalPages).keys()].map((p) =>
+                      pagination.currentPage === p ? (
+                          <ButtonFill key={p} onClick={() => onNavigate(p)}>
                               {p + 1}
                           </ButtonFill>
                       ) : (
-                          <Button key={p} onClick={() => props.onNavigate(p)}>
+                          <Button key={p} onClick={() => onNavigate(p)}>
                               {p + 1}
                           </Button>
                       )

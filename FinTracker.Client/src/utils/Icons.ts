@@ -15,6 +15,7 @@ import ExpandUpIcon from "../assets/ExpandUp.svg?react";
 import FileDockFillIcon from "../assets/FileDockFill.svg?react";
 import HomeIcon from "../assets/Home.svg?react";
 import ImportFillIcon from "../assets/ImportFill.svg?react";
+import LoadingIcon from "../assets/Loading.svg?react";
 import MenuIcon from "../assets/Menu.svg?react";
 import MoneyFillIcon from "../assets/MoneyFill.svg?react";
 import MoonIcon from "../assets/Moon.svg?react";
@@ -46,6 +47,7 @@ export {
     FileDockFillIcon,
     HomeIcon,
     ImportFillIcon,
+    LoadingIcon,
     MenuIcon,
     MoneyFillIcon,
     MoonIcon,

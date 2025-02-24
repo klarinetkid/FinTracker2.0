@@ -12,6 +12,7 @@ interface TransactionFiltersProps {
 }
 
 function TransactionFilters(props: TransactionFiltersProps) {
+    const { formValues } = props;
     const globalDataCache = useGlobalDataCache();
 
     return (
@@ -20,8 +21,8 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <Input
                     placeholder="Search"
                     name="search"
-                    value={props.formValues.values.search ?? ""}
-                    onChange={props.formValues.updateValue}
+                    value={formValues.values.search ?? ""}
+                    onChange={formValues.updateValue}
                 />
             </FormGroup>
             <FormGroup fieldName="Category">
@@ -30,14 +31,14 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     categories={globalDataCache.categories.value}
                     onChange={(c: Category | undefined) => {
                         const categoryId = c && c.id === undefined ? -1 : c?.id;
-                        props.formValues.setValues({
-                            ...props.formValues.values,
+                        formValues.setValues({
+                            ...formValues.values,
                             categoryId: categoryId,
                         });
                     }}
                     value={
                         globalDataCache.categories.value.filter(
-                            (c) => c.id === props.formValues.values?.categoryId
+                            (c) => c.id === formValues.values?.categoryId
                         )[0]
                     }
                 />
@@ -45,15 +46,15 @@ function TransactionFilters(props: TransactionFiltersProps) {
             <FormGroup fieldName="After">
                 <Input
                     name="after"
-                    value={props.formValues.values.after ?? ""}
-                    onChange={props.formValues.updateValue}
+                    value={formValues.values.after ?? ""}
+                    onChange={formValues.updateValue}
                 />
             </FormGroup>
             <FormGroup fieldName="Before">
                 <Input
                     name="before"
-                    value={props.formValues.values.before ?? ""}
-                    onChange={props.formValues.updateValue}
+                    value={formValues.values.before ?? ""}
+                    onChange={formValues.updateValue}
                 />
             </FormGroup>
         </Row>

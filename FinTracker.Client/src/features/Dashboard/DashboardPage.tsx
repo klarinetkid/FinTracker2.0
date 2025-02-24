@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import InOutPills from "../../components/InOutPills";
 import Row from "../../components/Row";
 import Select from "../../components/Select";
@@ -12,11 +12,11 @@ import { ArrowLeftSquareIcon, ArrowRightSquareIcon } from "../../utils/Icons";
 import BreakdownTable from "./BreakdownTable";
 import DashboardIncrementButton from "./DashboardIncrementButton";
 import Page from "../../components/Page";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 function DashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const globalDataCache = useGlobalDataCache();
-    const [isLoading, setIsLoading] = useState(true);
     const [breakdowns, setBreakdowns] = useState<Breakdown[]>();
 
     const year = useMemo(
@@ -34,17 +34,15 @@ function DashboardPage() {
 
     // load breakdowns
     useEffect(() => {
-        setIsLoading(true);
+        setBreakdowns(undefined);
         getData().then((results) => {
             setBreakdowns(results);
-            setIsLoading(false);
         });
     }, [year, viewType]);
 
     const breakdownsAreEmpty =
         !breakdowns ||
-        breakdowns.filter((b) => b.totalIn !== 0 || b.totalOut !== 0).length ===
-            0;
+        breakdowns.filter((b) => b.categoryTotals.length > 0).length === 0;
 
     return (
         <>
@@ -79,7 +77,7 @@ function DashboardPage() {
                         ""
                     )}
 
-                    <h1 style={{ color: isLoading ? "grey" : undefined }}>
+                    <h1 className="centre">
                         {viewType === "yearly"
                             ? "All Years"
                             : `Dashboard ${year ?? ""}`}
@@ -97,7 +95,9 @@ function DashboardPage() {
                     )}
                 </Row>
 
-                {!breakdownsAreEmpty ? (
+                {!breakdowns ? (
+                    <LoadingIndicator key={0} />
+                ) : !breakdownsAreEmpty ? (
                     <>
                         <Row justifyContent="center">
                             <InOutPills
@@ -109,8 +109,8 @@ function DashboardPage() {
                         <Spacer height={34} />
 
                         <BreakdownTable
-                            breakowns={breakdowns}
-                            dateFormat={getBreakdownTitleFormat()}
+                            breakdowns={breakdowns}
+                            titleFormat={getBreakdownTitleFormat()}
                             bandValueProperty={
                                 viewType === "weekly"
                                     ? "percentOfYearlySpend"

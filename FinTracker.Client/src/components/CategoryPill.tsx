@@ -14,7 +14,9 @@ interface CategoryPillProps {
 }
 
 function CategoryPill(props: CategoryPillProps) {
-    const cat: CategoryOrUncategorized = props.category ?? Uncategorized;
+    const { category, onClick, openTop } = props;
+
+    const cat: CategoryOrUncategorized = category ?? Uncategorized;
     const colour = tinycolor(cat.colour);
 
     const style = {
@@ -27,11 +29,11 @@ function CategoryPill(props: CategoryPillProps) {
             className={classList(
                 styles.pill,
                 cat.id || cat.id === 0 ? "" : styles.uncategorized,
-                props.onClick ? styles.clickable : "",
-                props.openTop ? styles.openTop : ""
+                onClick ? styles.clickable : "",
+                openTop ? styles.openTop : ""
             )}
             style={style}
-            onClick={props.onClick}
+            onClick={onClick}
         >
             {cat.categoryName}
         </span>

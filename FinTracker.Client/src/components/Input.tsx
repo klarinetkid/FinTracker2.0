@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 function Input(props: InputProps) {
     const { isError, ...rest } = props;
+
     return (
         <input
             {...rest}

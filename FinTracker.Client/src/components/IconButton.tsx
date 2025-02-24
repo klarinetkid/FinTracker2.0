@@ -9,15 +9,17 @@ interface IconButtonProps {
 }
 
 function IconButton(props: IconButtonProps) {
+    const { icon: Icon, title, onClick, className } = props;
+
     return (
         <button
-            title={props.title}
+            title={title}
             type="button"
-            className={classList(styles.button, props.className)}
-            onClick={props.onClick}
+            className={classList(styles.button, className)}
+            onClick={onClick}
             onContextMenu={(e) => e.preventDefault()}
         >
-            <props.icon width={32} height={32} />
+            <Icon width={32} height={32} />
         </button>
     );
 }

@@ -1,0 +1,5 @@
+.complete {
+    text-align: center;
+    font-weight: bold;
+    color: var(--green);
+}

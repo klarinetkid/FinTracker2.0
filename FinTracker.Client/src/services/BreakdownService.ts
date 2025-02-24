@@ -1,6 +1,7 @@
 import moment from "moment";
 import Breakdown from "../types/Breakdown";
 import BaseService from "./BaseService";
+import { formatDateOnly } from "../utils/DateHelper";
 
 class BreakdownService extends BaseService {
     constructor() {
@@ -9,14 +10,10 @@ class BreakdownService extends BaseService {
 
     getBreakdown(start: string | Date, end: string | Date): Promise<Breakdown> {
         const params = {
-            start: moment(start).format("yyyy-MM-DD"),
-            end: moment(end).format("yyyy-MM-DD"),
-            includes: ["Transactions"],
+            start: formatDateOnly(start),
+            end: formatDateOnly(end),
         };
-        return this.get<Breakdown>("/", {
-            params,
-            paramsSerializer: { indexes: null },
-        });
+        return this.get<Breakdown>("", { params });
     }
 
     getWeeklyBreakdownsForYear(year: number): Promise<Breakdown[]> {

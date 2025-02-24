@@ -6,12 +6,16 @@ import styles from "../../styles/BreakdownTable.module.css";
 import Breakdown from "../../types/Breakdown";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
-import { getTotalIncome, toBreakdown } from "../../utils/BreakdownHelper";
-import { formatCurrency, toFixed } from "../../utils/NumberHelper";
+import {
+    getIncomeCategoriesTotal,
+    getSpendingCategories,
+    toBreakdown,
+} from "../../utils/BreakdownHelper";
+import { formatCurrency } from "../../utils/NumberHelper";
 
 interface BreakdownTableProps {
-    breakowns: Breakdown[];
-    dateFormat: string;
+    breakdowns: Breakdown[];
+    titleFormat: string;
     bandValueProperty:
         | "percentOfIncome"
         | "percentOfSpend"
@@ -19,29 +23,29 @@ interface BreakdownTableProps {
 }
 
 function BreakdownTable(props: BreakdownTableProps) {
+    const { breakdowns, titleFormat, bandValueProperty } = props;
+
     const navigate = useNavigate();
 
-    const breakdowns = props.breakowns.filter(
+    const breakdownsFiltered = breakdowns.filter(
         (b) => b.categoryTotals.length > 0
     );
 
-    const yearlyIncome = getTotalIncome(breakdowns);
+    const yearlyIncome = getIncomeCategoriesTotal(breakdowns);
 
     return (
         <table className={styles.table}>
             <tbody>
-                {breakdowns.map((breakdown, i) => (
+                {breakdownsFiltered.map((breakdown, i) => (
                     <tr key={i} onClick={() => openBreakdown(breakdown)}>
                         <td className="ralign">
                             <h4>
-                                {moment(breakdown.start).format(
-                                    props.dateFormat
-                                )}
+                                {moment(breakdown.start).format(titleFormat)}
                             </h4>
                         </td>
                         <td className={styles.bandHolderCell}>
                             <div className={styles.bandHolder}>
-                                {spendingTotalsSorted(breakdown).map(
+                                {spendingTotalWithPctProp(breakdown).map(
                                     (categoryTotal, i) => (
                                         <div
                                             key={i}
@@ -56,7 +60,7 @@ function BreakdownTable(props: BreakdownTableProps) {
                                 )}
                             </div>
                         </td>
-                        <td>
+                        <td className={styles.inOutCell}>
                             <InOutPills
                                 totalIn={breakdown.totalIn}
                                 totalOut={breakdown.totalOut}
@@ -69,16 +73,16 @@ function BreakdownTable(props: BreakdownTableProps) {
         </table>
     );
 
-    function spendingTotalsSorted(breakdown: Breakdown) {
-        return breakdown.categoryTotals
-            .filter(
-                (c) => c.category && c.total < 0 && getCategoryPercentage(c)
-            )
-            .sort((a, b) => a.total - b.total);
+    // get spending categories sorted that have a value for
+    // the property we are using for percentage
+    function spendingTotalWithPctProp(breakdown: Breakdown) {
+        return getSpendingCategories(breakdown.categoryTotals).filter(
+            getCategoryPercentage
+        );
     }
 
     function getBandStyle(categoryTotal: CategoryTotal) {
-        const colour = categoryTotal.category?.colour ?? "grey";
+        const colour = categoryTotal.category?.colour ?? Uncategorized.colour;
         return {
             width: Math.abs(getCategoryPercentage(categoryTotal) ?? 0) + "%",
             background: getBandGradient(colour),
@@ -87,7 +91,7 @@ function BreakdownTable(props: BreakdownTableProps) {
 
     function getBandGradient(colour: string): string {
         const c = tinycolor(colour);
-        const validColour = c.isValid() ? c : tinycolor("grey");
+        const validColour = c.isValid() ? c : tinycolor(Uncategorized.colour);
         const spread = 30;
         const darkened = validColour.clone().darken(spread);
         const lightened = validColour.clone().lighten(spread);
@@ -98,12 +102,11 @@ function BreakdownTable(props: BreakdownTableProps) {
     function getTooltipText(categoryTotal: CategoryTotal) {
         const categoryName =
             categoryTotal.category?.categoryName ?? Uncategorized.categoryName;
-        const total = formatCurrency(categoryTotal.total, true);
-        const pct = toFixed(
-            Math.abs(getCategoryPercentage(categoryTotal) ?? 0),
+        const total = formatCurrency(categoryTotal.total);
+        const pct = Math.abs(getCategoryPercentage(categoryTotal) ?? 0).toFixed(
             1
         );
-        //return `${categoryName}: ${total} (${pct}%)`;
+
         return (
             <>
                 {categoryName}
@@ -116,7 +119,7 @@ function BreakdownTable(props: BreakdownTableProps) {
     function getCategoryPercentage(
         categoryTotal: CategoryTotal
     ): number | undefined {
-        switch (props.bandValueProperty) {
+        switch (bandValueProperty) {
             case "percentOfIncome":
                 return categoryTotal.percentOfIncome;
             case "percentOfSpend":

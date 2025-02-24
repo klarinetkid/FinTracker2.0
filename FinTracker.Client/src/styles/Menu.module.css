@@ -17,6 +17,7 @@
 
         .popdown.active .menu {
             max-height: calc(80vh - 112px);
+            height: calc(80vh - 112px);
         }
 
     .popdown .backButton {
@@ -35,17 +36,21 @@
     width: 700px;
     margin: 0 auto;
     margin-top: 100px;
-    background-color: var(--bg);
-    border-radius: 12px;
     padding: 6px;
     max-height: 0;
 }
 
 .tileContainer {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    align-content: flex-start;
     flex-wrap: wrap;
     justify-content: center;
+    overflow-y: scroll;
+    max-height: 100%;
+    background-color: var(--bg);
+    scrollbar-width: none;
+    border-radius: 12px;
 }
 
 .disabledLink {

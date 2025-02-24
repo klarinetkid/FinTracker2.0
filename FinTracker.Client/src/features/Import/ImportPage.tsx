@@ -2,12 +2,25 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
+import LoadingIndicator from "../../components/LoadingIndicator";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
+import styles from "../../styles/ImportPage.module.css";
 import Pages from "../../types/Pages";
 import ImportTable from "./ImportTable";
+
+// import process is linear:
+// loading -> editing -> submitting -> complete
+
+type ImportFlowStep =
+    | "loading" // initial processing and loading of data into form
+    | "editing" // user is editing the data
+    | "submitting" // data is being submitted & saved to the server
+    | "complete" // data has been successfully saved
+    | "error" // an unexpected error has occurred
+    | "invalid"; // the initial parameters were invalid, can't proceed
 
 function ImportPage() {
     const location = useLocation();
@@ -15,32 +28,23 @@ function ImportPage() {
     const transactionImport = useTransactionImport();
     const globalDataCache = useGlobalDataCache();
 
-    const locationStateIsValidForImport =
-        location.state?.selectedFormat && location.state?.filesContent;
-
-    const [isLoading, setIsLoading] = useState(false);
-    //const [pageState, setPageState] = useState<
-    //    "loading" | "editing" | "complete" | "invalid"
-    //>(locationStateIsValidForImport ? "loading" : "invalid");
-
-    const pageState =
-        location.state?.insertedRows !== undefined
-            ? "complete"
-            : !locationStateIsValidForImport
-              ? "invalid"
-              : isLoading
-                ? "loading"
-                : "editing";
+    const [flowStep, setFlowStep] = useState<ImportFlowStep>("loading");
 
     useEffect(() => {
-        if (locationStateIsValidForImport) {
-            setIsLoading(true);
+        // TODO more readable way to validate location state
+        if (location.state?.selectedFormat && location.state?.filesContent) {
+            setFlowStep("loading");
             transactionImport
                 .PrepareImport(
                     location.state?.selectedFormat,
                     location.state?.filesContent
                 )
-                .then(() => setIsLoading(false));
+                .then(() => setFlowStep("editing"))
+                .catch(() => setFlowStep("error"));
+        } else if (location.state?.insertedRows) {
+            setFlowStep("complete");
+        } else {
+            setFlowStep("invalid");
         }
     }, [location.state]);
 
@@ -53,7 +57,7 @@ function ImportPage() {
             <Row justifyContent="space-between">
                 <h1>Import Transactions</h1>
                 <div>
-                    {pageState === "editing" ? (
+                    {flowStep === "editing" ? (
                         <>
                             <Button type="button" onClick={cancelImport}>
                                 Cancel
@@ -72,34 +76,67 @@ function ImportPage() {
                 </div>
             </Row>
 
-            {pageState === "complete" ? (
-                <div className="centre">
-                    Successfully added {location.state.insertedRows}{" "}
-                    transactions.
-                </div>
-            ) : pageState === "invalid" ? (
-                <h4 className="centre">
-                    Access the menu screen to import transactions.
-                </h4>
-            ) : pageState === "loading" ? (
-                <div>loading...</div>
-            ) : (
-                <ImportTable transactions={transactionImport.Transcations} />
-            )}
+            {getPageBody()}
         </Page>
     );
+
+    function getPageBody(): JSX.Element {
+        switch (flowStep) {
+            case "loading":
+                return <LoadingIndicator message="Preparing" />;
+
+            case "submitting":
+                return <LoadingIndicator message="Submitting" />;
+
+            case "error":
+                return <div>An unexpected error has occurred.</div>;
+
+            case "complete":
+                return (
+                    <h2 className={styles.complete}>
+                        Successfully added{" "}
+                        {location.state.insertedRows.toLocaleString()}{" "}
+                        transactions.
+                    </h2>
+                );
+
+            case "invalid":
+                return (
+                    <h4 className="centre">
+                        Access the menu screen to import transactions.
+                    </h4>
+                );
+
+            case "editing":
+                return (
+                    <ImportTable
+                        transactions={transactionImport.Transcations}
+                    />
+                );
+        }
+    }
 
     function cancelImport() {
         navigate(Pages.Dashboard);
     }
 
     function submitImport() {
-        setIsLoading(true);
+        setFlowStep("submitting");
 
-        transactionImport.Submit().then((result: number) => {
-            globalDataCache.availableYears.refresh();
-            navigate(Pages.Import, { state: { insertedRows: result } });
-        });
+        transactionImport
+            .Submit()
+            .then((result: number) => {
+                setTimeout(() => {
+                    globalDataCache.availableYears.refresh();
+                    navigate(Pages.Import, {
+                        state: { insertedRows: result },
+                        replace: true,
+                    });
+                }, 1800);
+            })
+            .catch(() => {
+                setFlowStep("error");
+            });
     }
 }
 

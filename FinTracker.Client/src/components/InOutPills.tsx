@@ -8,19 +8,19 @@ interface InOutPillsProps {
 }
 
 function InOutPills(props: InOutPillsProps) {
+    const { totalIn, totalOut, showLabels } = props;
+    const labels = showLabels === false;
+
     return (
         <div className={styles.holder}>
             <div className={styles.in}>
-                {props.showLabels === false ? "" : "In:"}{" "}
-                {formatCurrency(props.totalIn)}
+                {labels ? "" : "In:"} {formatCurrency(totalIn)}
             </div>
             <div className={styles.out}>
-                {props.showLabels === false ? "" : "Out:"}{" "}
-                {formatCurrency(props.totalOut, true)}
+                {labels ? "" : "Out:"} {formatCurrency(totalOut, true)}
             </div>
             <div className={styles.net}>
-                {props.showLabels === false ? "" : "Net:"}{" "}
-                {formatCurrency(props.totalIn + props.totalOut)}
+                {labels ? "" : "Net:"} {formatCurrency(totalIn + totalOut)}
             </div>
         </div>
     );

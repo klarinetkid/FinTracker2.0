@@ -11,6 +11,8 @@ interface CategoryTableProps {
 }
 
 function CategoryTable(props: CategoryTableProps) {
+    const { categories, editCategory } = props;
+
     return (
         <Table>
             <thead>
@@ -22,13 +24,13 @@ function CategoryTable(props: CategoryTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {props.categories.map((category, i) => (
+                {categories.map((category, i) => (
                     <tr key={i}>
                         <td className="bold centre">{i + 1}</td>
                         <td className="centre">
                             <CategoryPill
                                 category={category}
-                                onClick={() => props.editCategory(category)}
+                                onClick={() => editCategory(category)}
                             />
                         </td>
                         <td className="centre monospace">{category.colour}</td>
@@ -47,7 +49,7 @@ function CategoryTable(props: CategoryTableProps) {
                 ))}
             </tbody>
 
-            {props.categories.length === 0 ? <EmptyTableMessage /> : ""}
+            {categories.length === 0 ? <EmptyTableMessage /> : ""}
         </Table>
     );
 }

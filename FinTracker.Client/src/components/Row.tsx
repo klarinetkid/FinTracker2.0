@@ -8,16 +8,18 @@ interface RowProps {
 }
 
 function Row(props: RowProps) {
+    const { children, justifyContent, gap, style } = props;
+
     return (
         <div
             className={styles.row}
             style={{
-                ...props.style,
-                justifyContent: props.justifyContent,
-                gap: props.gap,
+                ...style,
+                justifyContent: justifyContent,
+                gap: gap,
             }}
         >
-            {props.children}
+            {children}
         </div>
     );
 }

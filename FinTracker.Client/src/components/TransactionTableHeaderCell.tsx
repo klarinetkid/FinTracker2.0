@@ -11,25 +11,23 @@ interface TransactionTableHeaderCellProps {
 }
 
 function TransactionTableHeaderCell(props: TransactionTableHeaderCellProps) {
-    const { formValues, columnName } = props;
+    const { formValues, columnName, width } = props;
     const isActive =
         formValues.values.orderBy?.toLowerCase() === columnName.toLowerCase();
 
     // always show asc if not active
     const currentOrder =
         !isActive || formValues.values.order === "asc" ? "asc" : "desc";
-    const targetOrder = !isActive || currentOrder === "desc" ? "asc" : "desc";
+    const targetOrder = isActive && currentOrder === "asc" ? "desc" : "asc";
     const iconClass = classList(
         styles.orderBtn,
         isActive ? styles.activeOrder : ""
     );
 
+    const title = `Sort ${columnName} ${targetOrder === "asc" ? "ascending" : "descending"}`;
+
     return (
-        <th
-            onClick={setOrdering}
-            title={`Sort ${columnName} ${targetOrder === "asc" ? "ascending" : "descending"}`}
-            style={{ width: props.width }}
-        >
+        <th onClick={setOrdering} title={title} style={{ width }}>
             {props.columnName}
 
             {currentOrder === "asc" ? (
