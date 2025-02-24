@@ -1,3 +1,4 @@
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 import Table from "../../components/Table";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormat from "../../types/ImportFormat";
@@ -36,6 +37,12 @@ function FormatTable(props: FormatTableProps) {
                     </tr>
                 ))}
             </tbody>
+
+            {globalDataCache.importFormats.value.length === 0 ? (
+                <EmptyTableMessage />
+            ) : (
+                ""
+            )}
         </Table>
     );
 }

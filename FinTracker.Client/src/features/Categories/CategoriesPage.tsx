@@ -1,19 +1,21 @@
+import { AxiosError } from "axios";
 import { SyntheticEvent, useEffect, useState } from "react";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import { useFormValues } from "../../hooks/useFormValues";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
+import { ErrorResponse } from "../../services/BaseService";
 import CategoryService from "../../services/CategoryService";
 import { CategoryTransactionCount } from "../../types/Category";
 import CategoryViewModel from "../../types/CategoryViewModel";
+import { AddRoundLightFillIcon } from "../../utils/Icons";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
-import { AxiosError } from "axios";
-import { ErrorResponse } from "../../services/BaseService";
-import { AddRoundLightFillIcon } from "../../utils/Icons";
 
 function CategoriesPage() {
+    const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isRefreshed, setIsRefreshed] = useState(false);
     const formValues = useFormValues<CategoryViewModel>({});
@@ -22,11 +24,12 @@ function CategoriesPage() {
     );
 
     useEffect(() => {
+        globalDataCache.categories.refresh();
         CategoryService.getCategoryTransactionCounts().then(setCategories);
     }, [isRefreshed]);
 
     return (
-        <Page width={800}>
+        <Page>
             <Row justifyContent="space-between">
                 <h1>Categories</h1>
                 <IconButton
@@ -67,7 +70,8 @@ function CategoriesPage() {
             : CategoryService.createCategory(formValues.values)
         )
             .then(() => {
-                if (event.target instanceof HTMLButtonElement) event.target.blur();
+                if (event.target instanceof HTMLButtonElement)
+                    event.target.blur();
                 setIsRefreshed(!isRefreshed);
                 setIsDrawerOpen(false);
             })

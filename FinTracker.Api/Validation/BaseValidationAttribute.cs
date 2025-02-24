@@ -8,6 +8,8 @@ namespace FinTracker.Api.Validation
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
+            if (validationContext.MemberName == null) throw new Exception("member name is null wtf");
+
             PropertyInfo? property = validationContext.ObjectType.GetProperty(validationContext.MemberName);
             if (property != null)
             {

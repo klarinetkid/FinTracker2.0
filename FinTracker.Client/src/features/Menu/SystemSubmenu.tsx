@@ -1,20 +1,28 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Pages from "../../types/Pages";
 import * as Icons from "../../utils/Icons";
 import MenuTile from "./MenuTile";
 
 function SystemSubmenu() {
+    const navigate = useNavigate();
+
     return (
         <>
-            <Link to={Pages.Categories}>
-                <MenuTile title="Categories" icon={Icons.CategoryIcon} />
-            </Link>
-            <Link to={Pages.Memos}>
-                <MenuTile title="Memos" icon={Icons.SaveFillIcon} />
-            </Link>
-            <Link to={Pages.Formats}>
-                <MenuTile title="Formats" icon={Icons.FileDockFillIcon} />
-            </Link>
+            <MenuTile
+                title="Categories"
+                icon={Icons.CategoryIcon}
+                onClick={() => navigate(Pages.Categories)}
+            />
+            <MenuTile
+                title="Memos"
+                icon={Icons.SaveFillIcon}
+                onClick={() => navigate(Pages.Memos)}
+            />
+            <MenuTile
+                title="Formats"
+                icon={Icons.FileDockFillIcon}
+                onClick={() => navigate(Pages.Formats)}
+            />
         </>
     );
 }

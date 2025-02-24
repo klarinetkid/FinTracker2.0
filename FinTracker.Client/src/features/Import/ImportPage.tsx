@@ -49,7 +49,7 @@ function ImportPage() {
     ).length;
 
     return (
-        <Page width={900}>
+        <Page>
             <Row justifyContent="space-between">
                 <h1>Import Transactions</h1>
                 <div>

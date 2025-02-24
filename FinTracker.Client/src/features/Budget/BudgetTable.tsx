@@ -8,6 +8,7 @@ import Budget from "../../types/Budget";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import { formatCurrency } from "../../utils/NumberHelper";
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 
 interface BudgetTableProps {
     groupedBudgets: Grouping<Category, Budget>[];
@@ -59,6 +60,8 @@ function BudgetTable(props: BudgetTableProps) {
                     ))}
                 </GroupedTableRowSet>
             ))}
+
+            {props.groupedBudgets.length === 0 ? <EmptyTableMessage /> : ""}
         </GroupedTable>
     );
 }

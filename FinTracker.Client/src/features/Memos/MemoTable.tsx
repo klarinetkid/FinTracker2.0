@@ -1,9 +1,10 @@
 import CategoryPill from "../../components/CategoryPill";
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 import GroupedTable from "../../components/GroupedTable";
 import GroupedTableRow from "../../components/GroupedTableRow";
 import GroupedTableRowSet from "../../components/GroupedTableRowSet";
 import Input from "../../components/Input";
-import Category, { NeverImport } from "../../types/Category";
+import Category, { NeverImport, Uncategorized } from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import Memo from "../../types/Memo";
 
@@ -43,7 +44,13 @@ function MemoTable(props: MemoTableProps) {
                         <GroupedTableRow key={memo.id} rowIndex={i + 1}>
                             <td></td>
                             <td className="centre">
-                                <CategoryPill category={memo.category ?? NeverImport} />
+                                <CategoryPill
+                                    category={
+                                        memo.category ?? memo.isImported
+                                            ? Uncategorized
+                                            : NeverImport
+                                    }
+                                />
                             </td>
                             <td>
                                 <Input
@@ -56,6 +63,8 @@ function MemoTable(props: MemoTableProps) {
                     ))}
                 </GroupedTableRowSet>
             ))}
+
+            {props.memos.length === 0 ? <EmptyTableMessage /> : ""}
         </GroupedTable>
     );
 }

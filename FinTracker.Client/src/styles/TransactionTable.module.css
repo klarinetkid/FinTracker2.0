@@ -37,3 +37,13 @@
     .table th:hover .orderBtn:not(.activeOrder) {
         opacity: 0.4;
     }
+
+/*.shrink {
+   flex-shrink: 2;
+   overflow-y: scroll;
+}
+
+    .shrink th {
+        position: sticky;
+        top: 0;
+    }*/

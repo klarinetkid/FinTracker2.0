@@ -16,7 +16,12 @@
     color: var(--icon) !important;
 }
 
-    .tile:hover {
+    .tile.disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    .tile:not(.disabled):hover {
         text-decoration: underline;
         box-shadow: 4px 4px 3px 0px var(--box-shadow);
     }

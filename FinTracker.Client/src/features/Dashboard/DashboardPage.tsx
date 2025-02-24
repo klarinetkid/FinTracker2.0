@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import InOutPills from "../../components/InOutPills";
-import Page from "../../components/Page";
 import Row from "../../components/Row";
 import Select from "../../components/Select";
 import Spacer from "../../components/Spacer";
@@ -9,9 +8,10 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BreakdownService from "../../services/BreakdownService";
 import Breakdown from "../../types/Breakdown";
 import { getTotalIn, getTotalOut } from "../../utils/BreakdownHelper";
+import { ArrowLeftSquareIcon, ArrowRightSquareIcon } from "../../utils/Icons";
 import BreakdownTable from "./BreakdownTable";
 import DashboardIncrementButton from "./DashboardIncrementButton";
-import { ArrowLeftSquareIcon, ArrowRightSquareIcon } from "../../utils/Icons";
+import Page from "../../components/Page";
 
 function DashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -41,19 +41,28 @@ function DashboardPage() {
         });
     }, [year, viewType]);
 
+    const breakdownsAreEmpty =
+        !breakdowns ||
+        breakdowns.filter((b) => b.totalIn !== 0 || b.totalOut !== 0).length ===
+            0;
+
     return (
         <>
             <div style={{ float: "left" }}>
-                <Select
-                    value={viewType}
-                    onChange={(e) => setViewType(e.target.value)}
-                >
-                    <option value="monthly">Months</option>
-                    <option value="weekly">Weeks</option>
-                    <option value="yearly">Years</option>
-                </Select>
+                {!breakdownsAreEmpty ? (
+                    <Select
+                        value={viewType}
+                        onChange={(e) => setViewType(e.target.value)}
+                    >
+                        <option value="monthly">Months</option>
+                        <option value="weekly">Weeks</option>
+                        <option value="yearly">Years</option>
+                    </Select>
+                ) : (
+                    ""
+                )}
             </div>
-            <Page width={1100}>
+            <Page>
                 <Row
                     justifyContent="center"
                     gap={32}
@@ -75,6 +84,7 @@ function DashboardPage() {
                             ? "All Years"
                             : `Dashboard ${year ?? ""}`}
                     </h1>
+
                     {viewType !== "yearly" ? (
                         <DashboardIncrementButton
                             title="Next year"
@@ -87,7 +97,7 @@ function DashboardPage() {
                     )}
                 </Row>
 
-                {breakdowns ? (
+                {!breakdownsAreEmpty ? (
                     <>
                         <Row justifyContent="center">
                             <InOutPills
@@ -109,7 +119,7 @@ function DashboardPage() {
                         />
                     </>
                 ) : (
-                    ""
+                    <h4 className="centre">No data to show</h4>
                 )}
             </Page>
         </>

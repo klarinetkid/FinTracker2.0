@@ -3,6 +3,7 @@ import CategoryPill from "../../components/CategoryPill";
 import Table from "../../components/Table";
 import { CategoryTransactionCount } from "../../types/Category";
 import Pages from "../../types/Pages";
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 
 interface CategoryTableProps {
     categories: CategoryTransactionCount[];
@@ -45,6 +46,8 @@ function CategoryTable(props: CategoryTableProps) {
                     </tr>
                 ))}
             </tbody>
+
+            {props.categories.length === 0 ? <EmptyTableMessage /> : ""}
         </Table>
     );
 }

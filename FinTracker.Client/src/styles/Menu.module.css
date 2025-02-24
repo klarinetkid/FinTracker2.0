@@ -47,3 +47,7 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
+.disabledLink {
+    pointer-events: none;
+}

@@ -20,7 +20,7 @@ function FormatsPage() {
     const formValues = useFormValues<ImportFormatViewModel>({});
 
     return (
-        <Page width={600}>
+        <Page>
             <Row justifyContent="space-between">
                 <h1>Import Formats</h1>
                 <div>
@@ -46,10 +46,12 @@ function FormatsPage() {
     );
 
     function newFormat() {
+        formValues.setErrors(undefined);
         formValues.setValues({});
         setIsDrawerOpen(true);
     }
     function editFormat(format: ImportFormat) {
+        formValues.setErrors(undefined);
         formValues.setValues(format);
         setIsDrawerOpen(true);
     }
@@ -67,8 +69,8 @@ function FormatsPage() {
         };
 
         (formValues.values.id
-            ? ImportFormatService.createFormat(model)
-            : ImportFormatService.putFormat(model)
+            ? ImportFormatService.putFormat(model)
+            : ImportFormatService.createFormat(model)
         )
             .then(() => {
                 if (event.target instanceof HTMLButtonElement)

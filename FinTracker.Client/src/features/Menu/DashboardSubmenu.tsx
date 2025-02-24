@@ -1,15 +1,19 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import { ChartFillIcon } from "../../utils/Icons";
 import MenuTile from "./MenuTile";
 
 function DashboardSubmenu() {
     const globalDataCache = useGlobalDataCache();
+    const navigate = useNavigate();
 
     return globalDataCache.availableYears.value.map((year) => (
-        <Link key={year} to={`/?year=${year}`}>
-            <MenuTile title={year.toString()} icon={ChartFillIcon} />
-        </Link>
+        <MenuTile
+            key={year}
+            title={year.toString()}
+            icon={ChartFillIcon}
+            onClick={() => navigate(`/?year=${year}`)}
+        />
     ));
 }
 

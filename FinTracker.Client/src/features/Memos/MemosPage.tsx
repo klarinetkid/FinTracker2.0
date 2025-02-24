@@ -25,7 +25,7 @@ function MemosPage() {
     }, [isRefreshed]);
 
     return (
-        <Page width={800}>
+        <Page>
             <Row>
                 <h1>Memos</h1>
             </Row>

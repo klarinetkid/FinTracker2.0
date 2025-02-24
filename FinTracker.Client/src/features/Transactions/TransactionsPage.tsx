@@ -23,7 +23,7 @@ function TransactionsPage() {
     const formValues = useFormValues<TransactionViewModel>({});
 
     return (
-        <Page width={1000}>
+        <Page>
             <Row justifyContent="space-between">
                 <h1>Transactions</h1>
                 <ButtonFill onClick={newCashTransaction}>
@@ -36,6 +36,7 @@ function TransactionsPage() {
             <TransactionTable
                 query={filterValues.values}
                 onRowSelect={editTransaction}
+                shrink={true}
             />
 
             <Drawer isOpen={drawerIsOpen} setIsOpen={setDrawerIsOpen}>

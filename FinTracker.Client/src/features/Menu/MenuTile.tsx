@@ -1,10 +1,12 @@
 import styles from "../../styles/MenuTile.module.css";
+import { classList } from "../../utils/HtmlHelper";
 
 interface MenuTileProps {
     title: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     iconPath?: string;
-    onClick?: (event: React.MouseEvent) => void;
+    onClick?: () => void;
+    disabled?: boolean;
 }
 
 function MenuTile(props: MenuTileProps) {
@@ -12,8 +14,12 @@ function MenuTile(props: MenuTileProps) {
 
     return (
         <div
-            className={styles.tile}
-            onClick={(event) => props.onClick && props.onClick(event)}
+            className={classList(
+                styles.tile,
+                props.disabled ? styles.disabled : ""
+            )}
+            onClick={onTileClick}
+            title={props.disabled ? "No data" : undefined}
         >
             <div className={styles.tileIconHolder}>
                 {!props.icon ? (
@@ -34,6 +40,10 @@ function MenuTile(props: MenuTileProps) {
             <h2>{props.title}</h2>
         </div>
     );
+
+    function onTileClick() {
+        if (!props.disabled && props.onClick) props.onClick();
+    }
 }
 
 export default MenuTile;

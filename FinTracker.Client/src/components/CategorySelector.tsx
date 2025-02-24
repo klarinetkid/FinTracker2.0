@@ -1,22 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/CategorySelector.module.css";
 import controlStyle from "../styles/Control.module.css";
-import Category, { Uncategorized } from "../types/Category";
+import Category, {
+    CategoryOrUncategorized,
+    Uncategorized,
+} from "../types/Category";
 import { classList } from "../utils/HtmlHelper";
-import CategoryPill from "./CategoryPill";
 import { CloseRingIcon } from "../utils/Icons";
-
+import CategoryPill from "./CategoryPill";
 
 interface CategorySelectorProps {
     categories: Category[]; // don't want this component dependent on global data cache context, so just pass the options
-    value?: Category | undefined;
+    value?: CategoryOrUncategorized | undefined;
     selectedId?: number;
     isOpen?: boolean;
     disabled?: boolean;
     tabIndex?: number;
     className?: string;
     allowEmpty?: boolean;
-    onChange?: (category: Category | undefined) => void;
+    onChange?: (category: CategoryOrUncategorized | undefined) => void;
     onClose?: () => void;
     onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
@@ -31,9 +33,9 @@ function CategorySelector(props: CategorySelectorProps) {
 
     const [isOpen, setIsOpen] = useState(props.isOpen ?? false);
     const [search, setSearch] = useState("");
-    const [selectedValue, setSelectedValue] = useState<Category | undefined>(
-        props.value ?? defaultValue
-    );
+    const [selectedValue, setSelectedValue] = useState<
+        CategoryOrUncategorized | undefined
+    >(props.value ?? defaultValue);
 
     // focus if open by props
     useEffect(() => {
@@ -99,7 +101,7 @@ function CategorySelector(props: CategorySelectorProps) {
         </div>
     );
 
-    function optionClick(category: Category) {
+    function optionClick(category: CategoryOrUncategorized) {
         updateSelectedValue(category);
         setIsOpen(false);
     }
@@ -138,7 +140,9 @@ function CategorySelector(props: CategorySelectorProps) {
         return false;
     }
 
-    function updateSelectedValue(category: Category | undefined) {
+    function updateSelectedValue(
+        category: CategoryOrUncategorized | undefined
+    ) {
         if (props.onChange) props.onChange(category);
         setSelectedValue(category);
     }

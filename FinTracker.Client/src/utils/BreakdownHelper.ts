@@ -2,6 +2,7 @@ import moment, { Moment } from "moment";
 import { createSearchParams } from "react-router-dom";
 import Breakdown from "../types/Breakdown";
 import Pages from "../types/Pages";
+import { sum } from "./ArrayHelper";
 
 export function getTotalIn(summaries: Breakdown[] | undefined): number {
     return !summaries || summaries.length === 0
@@ -27,4 +28,14 @@ export function toBreakdown(start: Moment | string, end: Moment | string) {
             end: moment(end).format("yyyy-MM-DD"),
         }).toString(),
     };
+}
+
+export function getTotalIncome(breakdowns: Breakdown[]): number {
+    return sum(
+        breakdowns
+            .map((b) => b.categoryTotals)
+            .flat()
+            .filter((c) => c.total > 0)
+            .map((c) => c.total)
+    );
 }

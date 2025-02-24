@@ -6,7 +6,7 @@ import styles from "../../styles/BreakdownTable.module.css";
 import Breakdown from "../../types/Breakdown";
 import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
-import { toBreakdown } from "../../utils/BreakdownHelper";
+import { getTotalIncome, toBreakdown } from "../../utils/BreakdownHelper";
 import { formatCurrency, toFixed } from "../../utils/NumberHelper";
 
 interface BreakdownTableProps {
@@ -25,12 +25,7 @@ function BreakdownTable(props: BreakdownTableProps) {
         (b) => b.categoryTotals.length > 0
     );
 
-    const yearlyIncome = props.breakowns
-        .map((b) => b.categoryTotals)
-        .flat()
-        .filter((c) => c.total > 0)
-        .map((c) => c.total)
-        .reduce((curr, i) => curr + i);
+    const yearlyIncome = getTotalIncome(breakdowns);
 
     return (
         <table className={styles.table}>

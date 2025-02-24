@@ -14,6 +14,7 @@ import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
 import { BackIcon } from "../../utils/Icons";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
+import Row from "../../components/Row";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -37,14 +38,21 @@ function BreakdownPage() {
         })();
     }, [paramsAreValid, start, end, isUpdated]);
 
-    // TODO: use row here
 
     return !paramsAreValid ? (
-        <>
-            <h1>Invalid Parameters</h1>
-        </>
+        <Page>
+            <Row justifyContent="space-between">
+                <IconButton
+                    icon={BackIcon}
+                    title="To dashboard"
+                    onClick={() => navigate("/")}
+                />
+                <h1 className="centre">Invalid Query</h1>
+                <div></div>
+            </Row>
+        </Page>
     ) : (
-        <Page width={1000}>
+        <Page>
             <div className={styles.header}>
                 <IconButton
                     title="Back to dashboard"

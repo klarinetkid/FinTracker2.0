@@ -30,7 +30,7 @@ function BudgetPage() {
     }, [isRefreshed]);
 
     return (
-        <Page width={800}>
+        <Page>
             <Row justifyContent="space-between">
                 <h1>Budget</h1>
                 <IconButton

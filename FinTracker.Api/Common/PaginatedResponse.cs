@@ -2,7 +2,7 @@
 {
     public class PaginatedResponse<T>
     {
-        public T[] Results { get; set; }
+        public required T[] Results { get; set; }
 
         public int TotalItems { get; set; }
         public int TotalPages { get; set; }

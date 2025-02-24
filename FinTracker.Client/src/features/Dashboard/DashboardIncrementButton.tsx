@@ -10,24 +10,29 @@ interface DashboardIncrementButtonProps {
 }
 function DashboardIncrementButton(props: DashboardIncrementButtonProps) {
     const globalDataCache = useGlobalDataCache();
+    const years = [...globalDataCache.availableYears.value].reverse();
     const [searchParams, setSearchParams] = useSearchParams();
+    const { icon, increment, title, currentYear } = props;
 
-    const targetYear =
-        globalDataCache.availableYears.value[
-            globalDataCache.availableYears.value.indexOf(
-                props.currentYear ?? 0
-            ) - props.increment
-        ] ?? 0;
+    const currentYearExists = currentYear && years.indexOf(currentYear) > -1;
 
-    const isYearAvailable =
-        props.currentYear &&
-        globalDataCache.availableYears.value.indexOf(targetYear) > -1;
+    const targetYear = currentYearExists
+        ? // if current year exists, find the next year from year list
+          years[years.indexOf(currentYear) + increment] ?? 0
+        : // otherwise, depending which direction is increment find the next available year to show right buttons
+          !currentYear
+          ? 0
+          : (increment > 0 ? years : [...years].reverse()).filter((y) =>
+                increment > 0 ? y > currentYear : y < currentYear
+            )[0] ?? 0;
+
+    const isYearAvailable = years.indexOf(targetYear) > -1;
 
     const visibility = isYearAvailable ? "visible" : "hidden";
 
     return (
         <div style={{ visibility }} onClick={navigateToYear}>
-            <IconButton title={props.title} icon={props.icon} />
+            <IconButton title={title} icon={icon} />
         </div>
     );
 

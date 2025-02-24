@@ -1,7 +1,7 @@
 import Checkbox from "../../components/Checkbox";
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 import useCategorySelection from "../../hooks/useCategorySelection";
 import styles from "../../styles/SpendingTable.module.css";
-import Breakdown from "../../types/Breakdown";
 import { Total, Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
 import { sum } from "../../utils/ArrayHelper";
@@ -60,13 +60,7 @@ function SpendingTable(props: SpendingTableProps) {
                     />
                 </>
             ) : (
-                <tbody>
-                    <tr>
-                        <td colSpan={7} className="centre">
-                            <h4>No spending? Right on!</h4>
-                        </td>
-                    </tr>
-                </tbody>
+                <EmptyTableMessage />
             )}
         </table>
     );

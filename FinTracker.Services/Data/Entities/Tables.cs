@@ -9,8 +9,8 @@ namespace FinTracker.Services.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string CategoryName { get; set; }
-        public string Colour { get; set; }
+        public required string CategoryName { get; set; }
+        public required string Colour { get; set; }
     }
 
     [Table("TblBudget")]
@@ -18,10 +18,10 @@ namespace FinTracker.Services.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public required int CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
-        public int Amount { get; set; }
-        public DateOnly EffectiveDate { get; set; }
+        public required int Amount { get; set; }
+        public required DateOnly EffectiveDate { get; set; }
     }
 
     [Table("TblTransaction")]
@@ -29,12 +29,12 @@ namespace FinTracker.Services.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public DateOnly Date { get; set; }
-        public int Amount { get; set; }
-        public string? Memo { get; set; }
+        public required DateOnly Date { get; set; }
+        public required int Amount { get; set; }
+        public required string? Memo { get; set; }
         public int? CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
-        public bool IsCashTransaction { get; set; }
+        public bool IsCashTransaction { get; set; } = false;
     }
 
     [Table("TblImportFormat")]
@@ -42,13 +42,13 @@ namespace FinTracker.Services.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string ImportFormatName { get; set; }
-        public string DateKey { get; set; }
-        public string MemoFormat { get; set; }
-        public string AmountKey { get; set; }
-        public bool InvertAmounts { get; set; }
-        public int HeaderLines { get; set; }
-        public char Delimiter { get; set; }
+        public required string ImportFormatName { get; set; }
+        public required string DateKey { get; set; }
+        public required string MemoFormat { get; set; }
+        public required string AmountKey { get; set; }
+        public required bool InvertAmounts { get; set; }
+        public required int HeaderLines { get; set; }
+        public required char Delimiter { get; set; }
         public string? Image { get; set; }
     }
 
@@ -57,9 +57,9 @@ namespace FinTracker.Services.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string Memo { get; set; }
+        public required string Memo { get; set; }
         public int? CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
-        public bool IsImported { get; set; }
+        public bool IsImported { get; set; } = true;
     }
 }

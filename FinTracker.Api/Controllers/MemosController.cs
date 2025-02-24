@@ -12,7 +12,7 @@ namespace FinTracker.Api.Controllers
         private readonly MemoService service = new ();
 
         [HttpGet("Grouped")]
-        public Grouping<TblCategory, TblMemo>[] Grouped()
+        public Grouping<TblCategory?, TblMemo>[] Grouped()
         {
             return service.GetGrouped().ToArray();
         }
