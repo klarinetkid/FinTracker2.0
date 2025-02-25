@@ -10,6 +10,7 @@ import TransactionViewModel from "../types/TransactionViewModel";
 import { formatDateOnly } from "../utils/DateHelper";
 import { MoneyFillIcon } from "../utils/Icons";
 import { formatCurrency } from "../utils/NumberHelper";
+import { classList } from "../utils/HtmlHelper";
 
 interface TransactionTableRowProps {
     transaction: TransactionViewModel;
@@ -42,11 +43,19 @@ function TransactionTableRow(props: TransactionTableRowProps) {
             <td className="bold centre">{num + 1}</td>
             <td className="nobreak">{formatDateOnly(transactionLocal.date)}</td>
             <td
-                className={styles.ellipsis}
+                className={classList(
+                    styles.ellipsis,
+                    onChange ? styles.selectable : ""
+                )}
                 style={{ maxWidth: "70%", position: "relative" }}
                 onClick={_onClick}
             >
-                <span className={styles.ellipsisContent}>
+                <span
+                    className={classList(
+                        styles.ellipsisContent,
+                        transactionLocal.isCashTransaction ? styles.cash : ""
+                    )}
+                >
                     {transactionLocal.memo}
                 </span>
 

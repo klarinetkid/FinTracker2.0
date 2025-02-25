@@ -20,7 +20,8 @@ function InOutPills(props: InOutPillsProps) {
                 {labels ? "" : "Out:"} {formatCurrency(totalOut, true, true)}
             </div>
             <div className={styles.net}>
-                {labels ? "" : "Net:"} {formatCurrency(totalIn + totalOut, false, true)}
+                {labels ? "" : "Net:"}{" "}
+                {formatCurrency(totalIn + totalOut, false, true)}
             </div>
         </div>
     );

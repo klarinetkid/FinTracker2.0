@@ -17,7 +17,7 @@ export default function GlobalDataCacheProvider({
 }) {
     const value = new GlobalDataCacheContextManager({
         availableYears: new GlobalDataCacheItem(
-            ...useState<number[]>([]),
+            ...useState<number[] | undefined>(),
             MetadataService.getAvailableYears.bind(MetadataService)
         ),
         categories: new GlobalDataCacheItem(

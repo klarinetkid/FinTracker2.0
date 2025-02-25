@@ -31,7 +31,7 @@ namespace FinTracker.Services.Data.Entities
         public int Id { get; set; }
         public required DateOnly Date { get; set; }
         public required int Amount { get; set; }
-        public required string? Memo { get; set; }
+        public required string Memo { get; set; }
         public int? CategoryId { get; set; }
         public virtual TblCategory? Category { get; set; }
         public bool IsCashTransaction { get; set; } = false;

@@ -1,9 +1,9 @@
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 import { createSearchParams } from "react-router-dom";
 import Breakdown from "../types/Breakdown";
+import CategoryTotal from "../types/CategoryTotal";
 import Pages from "../types/Pages";
 import { sum } from "./ArrayHelper";
-import CategoryTotal from "../types/CategoryTotal";
 import { formatDateOnly } from "./DateHelper";
 
 export function getTotalIn(summaries: Breakdown[] | undefined): number {
@@ -56,4 +56,8 @@ export function getIncomeCategories(
     return categoryTotals
         .filter((c) => c.total > 0)
         .sort((a, b) => a.total - b.total);
+}
+
+export function breakdownsContainAnyData(breakdowns: Breakdown[]): boolean {
+    return breakdowns.filter((b) => b.categoryTotals.length > 0).length > 0;
 }

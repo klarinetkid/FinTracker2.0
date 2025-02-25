@@ -15,25 +15,28 @@ function MainMenu(props: MainMenuProps) {
     const globalDataCache = useGlobalDataCache();
     const navigate = useNavigate();
 
+    const yearsExist = globalDataCache.availableYears.value &&
+        globalDataCache.availableYears.value.length !== 0;
+
     return (
         <>
             <MenuTile
                 title="Dashboard"
                 icon={Icons.ChartFillIcon}
                 onClick={() => setSubMenu("dashboard")}
-                disabled={globalDataCache.availableYears.value.length === 0}
+                disabled={!yearsExist}
             />
             <MenuTile
                 title="View Year"
                 icon={Icons.DateRangeFillIcon}
                 onClick={() => setSubMenu("view year")}
-                disabled={globalDataCache.availableYears.value.length === 0}
+                disabled={!yearsExist}
             />
             <MenuTile
                 title="Custom Report"
                 icon={Icons.SettingsAltFillIcon}
                 onClick={() => openCustomReport()}
-                disabled={globalDataCache.availableYears.value.length === 0}
+                disabled={!yearsExist}
             />
             <MenuTile
                 title="Import"
@@ -50,7 +53,7 @@ function MainMenu(props: MainMenuProps) {
                 title="Transactions"
                 icon={Icons.PaperFillIcon}
                 onClick={() => navigate(Pages.Transactions)}
-                disabled={globalDataCache.availableYears.value.length === 0}
+                disabled={!yearsExist}
             />
             <MenuTile
                 title="System"

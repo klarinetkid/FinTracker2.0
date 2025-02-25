@@ -8,7 +8,7 @@ import MenuTile from "./MenuTile";
 function YearSubmenu() {
     const globalDataCache = useGlobalDataCache();
     const navigate = useNavigate();
-    const years = globalDataCache.availableYears.value;
+    const years = globalDataCache.availableYears.value ?? [];
     const curYear = new Date().getFullYear();
     const ytdEnd = formatDateOnly(moment().add(1, "days"));
 

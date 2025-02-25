@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Models;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,10 @@ namespace FinTracker.Api.Services
                 db.TblMemos.Entry(tblMemo).State = EntityState.Modified;
                 db.SaveChanges();
             }
+            else
+            {
+                throw new EntityNotFoundException();
+            }
 
             return db.TblMemos.Include(e => e.Category)
                 .FirstOrDefault(e => e.Id == id);
@@ -42,9 +47,15 @@ namespace FinTracker.Api.Services
         public void DeleteMemo(int id)
         {
             TblMemo? memo = db.TblMemos.Find(id);
-            if (memo == null) throw new InvalidDataException();
-            db.TblMemos.Entry(memo).State = EntityState.Deleted;
-            db.SaveChanges();
+            if (memo != null)
+            {
+                db.TblMemos.Entry(memo).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+            else
+            {
+                throw new EntityNotFoundException();
+            }
         }
 
         public IEnumerable<Grouping<TblCategory?, TblMemo>> GetGrouped()

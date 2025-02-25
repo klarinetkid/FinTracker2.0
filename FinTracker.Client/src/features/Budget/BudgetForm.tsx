@@ -37,11 +37,9 @@ function BudgetForm(props: FormProps<BudgetViewModel>) {
                                 categoryId: c?.id,
                             });
                         }}
-                        value={
-                            globalDataCache.categories.value.filter(
-                                (c) => c.id === formValues.values.categoryId
-                            )[0]
-                        }
+                        value={globalDataCache.getCategoryById(
+                            formValues.values.categoryId
+                        )}
                     />
                 </FormGroup>
 

@@ -47,13 +47,13 @@ namespace FinTracker.Api.Models
             return new TblImportFormat()
             {
                 Id = id,
-                ImportFormatName = ImportFormatName,
-                DateKey = DateKey,
-                MemoFormat = MemoFormat,
-                AmountKey = AmountKey,
-                InvertAmounts = InvertAmounts.HasValue ? InvertAmounts.Value : false,
-                HeaderLines = HeaderLines.HasValue ? HeaderLines.Value : 0,
-                Delimiter = Delimiter[0],
+                ImportFormatName = ImportFormatName ?? throw new Exception("ImportFormatName is required"),
+                DateKey = DateKey ?? throw new Exception("DateKey is required"),
+                MemoFormat = MemoFormat ?? throw new Exception("MemoFormat is required"),
+                AmountKey = AmountKey ?? throw new Exception("AmountKey is required"),
+                InvertAmounts = InvertAmounts.HasValue ? InvertAmounts.Value : throw new Exception("InvertAmounts is required"),
+                HeaderLines = HeaderLines.HasValue ? HeaderLines.Value : throw new Exception("HeaderLines is required"),
+                Delimiter = Delimiter != null ? Delimiter[0] : throw new Exception("Delimiter is required"),
                 Image = Image
             };
         }

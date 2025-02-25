@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Models;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,12 +40,15 @@ namespace FinTracker.Api.Services
 
         public void DeleteCategory(int id)
         {
-            // TODO: custom exception if not found
             TblCategory? category = db.TblCategories.Find(id);
             if (category != null)
             {
                 db.TblCategories.Entry(category).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+            else
+            {
+                throw new EntityNotFoundException();
             }
         }
     }

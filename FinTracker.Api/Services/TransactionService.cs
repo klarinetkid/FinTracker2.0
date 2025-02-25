@@ -76,8 +76,18 @@ namespace FinTracker.Api.Services
             if (tblTransaction != null)
             {
                 tblTransaction.CategoryId = model.CategoryId;
+                if (tblTransaction.IsCashTransaction)
+                {
+                    tblTransaction.Date = model.Date ?? tblTransaction.Date;
+                    tblTransaction.Memo = model.Memo ?? tblTransaction.Memo;
+                }
+                
                 db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
                 db.SaveChanges();
+            }
+            else
+            {
+                throw new EntityNotFoundException();
             }
 
             return db.TblTransactions.Include(e => e.Category).FirstOrDefault(e => e.Id == transactionId);
@@ -106,11 +116,14 @@ namespace FinTracker.Api.Services
             return results.OrderBy(e => e.Date).ToArray();
         }
 
-        //public TblTransaction Create(TransactionViewModel transaction)
-        //{
-        //    TblTransaction tblTransaction = transaction.ToTblTransaction();
-        //    db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
-        //}
+        public TblTransaction CreateCashTransaction(TransactionViewModel transaction)
+        {
+            TblTransaction tblTransaction = transaction.ToTblTransaction();
+            tblTransaction.IsCashTransaction = true;
+            db.TblTransactions.Entry(tblTransaction).State = EntityState.Added;
+            db.SaveChanges();
+            return tblTransaction;
+        }
 
         public int BatchCreate(TransactionViewModel[] transactions)
         {
@@ -118,6 +131,20 @@ namespace FinTracker.Api.Services
             db.TblTransactions.AddRange(transactions.Select(t => t.ToTblTransaction()));
                     //Entry(transaction.ToTblTransaction()).State = EntityState.Modified;
             return db.SaveChanges();
+        }
+
+        public void DeleteTransaction(int id)
+        {
+            TblTransaction? transaction = db.TblTransactions.Find(id);
+            if (transaction != null)
+            {
+                db.TblTransactions.Entry(transaction).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+            else
+            {
+                throw new EntityNotFoundException();
+            }
         }
     }
 

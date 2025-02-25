@@ -10,7 +10,6 @@ import useTransactionImport from "../../hooks/useTransactionImport";
 import styles from "../../styles/ImportPage.module.css";
 import Pages from "../../types/Pages";
 import ImportTable from "./ImportTable";
-import { FileContent } from "use-file-picker/types";
 
 // import process is linear:
 // loading -> editing -> submitting -> complete

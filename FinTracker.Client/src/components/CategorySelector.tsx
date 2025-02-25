@@ -116,7 +116,7 @@ function CategorySelector(props: CategorySelectorProps) {
     }
 
     function _onClick() {
-        if(!disabled) setIsMenuOpen(!isMenuOpen);
+        if (!disabled) setIsMenuOpen(!isMenuOpen);
     }
 
     function _onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {

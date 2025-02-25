@@ -1,5 +1,7 @@
-﻿using FinTracker.Services.Data.Entities;
+﻿using FinTracker.Api.Validation;
+using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Models
 {
@@ -12,8 +14,6 @@ namespace FinTracker.Api.Models
         public TblCategory? Category { get; set; }
 
 
-        //public bool? IsMemoSaved { get; set; }
-        //public bool? IsMemoImported { get; set; }
         public bool? IsAlreadyImported { get; set; }
         public TblMemo? SavedMemo { get; set; }
 
@@ -23,9 +23,9 @@ namespace FinTracker.Api.Models
             return new TblTransaction
             {
                 Id = id,
-                Date = Date.HasValue ? Date.Value : DateOnly.MinValue,
-                Memo = Memo,
-                Amount = Amount.HasValue ? Amount.Value : 0,
+                Date = Date.HasValue ? Date.Value : throw new Exception("Date is required"),
+                Memo = Memo ?? throw new Exception("Memo is required"),
+                Amount = Amount.HasValue ? Amount.Value : throw new Exception("Amount is required"),
                 CategoryId = CategoryId
             };
         }

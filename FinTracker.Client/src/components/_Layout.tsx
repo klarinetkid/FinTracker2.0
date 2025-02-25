@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import MenuPopdown from "../features/Menu/MenuPopdown";
-import { HomeIcon, MenuIcon } from "../utils/Icons";
-import IconButton from "./IconButton";
-import DarkModeToggle from "./DarkModeToggle";
 import styles from "../styles/Layout.module.css";
-import useGlobalDataCache from "../hooks/useGlobalDataCache";
-import LoadingIndicator from "./LoadingIndicator";
-import Page from "./Page";
+import { HomeIcon, MenuIcon } from "../utils/Icons";
+import DarkModeToggle from "./DarkModeToggle";
+import IconButton from "./IconButton";
 
 function Layout() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
-    const globalDataCache = useGlobalDataCache();
     return (
         <>
             <DarkModeToggle />
@@ -27,11 +23,7 @@ function Layout() {
             </div>
             <MenuPopdown isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} />
 
-            {globalDataCache.availableYears.value.length > 0 ? (
-                <Outlet />
-            ) : (
-                <LoadingIndicator />
-            )}
+            <Outlet />
         </>
     );
     function menuIconClick() {

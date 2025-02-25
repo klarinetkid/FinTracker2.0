@@ -15,9 +15,19 @@ class TransactionService extends BaseService {
         return this.get("", { params: query });
     }
 
+    createTransaction(
+        model: TransactionViewModel
+    ): Promise<TransactionViewModel> {
+        return this.post("", model);
+    }
+
     patchTransaction(model: TransactionViewModel): Promise<Transaction> {
         const { id, ...values } = model;
         return this.patch(`/${id}`, values);
+    }
+
+    deleteTransaction(id: number): Promise<void> {
+        return this.delete(`${id}`);
     }
 
     prepareImport(

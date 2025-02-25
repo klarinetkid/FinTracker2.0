@@ -1,5 +1,5 @@
-import moment from "moment";
 import CategoryPill from "../../components/CategoryPill";
+import EmptyTableMessage from "../../components/EmptyTableMessage";
 import GroupedTable from "../../components/GroupedTable";
 import GroupedTableRow from "../../components/GroupedTableRow";
 import GroupedTableRowSet from "../../components/GroupedTableRowSet";
@@ -7,9 +7,8 @@ import Input from "../../components/Input";
 import Budget from "../../types/Budget";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
-import { formatCurrency } from "../../utils/NumberHelper";
-import EmptyTableMessage from "../../components/EmptyTableMessage";
 import { formatDateOnly } from "../../utils/DateHelper";
+import { formatCurrency } from "../../utils/NumberHelper";
 
 interface BudgetTableProps {
     groupedBudgets: Grouping<Category, Budget>[];

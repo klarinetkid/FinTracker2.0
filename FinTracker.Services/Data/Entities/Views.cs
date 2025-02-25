@@ -6,8 +6,8 @@ namespace FinTracker.Services.Data.Entities
     public class VwCategoryTransactionCount
     {
         public int Id { get; set; }
-        public string CategoryName { get; set; }
-        public string Colour { get; set; }
+        public required string CategoryName { get; set; }
+        public required string Colour { get; set; }
         public int TransactionCount { get; set; }
     }
 }

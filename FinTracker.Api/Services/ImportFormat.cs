@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Models;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,10 @@ namespace FinTracker.Api.Services
             {
                 db.TblImportFormats.Entry(importFileFormat).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+            else
+            {
+                throw new EntityNotFoundException();
             }
         }
     }

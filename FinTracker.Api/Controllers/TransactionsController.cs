@@ -18,11 +18,25 @@ namespace FinTracker.Api.Controllers
             return service.GetTransactions(query);
         }
 
+        [HttpPost]
+        public TblTransaction CreateCashTransaction(TransactionViewModel model)
+        {
+            return service.CreateCashTransaction(model);
+        }
+
         [HttpPatch("{id?}")]
         public TblTransaction? PatchTransaction(int? id, TransactionViewModel model)
         {
             if (id == null) throw new Exception("Id cannot be null");
             return service.PatchTransaction(id.Value, model);
+        }
+
+        [HttpDelete("{id?}")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null) throw new Exception();
+            service.DeleteTransaction(id.Value);
+            return Ok();
         }
 
         [HttpPost("$batch")]

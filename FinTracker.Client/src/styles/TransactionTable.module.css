@@ -66,4 +66,16 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    } 
+    }
+
+    .ellipsis .ellipsisContent.cash {
+        right: 30px;
+    }
+
+
+
+.selectable:hover .ellipsisContent {
+    color: var(--blue);
+    text-decoration: underline;
+    cursor: pointer;
+}

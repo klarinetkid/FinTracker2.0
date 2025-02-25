@@ -1,9 +1,12 @@
 ﻿using FinTracker.Services.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Models
 {
     public class MemoViewModel
     {
+        [Required]
+        [MaxLength(200)]
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
         public bool? IsImported { get; set; }
@@ -13,8 +16,8 @@ namespace FinTracker.Api.Models
             return new TblMemo()
             {
                 Id = id,
-                Memo = Memo,
-                CategoryId = CategoryId, // TODO: should throw exception?
+                Memo = Memo ?? throw new Exception("Memo is required"),
+                CategoryId = CategoryId,
                 IsImported = IsImported.HasValue ? IsImported.Value : true
             };
         }

@@ -1,20 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
-import InOutPills from "../../components/InOutPills";
-import Row from "../../components/Row";
+import { useSearchParams } from "react-router-dom";
+import LoadingIndicator from "../../components/LoadingIndicator";
+import Page from "../../components/Page";
 import Select from "../../components/Select";
-import Spacer from "../../components/Spacer";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BreakdownService from "../../services/BreakdownService";
 import Breakdown from "../../types/Breakdown";
-import { getTotalIn, getTotalOut } from "../../utils/BreakdownHelper";
-import { ArrowLeftSquareIcon, ArrowRightSquareIcon } from "../../utils/Icons";
-import BreakdownTable from "./BreakdownTable";
-import DashboardIncrementButton from "./DashboardIncrementButton";
-import Page from "../../components/Page";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import DashboardDataView from "./DashboardDataView";
+import DashboardPageHeader from "./DashboardPageHeader";
+import { breakdownsContainAnyData } from "../../utils/BreakdownHelper";
+
+export type DashboardPageState =
+    | "loading"
+    | "show data"
+    | "no data"
+    | "show help";
 
 function DashboardPage() {
+    const [pageState, setPageState] = useState<DashboardPageState>("loading");
     const [searchParams, setSearchParams] = useSearchParams();
     const globalDataCache = useGlobalDataCache();
     const [breakdowns, setBreakdowns] = useState<Breakdown[]>();
@@ -22,7 +25,7 @@ function DashboardPage() {
     const year = useMemo(
         () =>
             parseInt(searchParams.get("year") ?? "") ||
-            globalDataCache.availableYears.value[0] ||
+            globalDataCache.availableYears.value?.[0] ||
             undefined,
         [searchParams.get("year"), globalDataCache.availableYears.value]
     );
@@ -36,18 +39,28 @@ function DashboardPage() {
     useEffect(() => {
         setBreakdowns(undefined);
         getData().then((results) => {
-            setBreakdowns(results);
+            if (results && globalDataCache.userHasTransactions()) {
+                if (!breakdownsContainAnyData(results)) {
+                    setPageState("no data");
+                } else {
+                    setBreakdowns(results);
+                    setPageState("show data");
+                }
+            }
         });
     }, [year, viewType]);
 
-    const breakdownsAreEmpty =
-        !breakdowns ||
-        breakdowns.filter((b) => b.categoryTotals.length > 0).length === 0;
+    // show help message if no data
+    useEffect(() => {
+        if (!globalDataCache.userHasTransactions()) {
+            setPageState("show help");
+        }
+    }, [globalDataCache.availableYears.value]);
 
     return (
         <>
             <div style={{ float: "left" }}>
-                {!breakdownsAreEmpty ? (
+                {pageState === "show data" ? (
                     <Select
                         value={viewType}
                         onChange={(e) => setViewType(e.target.value)}
@@ -61,69 +74,30 @@ function DashboardPage() {
                 )}
             </div>
             <Page>
-                <Row
-                    justifyContent="center"
-                    gap={32}
-                    style={{ userSelect: "none" }}
-                >
-                    {viewType !== "yearly" ? (
-                        <DashboardIncrementButton
-                            title="Previous year"
-                            icon={ArrowLeftSquareIcon}
-                            increment={-1}
-                            currentYear={year}
-                        />
-                    ) : (
-                        ""
-                    )}
+                <DashboardPageHeader year={year} viewType={viewType} />
 
-                    <h1 className="centre">
-                        {viewType === "yearly"
-                            ? "All Years"
-                            : `Dashboard ${year ?? ""}`}
-                    </h1>
-
-                    {viewType !== "yearly" ? (
-                        <DashboardIncrementButton
-                            title="Next year"
-                            icon={ArrowRightSquareIcon}
-                            increment={1}
-                            currentYear={year}
-                        />
-                    ) : (
-                        ""
-                    )}
-                </Row>
-
-                {!breakdowns ? (
-                    <LoadingIndicator key={0} />
-                ) : !breakdownsAreEmpty ? (
-                    <>
-                        <Row justifyContent="center">
-                            <InOutPills
-                                totalIn={getTotalIn(breakdowns)}
-                                totalOut={getTotalOut(breakdowns)}
-                            />
-                        </Row>
-
-                        <Spacer height={34} />
-
-                        <BreakdownTable
-                            breakdowns={breakdowns}
-                            titleFormat={getBreakdownTitleFormat()}
-                            bandValueProperty={
-                                viewType === "weekly"
-                                    ? "percentOfYearlySpend"
-                                    : "percentOfIncome"
-                            }
-                        />
-                    </>
-                ) : (
-                    <h4 className="centre">No data to show</h4>
-                )}
+                {getPageBody()}
             </Page>
         </>
     );
+
+    function getPageBody(): JSX.Element {
+        switch (pageState) {
+            case "loading":
+                return <LoadingIndicator />;
+            case "no data":
+                return <h4 className="centre">No data to show</h4>;
+            case "show help":
+                return <p>you have no data show more helpful message</p>;
+            case "show data":
+                return (
+                    <DashboardDataView
+                        breakdowns={breakdowns ?? []}
+                        viewType={viewType}
+                    />
+                );
+        }
+    }
 
     async function getData(): Promise<Breakdown[] | undefined> {
         switch (viewType) {
@@ -136,18 +110,6 @@ function DashboardPage() {
                 if (!year) return undefined;
                 return BreakdownService.getWeeklyBreakdownsForYear(year);
         }
-    }
-
-    function getBreakdownTitleFormat() {
-        switch (viewType) {
-            case "monthly":
-                return "MMMM";
-            case "yearly":
-                return "yyyy";
-            case "weekly":
-                return "[Week] W";
-        }
-        return "";
     }
 
     function setViewType(viewType: string) {

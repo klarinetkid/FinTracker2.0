@@ -7,7 +7,7 @@ function DashboardSubmenu() {
     const globalDataCache = useGlobalDataCache();
     const navigate = useNavigate();
 
-    return globalDataCache.availableYears.value.map((year) => (
+    return (globalDataCache.availableYears.value ?? []).map((year) => (
         <MenuTile
             key={year}
             title={year.toString()}

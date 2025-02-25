@@ -20,8 +20,8 @@ namespace FinTracker.Api.Models
             return new TblCategory()
             {
                 Id = id,
-                CategoryName = CategoryName,
-                Colour = Colour
+                CategoryName = CategoryName ?? throw new Exception("CategoryName is required"),
+                Colour = Colour ?? throw new Exception("Colour is required")
             };
         }
     }

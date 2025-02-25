@@ -17,10 +17,11 @@ interface TransactionTableProps {
     query?: TransactionQuery;
     onChange?: () => void;
     onRowSelect?: (transaction: TransactionViewModel) => void;
+    refresh?: boolean;
 }
 
 function TransactionTable(props: TransactionTableProps) {
-    const { query, onChange, onRowSelect } = props;
+    const { query, onChange, onRowSelect, refresh } = props;
 
     const tableHeadRef = useRef<HTMLTableRowElement>(null);
 
@@ -37,7 +38,7 @@ function TransactionTable(props: TransactionTableProps) {
             pageNumber: currentPage,
         };
         TransactionService.getTransactions(combinedQuery).then(setPage);
-    }, [currentPage, query, formValues.values]);
+    }, [currentPage, query, formValues.values, refresh]);
 
     // refresh when query changes
     useEffect(() => {

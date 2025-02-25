@@ -1,6 +1,5 @@
 
 using FinTracker.Api.Common;
-using Microsoft.Identity.Client;
 
 namespace FinTracker.Api
 {
@@ -13,7 +12,10 @@ namespace FinTracker.Api
             // init static app config
             Helper.AppConfig = new AppConfig(builder.Configuration);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(new EntityNotFoundExceptionFilter());
+            });
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

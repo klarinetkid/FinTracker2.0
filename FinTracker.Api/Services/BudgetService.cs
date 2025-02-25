@@ -1,4 +1,5 @@
-﻿using FinTracker.Api.Models;
+﻿using FinTracker.Api.Common;
+using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,6 +41,9 @@ namespace FinTracker.Api.Services
             {
                 db.TblBudgets.Entry(budgetItem).State = EntityState.Deleted;
                 db.SaveChanges();
+            } else
+            {
+                throw new EntityNotFoundException();
             }
         }
     }

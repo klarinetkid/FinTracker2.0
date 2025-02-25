@@ -15,9 +15,7 @@ function MemoForm(props: FormProps<MemoViewModel>) {
     const globalDataCache = useGlobalDataCache();
 
     const catSelectorValue = formValues.values.isImported
-        ? globalDataCache.categories.value.filter(
-              (c) => c.id === formValues.values.categoryId
-          )[0]
+        ? globalDataCache.getCategoryById(formValues.values.categoryId)
         : NeverImport;
 
     return (

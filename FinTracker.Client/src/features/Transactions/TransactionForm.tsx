@@ -16,10 +16,15 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
         <form onSubmit={onSubmit}>
             <div>
                 <h2>
-                    {formValues.values.id ? "Edit" : "Add"} Cash Transaction
+                    {formValues.values.id ? "Edit " : "Add "}
+                    {formValues.values.isCashTransaction ? "Cash " : " "}
+                    Transaction
                 </h2>
 
-                <FormGroup fieldName="Date">
+                <FormGroup
+                    fieldName="Date"
+                    error={formValues.getFieldError("Date")}
+                >
                     <Input
                         readOnly={!formValues.values.isCashTransaction}
                         name="date"
@@ -27,7 +32,10 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
                         onChange={formValues.updateValue}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Amount">
+                <FormGroup
+                    fieldName="Amount"
+                    error={formValues.getFieldError("Amount")}
+                >
                     <Input
                         readOnly={!formValues.values.isCashTransaction}
                         type="text"
@@ -36,9 +44,23 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
                         onChange={formValues.updateValue}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Category">
+                <FormGroup
+                    fieldName="Memo"
+                    error={formValues.getFieldError("Memo")}
+                >
+                    <Input
+                        readOnly={!formValues.values.isCashTransaction}
+                        type="text"
+                        name="memo"
+                        value={formValues.values.memo ?? ""}
+                        onChange={formValues.updateValue}
+                    />
+                </FormGroup>
+                <FormGroup
+                    fieldName="Category"
+                    error={formValues.getFieldError("Category")}
+                >
                     <CategorySelector
-                        disabled={!formValues.values.isCashTransaction}
                         categories={globalDataCache.categories.value}
                         onChange={(c) => {
                             formValues.setValues({
@@ -46,11 +68,9 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
                                 categoryId: c?.id,
                             });
                         }}
-                        value={
-                            globalDataCache.categories.value.filter(
-                                (c) => c.id === formValues.values.categoryId
-                            )[0]
-                        }
+                        value={globalDataCache.getCategoryById(
+                            formValues.values.categoryId
+                        )}
                     />
                 </FormGroup>
             </div>
