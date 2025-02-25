@@ -10,10 +10,10 @@ import useTransactionImport from "../../hooks/useTransactionImport";
 import styles from "../../styles/ImportPage.module.css";
 import Pages from "../../types/Pages";
 import ImportTable from "./ImportTable";
+import { FileContent } from "use-file-picker/types";
 
 // import process is linear:
 // loading -> editing -> submitting -> complete
-
 type ImportFlowStep =
     | "loading" // initial processing and loading of data into form
     | "editing" // user is editing the data

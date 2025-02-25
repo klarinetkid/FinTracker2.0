@@ -14,13 +14,13 @@ function InOutPills(props: InOutPillsProps) {
     return (
         <div className={styles.holder}>
             <div className={styles.in}>
-                {labels ? "" : "In:"} {formatCurrency(totalIn)}
+                {labels ? "" : "In:"} {formatCurrency(totalIn, false, true)}
             </div>
             <div className={styles.out}>
-                {labels ? "" : "Out:"} {formatCurrency(totalOut, true)}
+                {labels ? "" : "Out:"} {formatCurrency(totalOut, true, true)}
             </div>
             <div className={styles.net}>
-                {labels ? "" : "Net:"} {formatCurrency(totalIn + totalOut)}
+                {labels ? "" : "Net:"} {formatCurrency(totalIn + totalOut, false, true)}
             </div>
         </div>
     );

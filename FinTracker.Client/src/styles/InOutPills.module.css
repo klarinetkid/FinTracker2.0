@@ -1,6 +1,7 @@
 .holder {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
     .holder > div {
@@ -12,7 +13,8 @@
         font-size: 80%;
         text-align: center;
         vertical-align: middle;
-        margin-left: 4px
+        margin-left: 4px;
+        width: 33%;
     }
 
 
