@@ -15,7 +15,7 @@ import ExpandUpIcon from "../assets/ExpandUp.svg?react";
 import FileDockFillIcon from "../assets/FileDockFill.svg?react";
 import HomeIcon from "../assets/Home.svg?react";
 import ImportFillIcon from "../assets/ImportFill.svg?react";
-import LoadingIcon from "../assets/Loading.svg?react";
+import InfoIcon from "../assets/Info.svg?react";
 import MenuIcon from "../assets/Menu.svg?react";
 import MoneyFillIcon from "../assets/MoneyFill.svg?react";
 import MoonIcon from "../assets/Moon.svg?react";
@@ -25,6 +25,7 @@ import SaveIcon from "../assets/Save.svg?react";
 import SaveFillIcon from "../assets/SaveFill.svg?react";
 import SettingsAltFillIcon from "../assets/SettingsAltFill.svg?react";
 import SettingsFillIcon from "../assets/SettingsFill.svg?react";
+import StatusHolderIcon from "../assets/StatusHolder.svg?react";
 import SunIcon from "../assets/Sun.svg?react";
 import SunFillIcon from "../assets/SunFill.svg?react";
 import WalletFillIcon from "../assets/WalletFill.svg?react";
@@ -47,7 +48,7 @@ export {
     FileDockFillIcon,
     HomeIcon,
     ImportFillIcon,
-    LoadingIcon,
+    InfoIcon,
     MenuIcon,
     MoneyFillIcon,
     MoonIcon,
@@ -57,6 +58,7 @@ export {
     SaveFillIcon,
     SettingsAltFillIcon,
     SettingsFillIcon,
+    StatusHolderIcon,
     SunIcon,
     SunFillIcon,
     WalletFillIcon,

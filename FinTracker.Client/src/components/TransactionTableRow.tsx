@@ -22,11 +22,10 @@ interface TransactionTableRowProps {
 // TODO: does this really need a state? I guess it prevents the category
 // flashing back momentarily before table is refreshed when updated
 function TransactionTableRow(props: TransactionTableRowProps) {
-    const { transaction, num, onChange, onRowSelect } = props;
+    const { transaction: trx, num, onChange, onRowSelect } = props;
 
     const [isEditingCat, setIsEditingCat] = useState(false);
     const [newCategory, setNewCategory] = useState<CategoryOrUncategorized>();
-    const [transactionLocal, setTransactionLocal] = useState(transaction);
     const categorySelection = useCategorySelection();
     const globalDataCache = useGlobalDataCache();
 
@@ -35,57 +34,55 @@ function TransactionTableRow(props: TransactionTableRowProps) {
     }, [newCategory]);
 
     const isSelected = categorySelection.isSelected(
-        transactionLocal.category ?? Uncategorized
+        trx.category ?? Uncategorized
     );
 
     return (
         <tr className={isSelected ? styles.selected : undefined}>
             <td className="bold centre">{num + 1}</td>
-            <td className="nobreak">{formatDateOnly(transactionLocal.date)}</td>
+            <td className="nobreak">{formatDateOnly(trx.date)}</td>
             <td
+                onClick={_onClick}
                 className={classList(
                     styles.ellipsis,
-                    onChange ? styles.selectable : ""
+                    onChange ? "selectable" : ""
                 )}
-                style={{ maxWidth: "70%", position: "relative" }}
-                onClick={_onClick}
             >
                 <span
+                    title={trx.memo}
                     className={classList(
                         styles.ellipsisContent,
-                        transactionLocal.isCashTransaction ? styles.cash : ""
+                        trx.isCashTransaction ? styles.cash : ""
                     )}
                 >
-                    {transactionLocal.memo}
+                    {trx.memo}
                 </span>
 
-                {transactionLocal.isCashTransaction ? (
+                {trx.isCashTransaction ? (
                     <MoneyFillIcon className={styles.cashTransactionIcon} />
                 ) : (
                     ""
                 )}
             </td>
-            <td className="ralign">
-                {formatCurrency(transactionLocal.amount)}
-            </td>
+            <td className="ralign">{formatCurrency(trx.amount)}</td>
             <td className="centre noselect" onDoubleClick={_categoryDblClick}>
                 {isEditingCat ? (
                     <CategorySelector
                         categories={globalDataCache.categories.value}
                         onChange={setNewCategory}
-                        value={transactionLocal.category}
+                        value={trx.category}
                         isOpen={true}
                         onClose={() => setIsEditingCat(false)}
                     />
                 ) : (
-                    <CategoryPill category={transactionLocal.category} />
+                    <CategoryPill category={trx.category} />
                 )}
             </td>
         </tr>
     );
 
     function _onClick() {
-        if (onRowSelect) onRowSelect(transactionLocal);
+        if (onRowSelect) onRowSelect(trx);
     }
 
     function _categoryDblClick() {
@@ -96,12 +93,10 @@ function TransactionTableRow(props: TransactionTableRowProps) {
         if (newCategory === undefined) return;
 
         const payload = {
-            id: transactionLocal.id,
+            id: trx.id,
             categoryId: newCategory.id,
         };
-        const updatedTransaction =
-            await TransactionService.patchTransaction(payload);
-        setTransactionLocal(updatedTransaction);
+        await TransactionService.patchTransaction(payload);
 
         setIsEditingCat(false);
         if (onChange) onChange();

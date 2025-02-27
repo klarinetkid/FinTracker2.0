@@ -4,6 +4,9 @@ import Table from "../../components/Table";
 import { CategoryTransactionCount } from "../../types/Category";
 import Pages from "../../types/Pages";
 import EmptyTableMessage from "../../components/EmptyTableMessage";
+import { classList } from "../../utils/HtmlHelper";
+import tinycolor from "tinycolor2";
+import styles from "../../styles/CategoryTable.module.css";
 
 interface CategoryTableProps {
     categories: CategoryTransactionCount[];
@@ -33,7 +36,16 @@ function CategoryTable(props: CategoryTableProps) {
                                 onClick={() => editCategory(category)}
                             />
                         </td>
-                        <td className="centre monospace">{category.colour}</td>
+                        <td
+                            className={classList(
+                                "centre monospace",
+                                !tinycolor(category.colour).isValid()
+                                    ? styles.invalidColour
+                                    : ""
+                            )}
+                        >
+                            {category.colour}
+                        </td>
                         <td className="ralign">
                             {category.transactionCount > 0 ? (
                                 <Link

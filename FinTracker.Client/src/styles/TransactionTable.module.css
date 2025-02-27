@@ -2,6 +2,17 @@
     transition: background-color ease-in 0.1s
 }
 
+.table th.colDate {
+    width: 6em;
+}
+.table th.colAmount {
+    width: 9em;
+}
+.table th.colCategory {
+    width: 13.75em;
+}
+
+
 .table tr.selected td {
     background-color: var(--highlight);
     border: solid 1px var(--border-400);
@@ -38,18 +49,12 @@
         opacity: 0.4;
     }
 
-/*.shrink {
-   flex-shrink: 2;
-   overflow-y: scroll;
-}
 
-    .shrink th {
-        position: sticky;
-        top: 0;
-    }*/
+
 
 .ellipsis {
     position: relative;
+    max-width: 70%;
 }
 
     .ellipsis:before {
@@ -71,11 +76,3 @@
     .ellipsis .ellipsisContent.cash {
         right: 30px;
     }
-
-
-
-.selectable:hover .ellipsisContent {
-    color: var(--blue);
-    text-decoration: underline;
-    cursor: pointer;
-}

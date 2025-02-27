@@ -6,7 +6,17 @@ import { CategoryOrUncategorized } from "../types/Category";
 import ImportFormat from "../types/ImportFormat";
 import MemoViewModel from "../types/MemoViewModel";
 import TransactionViewModel from "../types/TransactionViewModel";
-import { prepareImport } from "../utils/ImportHelper";
+import { prepareImport } from "../utils/CsvHelper";
+
+export type ImportParams = {
+    format: ImportFormat;
+    filesContent: FileContent<ArrayBuffer>[];
+};
+
+export type ImportResult = {
+    transactionsInserted: number;
+    memosInserted: number;
+};
 
 export class TransactionImportManager {
     public Transcations: TransactionViewModel[];
@@ -30,9 +40,11 @@ export class TransactionImportManager {
     ): Promise<void> {
         if (!format || !filesContent) return;
 
-        const prepared = prepareImport(format, filesContent);
+        //const prepared = await chunkedPrepareImport(format, filesContent, 100);
+        const prepared = await prepareImport(format, filesContent);
 
         const transactions = await TransactionService.prepareImport(prepared);
+        //const transactionModels = transactions
         const transactionModels = transactions.map(
             (trx, i): TransactionViewModel => ({
                 ...trx,
@@ -117,23 +129,25 @@ export class TransactionImportManager {
         this.setTransactions(newTransactions);
     }
 
-    public async Submit(): Promise<number> {
+    public async Submit(): Promise<ImportResult | undefined> {
         const newTransactions = this.getTransactionsToSubmit();
 
-        if (newTransactions.length === 0) return 0;
+        if (newTransactions.length === 0) return;
 
         const newMemos: MemoViewModel[] = this.getMemosToSubmit();
+
+        // TODO: catch these
 
         const results = {
             transactionsInserted:
                 await TransactionService.createBatch(newTransactions),
-            defaultsInserted:
+            memosInserted:
                 newMemos.length > 0
                     ? await MemoService.patchBatch(newMemos)
                     : 0,
         };
 
-        return results.transactionsInserted;
+        return results;
     }
 
     private getTransactionsToSubmit(): TransactionViewModel[] {

@@ -34,3 +34,14 @@
     flex-direction: column;
     gap: 18px;
 }
+
+    .incomeColumn.horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+
+.inOutPillHolder {
+    width: 35%;
+}

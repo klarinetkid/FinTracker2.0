@@ -13,6 +13,8 @@ import TransactionsPage from "./features/Transactions/TransactionsPage";
 import "./styles/_global.css";
 import "./styles/_variables.css";
 import Pages from "./types/Pages";
+import NotFoundPage from "./components/NotFoundPage";
+import AboutPage from "./features/About/AboutPage";
 
 function App() {
     return (
@@ -44,6 +46,8 @@ function App() {
                             path={Pages.Transactions}
                             element={<TransactionsPage />}
                         />
+                        <Route path={Pages.About} element={<AboutPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

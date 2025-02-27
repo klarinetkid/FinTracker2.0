@@ -8,6 +8,9 @@
         public int MaxBreakdownYears { get; set; }
         public int MaxMonthlyBudget { get; set; }
 
+        public string? ApiVersion { get; set; }
+
+
         public AppConfig(ConfigurationManager config)
         {
             ConnectionString = config.GetConnectionString("Connection")
@@ -16,6 +19,8 @@
             ResponsePageSize = config.GetValue<int>("AppSettings:ResponsePageSize");
 
             if (ResponsePageSize < 1) throw new Exception("ResponsePageSize must be greater than 0");
+
+            ApiVersion = config.GetValue<string>("AppSettings:ApiVersion");
         }
     }
 }

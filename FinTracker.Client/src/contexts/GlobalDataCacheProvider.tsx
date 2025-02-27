@@ -25,7 +25,7 @@ export default function GlobalDataCacheProvider({
             CategoryService.getCategories.bind(CategoryService)
         ),
         importFormats: new GlobalDataCacheItem(
-            ...useState<ImportFormat[]>([]),
+            ...useState<ImportFormat[]>(),
             ImportFormatService.getFormats.bind(ImportFormatService)
         ),
     });

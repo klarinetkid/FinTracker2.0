@@ -1,0 +1,81 @@
+.indicator {
+    font-weight: bold;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 143px;
+    height: 143px;
+}
+
+    .indicator svg {
+        position: absolute;
+    }
+
+.message {
+    position: relative;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.background {
+    background-color: var(--bg);
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    position: absolute;
+    border: solid 3px var(--bg);
+}
+
+.loading .message {
+    color: var(--deep-yellow);
+}
+
+.loading svg circle {
+    stroke-dashoffset: 0;
+    transform-origin: center center;
+    animation: 1s linear infinite rotate;
+    stroke: #e9b82f;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error svg *[stroke] {
+    stroke: var(--red);
+}
+
+.error .message {
+    color: var(--red);
+}
+
+.info svg *[stroke] {
+    stroke: var(--fg);
+}
+
+.info .message {
+    color: var(--fg);
+}
+
+.success svg *[stroke] {
+    stroke: var(--green);
+}
+
+.success .message {
+    color: var(--green);
+}

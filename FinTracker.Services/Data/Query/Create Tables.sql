@@ -18,7 +18,7 @@ Create table TblBudget (
 	[Amount] int NOT NULL,
 	[EffectiveDate] date NOT NULL,
 	constraint CK_TblBudget_Amount_Range check (
-	   [Amount] >= -1000000 AND [Amount] <= 1000000
+	   [Amount] >= -100000000 AND [Amount] <= 100000000
 	)
 );
 

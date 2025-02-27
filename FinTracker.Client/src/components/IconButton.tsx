@@ -19,7 +19,7 @@ function IconButton(props: IconButtonProps) {
             onClick={onClick}
             onContextMenu={(e) => e.preventDefault()}
         >
-            <Icon width={32} height={32} />
+            <Icon width={32} height={32} className="themed" />
         </button>
     );
 }

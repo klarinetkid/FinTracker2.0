@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useBlocker, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
-import LoadingIndicator from "../../components/LoadingIndicator";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import StatusIndicator from "../../components/StatusIndicator";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
-import styles from "../../styles/ImportPage.module.css";
 import Pages from "../../types/Pages";
 import ImportTable from "./ImportTable";
+import {
+    ImportParams,
+    ImportResult,
+} from "../../contexts/TransactionImportContext";
+import { pluralize } from "../../utils/StringHelper";
 
 // import process is linear:
 // loading -> editing -> submitting -> complete
@@ -29,18 +33,24 @@ function ImportPage() {
 
     const [flowStep, setFlowStep] = useState<ImportFlowStep>("loading");
 
+    useBlocker(flowStep === "editing" || flowStep === "submitting");
+
+    // TODO more readable way to validate location state
+    const { importParams, importResult } = location.state ?? {};
+
     useEffect(() => {
-        // TODO more readable way to validate location state
-        if (location.state?.selectedFormat && location.state?.filesContent) {
+        if (importParams) {
+            const params = importParams as ImportParams;
             setFlowStep("loading");
-            transactionImport
-                .PrepareImport(
-                    location.state?.selectedFormat,
-                    location.state?.filesContent
-                )
-                .then(() => setFlowStep("editing"))
-                .catch(() => setFlowStep("error"));
-        } else if (location.state?.insertedRows) {
+            setTimeout(
+                () =>
+                    transactionImport
+                        .PrepareImport(params.format, params.filesContent)
+                        .then(() => setFlowStep("editing"))
+                        .catch(() => setFlowStep("error")),
+                1200
+            );
+        } else if (importResult) {
             setFlowStep("complete");
         } else {
             setFlowStep("invalid");
@@ -82,34 +92,32 @@ function ImportPage() {
     function getPageBody(): JSX.Element {
         switch (flowStep) {
             case "loading":
-                return <LoadingIndicator message="Preparing" />;
+                return <StatusIndicator status="loading" message="Preparing" />;
 
             case "submitting":
-                return <LoadingIndicator message="Submitting" />;
+                return (
+                    <StatusIndicator status="loading" message="Submitting" />
+                );
 
             case "error":
-                return <div>An unexpected error has occurred.</div>;
+                return <StatusIndicator status="error" />;
+
+            case "editing":
+                return <ImportTable />;
 
             case "complete":
                 return (
-                    <h2 className={styles.complete}>
-                        Successfully added{" "}
-                        {location.state.insertedRows.toLocaleString()}{" "}
-                        transactions.
-                    </h2>
+                    <StatusIndicator
+                        status="success"
+                        message={getSuccessMessage()}
+                    />
                 );
 
             case "invalid":
                 return (
-                    <h4 className="centre">
-                        Access the menu screen to import transactions.
-                    </h4>
-                );
-
-            case "editing":
-                return (
-                    <ImportTable
-                        transactions={transactionImport.Transcations}
+                    <StatusIndicator
+                        status="info"
+                        message="Access the menu to select a file to import."
                     />
                 );
         }
@@ -124,11 +132,11 @@ function ImportPage() {
 
         transactionImport
             .Submit()
-            .then((result: number) => {
+            .then((result: ImportResult | undefined) => {
                 setTimeout(() => {
                     globalDataCache.availableYears.refresh();
                     navigate(Pages.Import, {
-                        state: { insertedRows: result },
+                        state: { importResult: result },
                         replace: true,
                     });
                 }, 1800);
@@ -136,6 +144,22 @@ function ImportPage() {
             .catch(() => {
                 setFlowStep("error");
             });
+    }
+
+    function getSuccessMessage(): string | undefined {
+        if (!importResult) return;
+        const result = importResult as ImportResult;
+        const numTrxs = result.transactionsInserted.toLocaleString();
+        const numMemos = result.memosInserted.toLocaleString();
+        return (
+            `Successfully added ${numTrxs} transaction` +
+            pluralize(result.transactionsInserted) +
+            (result.memosInserted > 0
+                ? ` and saved ${numMemos} memo` +
+                  pluralize(result.memosInserted)
+                : "") +
+            "."
+        );
     }
 }
 

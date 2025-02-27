@@ -16,7 +16,10 @@ function MainMenu(props: MainMenuProps) {
     const navigate = useNavigate();
 
     const yearsExist = globalDataCache.availableYears.value &&
-        globalDataCache.availableYears.value.length !== 0;
+        globalDataCache.availableYears.value.length > 0;
+
+    const formatsExist = globalDataCache.importFormats.value &&
+        globalDataCache.importFormats.value.length > 0;
 
     return (
         <>
@@ -42,7 +45,7 @@ function MainMenu(props: MainMenuProps) {
                 title="Import"
                 icon={Icons.ImportFillIcon}
                 onClick={() => setSubMenu("import")}
-                disabled={globalDataCache.importFormats.value.length === 0}
+                disabled={!formatsExist}
             />
             <MenuTile
                 title="Budget"

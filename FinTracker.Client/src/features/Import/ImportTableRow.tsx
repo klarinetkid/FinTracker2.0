@@ -44,7 +44,7 @@ function ImportTableRow(props: ImportTableRowProps) {
                     value={formatDateOnly(trx.date)}
                 />
             </td>
-            <td style={{ position: "relative" }}>
+            <td className={styles.memoCell}>
                 <Input readOnly value={trx.memo} />
                 {trx.isAlreadyImported ? (
                     <div

@@ -8,6 +8,7 @@ type Breakdown = {
     type: string;
     totalIn: number;
     totalOut: number;
+    isEmpty: boolean;
     categoryTotals: CategoryTotal[];
 };
 

@@ -1,4 +1,5 @@
 import Breakdown from "../types/Breakdown";
+import BreakdownCollection from "../types/BreakdownCollection";
 import { formatDateOnly } from "../utils/DateHelper";
 import BaseService from "./BaseService";
 
@@ -15,16 +16,16 @@ class BreakdownService extends BaseService {
         return this.get<Breakdown>("", { params });
     }
 
-    getWeeklyBreakdownsForYear(year: number): Promise<Breakdown[]> {
-        return this.get<Breakdown[]>(`/Weekly/${year}`);
+    getWeeklyBreakdownsForYear(year: number): Promise<BreakdownCollection> {
+        return this.get(`/Weekly/${year}`);
     }
 
-    getMonthlyBreakdownsForYear(year: number): Promise<Breakdown[]> {
-        return this.get<Breakdown[]>(`/Monthly/${year}`);
+    getMonthlyBreakdownsForYear(year: number): Promise<BreakdownCollection> {
+        return this.get(`/Monthly/${year}`);
     }
 
-    getYearBreakdowns(): Promise<Breakdown[]> {
-        return this.get<Breakdown[]>(`/Yearly`);
+    getYearBreakdowns(): Promise<BreakdownCollection> {
+        return this.get(`/Yearly`);
     }
 }
 

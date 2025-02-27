@@ -1,0 +1,12 @@
+.page {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.page h1 {
+    text-align: center;
+}
+
+.table td:nth-child(2) {
+    text-align: right;
+}

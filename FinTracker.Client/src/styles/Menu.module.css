@@ -16,8 +16,8 @@
     }
 
         .popdown.active .menu {
-            max-height: calc(80vh - 112px);
-            height: calc(80vh - 112px);
+            max-height: calc(100vh - 212px);
+            height: calc(100vh - 212px);
         }
 
     .popdown .backButton {

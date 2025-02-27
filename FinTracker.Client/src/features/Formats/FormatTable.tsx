@@ -12,6 +12,8 @@ function FormatTable(props: FormatTableProps) {
 
     const globalDataCache = useGlobalDataCache();
 
+    const formats = globalDataCache.importFormats.value ?? [];
+
     return (
         <Table>
             <thead>
@@ -22,10 +24,15 @@ function FormatTable(props: FormatTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {globalDataCache.importFormats.value.map((format, i) => (
-                    <tr onClick={() => editFormat(format)}>
+                {formats.map((format, i) => (
+                    <tr key={format.id}>
                         <td className="bold centre">{i + 1}</td>
-                        <td className="centre">{format.importFormatName}</td>
+                        <td
+                            className="centre selectable"
+                            onClick={() => editFormat(format)}
+                        >
+                            {format.importFormatName}
+                        </td>
                         <td className="centre">
                             {!format.image ? (
                                 ""
@@ -40,11 +47,7 @@ function FormatTable(props: FormatTableProps) {
                 ))}
             </tbody>
 
-            {globalDataCache.importFormats.value.length === 0 ? (
-                <EmptyTableMessage />
-            ) : (
-                ""
-            )}
+            {formats.length === 0 ? <EmptyTableMessage /> : ""}
         </Table>
     );
 }

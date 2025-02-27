@@ -17,7 +17,7 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpGet("Weekly/{year?}")]
-        public IEnumerable<BreakdownViewModel> GetWeeklyBreakdownsForYear(int? year)
+        public BreakdownCollection GetWeeklyBreakdownsForYear(int? year)
         {
             if (year == null) throw new ArgumentNullException();
 
@@ -25,7 +25,7 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpGet("Monthly/{year?}")]
-        public IEnumerable<BreakdownViewModel> GetMonthlyBreakdownsForYear(int? year)
+        public BreakdownCollection GetMonthlyBreakdownsForYear(int? year)
         {
             if (year == null) throw new ArgumentNullException();
 
@@ -33,7 +33,7 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpGet("Yearly")]
-        public IEnumerable<BreakdownViewModel> GetYearlyBreakdowns()
+        public BreakdownCollection GetYearlyBreakdowns()
         {
             return service.GetYearlyBreakdowns();
         }

@@ -75,6 +75,7 @@ namespace FinTracker.Api.Services
 
         public int BatchPatch(MemoViewModel[] memos)
         {
+            int numPatched = 0;
             foreach (MemoViewModel memo in memos)
             {
                 if (memo.Memo == null) continue;
@@ -89,10 +90,11 @@ namespace FinTracker.Api.Services
                 else
                 {
                     PatchMemo(existing.Id, memo);
+                    numPatched++;
                 }
             }
 
-            return db.SaveChanges();
+            return db.SaveChanges() + numPatched;
         }
     }
 }

@@ -17,11 +17,11 @@ interface TransactionTableProps {
     query?: TransactionQuery;
     onChange?: () => void;
     onRowSelect?: (transaction: TransactionViewModel) => void;
-    refresh?: boolean;
+    refreshed?: boolean;
 }
 
 function TransactionTable(props: TransactionTableProps) {
-    const { query, onChange, onRowSelect, refresh } = props;
+    const { query, onChange, onRowSelect, refreshed } = props;
 
     const tableHeadRef = useRef<HTMLTableRowElement>(null);
 
@@ -38,7 +38,7 @@ function TransactionTable(props: TransactionTableProps) {
             pageNumber: currentPage,
         };
         TransactionService.getTransactions(combinedQuery).then(setPage);
-    }, [currentPage, query, formValues.values, refresh]);
+    }, [currentPage, query, formValues.values, refreshed]);
 
     // refresh when query changes
     useEffect(() => {
@@ -50,13 +50,13 @@ function TransactionTable(props: TransactionTableProps) {
             <Table className={styles.table}>
                 <thead>
                     <tr ref={tableHeadRef}>
-                        <th style={{ width: 0 }}>
+                        <th className="nowidth">
                             {page ? `(${page.totalItems})` : ""}
                         </th>
                         <TransactionTableHeaderCell
                             formValues={formValues}
                             columnName="Date"
-                            width="6em"
+                            className={styles.colDate}
                         />
                         <TransactionTableHeaderCell
                             formValues={formValues}
@@ -65,12 +65,12 @@ function TransactionTable(props: TransactionTableProps) {
                         <TransactionTableHeaderCell
                             formValues={formValues}
                             columnName="Amount"
-                            width="9em"
+                            className={styles.colAmount}
                         />
                         <TransactionTableHeaderCell
                             formValues={formValues}
                             columnName="Category"
-                            width="13.75em"
+                            className={styles.colCategory}
                         />
                     </tr>
                 </thead>

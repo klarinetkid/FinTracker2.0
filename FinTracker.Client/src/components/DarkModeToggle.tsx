@@ -15,11 +15,11 @@ function DarkModeToggle() {
             )}
             onClick={toggleDarkMode}
         >
-            <SunIcon />
+            <SunIcon className="themed" />
             <div className={styles.ballHolder}>
                 <div className={styles.ball}></div>
             </div>
-            <MoonIcon />
+            <MoonIcon className="themed" />
         </div>
     );
 

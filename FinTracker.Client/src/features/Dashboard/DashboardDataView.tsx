@@ -1,28 +1,22 @@
 import InOutPills from "../../components/InOutPills";
 import Row from "../../components/Row";
 import Spacer from "../../components/Spacer";
-import Breakdown from "../../types/Breakdown";
-import { getTotalIn, getTotalOut } from "../../utils/BreakdownHelper";
+import BreakdownCollection from "../../types/BreakdownCollection";
 import BreakdownTable from "./BreakdownTable";
+import styles from "../../styles/DashboardDataView.module.css";
 
 interface DashboardDataViewProps {
-    breakdowns: Breakdown[];
+    breakdowns: BreakdownCollection;
     viewType: string;
 }
 
 function DashboardDataView({ breakdowns, viewType }: DashboardDataViewProps) {
     return (
         <>
-            <Row
-                justifyContent="space-between"
-                style={{
-                    width: "40%",
-                    margin: "0 auto",
-                }}
-            >
+            <Row justifyContent="space-between" className={styles.pillsRow}>
                 <InOutPills
-                    totalIn={getTotalIn(breakdowns)}
-                    totalOut={getTotalOut(breakdowns)}
+                    totalIn={breakdowns.totalIn}
+                    totalOut={breakdowns.totalOut}
                 />
             </Row>
 

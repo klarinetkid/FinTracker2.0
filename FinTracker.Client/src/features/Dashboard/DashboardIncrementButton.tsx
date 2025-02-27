@@ -8,9 +8,10 @@ interface DashboardIncrementButtonProps {
     title: string;
     currentYear: number | undefined;
     visible?: boolean;
+    viewType: string;
 }
 function DashboardIncrementButton(props: DashboardIncrementButtonProps) {
-    const { icon, increment, title, currentYear, visible } = props;
+    const { icon, increment, title, currentYear, visible, viewType } = props;
 
     const globalDataCache = useGlobalDataCache();
     const years = [...(globalDataCache.availableYears.value ?? [])].reverse();
@@ -32,6 +33,7 @@ function DashboardIncrementButton(props: DashboardIncrementButtonProps) {
     function navigateToYear() {
         if (targetYear) {
             searchParams.set("year", targetYear.toString());
+            searchParams.set("view", viewType);
             setSearchParams(searchParams);
         }
     }

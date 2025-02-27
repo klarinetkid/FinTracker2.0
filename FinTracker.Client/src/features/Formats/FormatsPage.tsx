@@ -13,6 +13,7 @@ import ImportFormatViewModel from "../../types/ImportFormatViewModel";
 import { AddRoundLightFillIcon } from "../../utils/Icons";
 import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
+import StatusIndicator from "../../components/StatusIndicator";
 
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
@@ -32,7 +33,11 @@ function FormatsPage() {
                 </div>
             </Row>
 
-            <FormatTable editFormat={editFormat} />
+            {globalDataCache.importFormats.value ? (
+                <FormatTable editFormat={editFormat} />
+            ) : (
+                <StatusIndicator status="loading" />
+            )}
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <FormatForm

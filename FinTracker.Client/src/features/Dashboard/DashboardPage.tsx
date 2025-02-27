@@ -1,80 +1,91 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import LoadingIndicator from "../../components/LoadingIndicator";
 import Page from "../../components/Page";
 import Select from "../../components/Select";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BreakdownService from "../../services/BreakdownService";
-import Breakdown from "../../types/Breakdown";
+import BreakdownCollection from "../../types/BreakdownCollection";
 import DashboardDataView from "./DashboardDataView";
 import DashboardPageHeader from "./DashboardPageHeader";
-import { breakdownsContainAnyData } from "../../utils/BreakdownHelper";
+import StatusIndicator from "../../components/StatusIndicator";
+import styles from "../../styles/DashboardPage.module.css";
 
 export type DashboardPageState =
     | "loading"
     | "show data"
+    | "refresh"
     | "no data"
-    | "show help";
+    | "error"
+    | "invalid view";
+
+const defaultViewType = "monthly";
 
 function DashboardPage() {
     const [pageState, setPageState] = useState<DashboardPageState>("loading");
     const [searchParams, setSearchParams] = useSearchParams();
     const globalDataCache = useGlobalDataCache();
-    const [breakdowns, setBreakdowns] = useState<Breakdown[]>();
+    const [breakdowns, setBreakdowns] = useState<BreakdownCollection>();
+    const [loadedView, setLoadedView] = useState(defaultViewType);
+
+    // use ref to get this value in callback
+    const [lastReqTime, setLastReqTime] = useState<number>();
+    const reqStateRef = useRef<number>();
+    reqStateRef.current = lastReqTime;
 
     const year = useMemo(
         () =>
-            parseInt(searchParams.get("year") ?? "") ||
-            globalDataCache.availableYears.value?.[0] ||
-            undefined,
+            Number(searchParams.get("year")) ||
+            globalDataCache.availableYears.value?.[0],
         [searchParams.get("year"), globalDataCache.availableYears.value]
     );
 
     const viewType = useMemo(
-        () => searchParams.get("view") ?? "monthly",
+        () => searchParams.get("view") ?? defaultViewType,
         [searchParams.get("view")]
     );
 
     // load breakdowns
     useEffect(() => {
-        setBreakdowns(undefined);
-        getData().then((results) => {
-            if (results && globalDataCache.userHasTransactions()) {
-                if (!breakdownsContainAnyData(results)) {
+        setPageState(pageState === "show data" ? "refresh" : "loading");
+
+        const reqTime = new Date().getTime();
+        console.log(reqTime)
+        setLastReqTime(reqTime);
+        getData()
+            .then((result) => {
+                if (!result || reqStateRef.current !== reqTime) return;
+
+                if (result.isEmpty) {
                     setPageState("no data");
                 } else {
-                    setBreakdowns(results);
+                    setLoadedView(viewType);
+                    setBreakdowns(result);
                     setPageState("show data");
                 }
-            }
-        });
+            })
+            .catch(() => {
+                setPageState("error");
+            });
     }, [year, viewType]);
-
-    // show help message if no data
-    useEffect(() => {
-        if (!globalDataCache.userHasTransactions()) {
-            setPageState("show help");
-        }
-    }, [globalDataCache.availableYears.value]);
 
     return (
         <>
-            <div style={{ float: "left" }}>
-                {pageState === "show data" ? (
-                    <Select
-                        value={viewType}
-                        onChange={(e) => setViewType(e.target.value)}
-                    >
-                        <option value="monthly">Months</option>
-                        <option value="weekly">Weeks</option>
-                        <option value="yearly">Years</option>
-                    </Select>
-                ) : (
-                    ""
-                )}
+            <div className={styles.viewSelectHolder}>
+                <Select
+                    value={viewType}
+                    onChange={(e) => setViewType(e.target.value)}
+                >
+                    <option value="monthly">Months</option>
+                    <option value="weekly">Weeks</option>
+                    <option value="yearly">Years</option>
+                </Select>
             </div>
             <Page>
-                <DashboardPageHeader year={year} viewType={viewType} />
+                <DashboardPageHeader
+                    year={year}
+                    viewType={breakdowns ? loadedView : viewType}
+                    pageState={pageState}
+                />
 
                 {getPageBody()}
             </Page>
@@ -84,22 +95,45 @@ function DashboardPage() {
     function getPageBody(): JSX.Element {
         switch (pageState) {
             case "loading":
-                return <LoadingIndicator />;
+                return <StatusIndicator status="loading" />;
+
             case "no data":
-                return <h4 className="centre">No data to show</h4>;
-            case "show help":
-                return <p>you have no data show more helpful message</p>;
-            case "show data":
+                return <StatusIndicator status="info" message="No data" />;
+
+            case "error":
+                return <StatusIndicator status="error" />;
+
+            case "invalid view":
                 return (
+                    <StatusIndicator status="error" message="Invalid view" />
+                );
+
+            case "show data":
+                return breakdowns ? (
                     <DashboardDataView
-                        breakdowns={breakdowns ?? []}
-                        viewType={viewType}
+                        breakdowns={breakdowns}
+                        viewType={loadedView}
                     />
+                ) : (
+                    <></>
+                );
+
+            case "refresh":
+                return breakdowns ? (
+                    <>
+                        <DashboardDataView
+                            breakdowns={breakdowns}
+                            viewType={loadedView}
+                        />
+                        <StatusIndicator status="loading" />
+                    </>
+                ) : (
+                    <></>
                 );
         }
     }
 
-    async function getData(): Promise<Breakdown[] | undefined> {
+    async function getData(): Promise<BreakdownCollection | undefined> {
         switch (viewType) {
             case "monthly":
                 if (!year) return undefined;
@@ -109,6 +143,8 @@ function DashboardPage() {
             case "weekly":
                 if (!year) return undefined;
                 return BreakdownService.getWeeklyBreakdownsForYear(year);
+            default:
+                setPageState("invalid view");
         }
     }
 

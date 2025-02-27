@@ -6,25 +6,19 @@ namespace FinTracker.Api.Models
 {
     public class BreakdownViewModel
     {
-        public DateOnly Start { get; set; }
-        public DateOnly End { get; set; }
+        public DateOnly Start { get; private init; }
+        public DateOnly End { get; private init; }
 
-        public CategoryTotal[] CategoryTotals { get; set; }
-        private IEnumerable<TblTransaction> transactions;
-        
-        public Int64 TotalIn
+        public CategoryTotal[] CategoryTotals { get; private init; }
+
+        public Int64 TotalIn { get; private init; }
+        public Int64 TotalOut { get; private init; }
+
+        public bool IsEmpty
         {
             get
             {
-                return transactions.Where(t => t.Amount > 0).Sum(t => (Int64)t.Amount);
-            }
-        }
-
-        public Int64 TotalOut
-        {
-            get
-            {
-                return transactions.Where(t => t.Amount < 0).Sum(t => (Int64)t.Amount);
+                return !CategoryTotals.Any();
             }
         }
 
@@ -126,7 +120,8 @@ namespace FinTracker.Api.Models
             Start = start;
             End = end;
             CategoryTotals = categoryTotals;
-            this.transactions = transactions;
+            TotalIn = transactions.Where(t => t.Amount > 0).Sum(t => (Int64)t.Amount);
+            TotalOut = transactions.Where(t => t.Amount < 0).Sum(t => (Int64)t.Amount);
         }
     }
 }

@@ -8,13 +8,11 @@ import Spacer from "../../components/Spacer";
 import Table from "../../components/Table";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useLocalPagination from "../../hooks/useLocalPagination";
+import useTransactionImport from "../../hooks/useTransactionImport";
+import styles from "../../styles/ImportTable.module.css";
 import TransactionViewModel from "../../types/TransactionViewModel";
-import ImportTableRow from "./ImportTableRow";
 import { CategoryRefreshIcon } from "../../utils/Icons";
-
-interface ImportTableProps {
-    transactions: TransactionViewModel[];
-}
+import ImportTableRow from "./ImportTableRow";
 
 const importFilters = [
     "View All",
@@ -25,8 +23,9 @@ const importFilters = [
 ] as const;
 type ImportFilter = (typeof importFilters)[number];
 
-function ImportTable(props: ImportTableProps) {
-    const { transactions } = props;
+function ImportTable() {
+    const transactionImport = useTransactionImport();
+    const transactions = transactionImport.Transcations;
 
     const globalDataCache = useGlobalDataCache();
     const [filter, setFilter] = useState<ImportFilter>("View All");
@@ -66,11 +65,11 @@ function ImportTable(props: ImportTableProps) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th style={{ width: "5em" }}>Date</th>
+                        <th className={styles.colDate}>Date</th>
                         <th>Memo</th>
-                        <th style={{ width: "5em" }}>Amount</th>
-                        <th style={{ width: "10%" }}>Category</th>
-                        <th style={{ width: 0 }}></th>
+                        <th className={styles.colAmount}>Amount</th>
+                        <th className={styles.colCategory}>Category</th>
+                        <th className="nowidth"></th>
                     </tr>
                 </thead>
                 <tbody>

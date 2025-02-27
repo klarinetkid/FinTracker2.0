@@ -5,6 +5,8 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormat from "../../types/ImportFormat";
 import Pages from "../../types/Pages";
 import MenuTile from "./MenuTile";
+import { setImportParams } from "../../utils/ImportHelper";
+import { ImportParams } from "../../contexts/TransactionImportContext";
 
 function ImportSubmenu() {
     const navigate = useNavigate();
@@ -15,7 +17,13 @@ function ImportSubmenu() {
         onFilesSuccessfullySelected: (data: SelectedFiles<ArrayBuffer>) => {
             if (!selectedFormat) return;
             const { filesContent } = data;
-            navigate(Pages.Import, { state: { selectedFormat, filesContent } });
+
+            const importParams: ImportParams = {
+                format: selectedFormat,
+                filesContent,
+            };
+
+            navigate(Pages.Import, { state: { importParams } });
         },
     });
 

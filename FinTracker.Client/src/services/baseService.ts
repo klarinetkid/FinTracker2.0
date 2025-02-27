@@ -15,7 +15,7 @@ export type ErrorResponse = {
     traceId: string;
 };
 
-const ApiBaseURL = "/api";
+export const ApiBaseURL = "/api";
 
 class BaseService {
     protected axiosInstance: AxiosInstance;

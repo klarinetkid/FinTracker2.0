@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import IconButton from "../../components/IconButton";
 import InOutPills from "../../components/InOutPills";
 import Page from "../../components/Page";
+import Row from "../../components/Row";
 import Spacer from "../../components/Spacer";
 import TransactionTable from "../../components/TransactionTable";
 import CategorySelectionProvider from "../../contexts/CategorySelectionProvider";
@@ -15,12 +16,15 @@ import {
     getIncomeCategories,
     getSpendingCategories,
 } from "../../utils/BreakdownHelper";
+import { formatDateOnly } from "../../utils/DateHelper";
 import { BackIcon } from "../../utils/Icons";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
-import Row from "../../components/Row";
-import { formatDateOnly } from "../../utils/DateHelper";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import useRefresh from "../../hooks/useRefresh";
+import StatusIndicator from "../../components/StatusIndicator";
+import { classList } from "../../utils/HtmlHelper";
+
+// states: loading, view, no data, invalid
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
@@ -34,16 +38,17 @@ function BreakdownPage() {
     const paramsAreValid = breakdownParamsAreValid(moment(start), moment(end));
 
     const [breakdown, setBreakdown] = useState<Breakdown>();
-    const [isUpdated, setIsUpdated] = useState(false);
+    const { refreshed, refresh } = useRefresh();
 
     useEffect(() => {
-        (async () => {
-            if (!paramsAreValid) return;
-            setBreakdown(undefined);
-            const data = await BreakdownService.getBreakdown(start, end);
-            setBreakdown(data);
-        })();
-    }, [paramsAreValid, start, end, isUpdated]);
+        if (!paramsAreValid) return;
+        setBreakdown(undefined);
+        BreakdownService.getBreakdown(start, end).then(setBreakdown);
+    }, [paramsAreValid, start, end]);
+
+    useEffect(() => {
+        BreakdownService.getBreakdown(start, end).then(setBreakdown);
+    }, [refreshed]);
 
     const spendingCategories = getSpendingCategories(breakdown?.categoryTotals);
     const incomeCategories = getIncomeCategories(breakdown?.categoryTotals);
@@ -62,27 +67,28 @@ function BreakdownPage() {
         </Page>
     ) : (
         <Page>
-            <div className={styles.header}>
-                <IconButton
-                    title="Back to dashboard"
-                    icon={BackIcon}
-                    onClick={backClick}
-                />
-                <div>
-                    <h1>{breakdown ? breakdown.title : "Loading..."}</h1>
-
-                    <div className={styles.subtitle}>
-                        {breakdown ? breakdown.subtitle : ""}
-                    </div>
-                </div>
-            </div>
-
             {breakdown ? (
                 <>
-                    <InOutPills
-                        totalIn={breakdown.totalIn}
-                        totalOut={breakdown.totalOut}
-                    />
+                    <div className={styles.header}>
+                        <IconButton
+                            title="Back to dashboard"
+                            icon={BackIcon}
+                            onClick={backClick}
+                        />
+                        <div>
+                            <h1>{breakdown ? breakdown.title : ""}</h1>
+
+                            <div className={styles.subtitle}>
+                                {breakdown ? breakdown.subtitle : ""}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.inOutPillHolder}>
+                        <InOutPills
+                            totalIn={breakdown.totalIn}
+                            totalOut={breakdown.totalOut}
+                        />
+                    </div>
 
                     <Spacer height={26} />
 
@@ -99,7 +105,14 @@ function BreakdownPage() {
                             )}
 
                             {incomeCategories.length > 0 ? (
-                                <div className={styles.incomeColumn}>
+                                <div
+                                    className={classList(
+                                        styles.incomeColumn,
+                                        spendingCategories.length === 0
+                                            ? styles.horizontal
+                                            : ""
+                                    )}
+                                >
                                     {incomeCategories.map((c, i) => (
                                         <IncomeCard key={i} categoryTotal={c} />
                                     ))}
@@ -113,19 +126,15 @@ function BreakdownPage() {
 
                         <TransactionTable
                             query={getTransactionQuery()}
-                            onChange={refreshBreakdown}
+                            onChange={refresh}
                         />
                     </CategorySelectionProvider>
                 </>
             ) : (
-                <LoadingIndicator />
+                <StatusIndicator status="loading" />
             )}
         </Page>
     );
-
-    function refreshBreakdown() {
-        setIsUpdated(!isUpdated);
-    }
 
     function backClick() {
         const year = moment(breakdown?.start).get("year");

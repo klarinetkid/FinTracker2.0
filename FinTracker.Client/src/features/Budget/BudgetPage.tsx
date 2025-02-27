@@ -16,19 +16,20 @@ import { formatDateOnly } from "../../utils/DateHelper";
 import { AddRoundLightFillIcon } from "../../utils/Icons";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
+import useRefresh from "../../hooks/useRefresh";
+import StatusIndicator from "../../components/StatusIndicator";
 
 function BudgetPage() {
-    const [groupedBudgets, setGroupedBudgets] = useState<
-        Grouping<Category, Budget>[]
-    >([]);
+    const [groupedBudgets, setGroupedBudgets] =
+        useState<Grouping<Category, Budget>[]>();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [isRefreshed, setIsRefreshed] = useState(false);
+    const { refreshed, refresh } = useRefresh();
 
     const formValues = useFormValues<BudgetViewModel>({});
 
     useEffect(() => {
         BudgetService.getGrouped().then(setGroupedBudgets);
-    }, [isRefreshed]);
+    }, [refreshed]);
 
     return (
         <Page>
@@ -41,10 +42,14 @@ function BudgetPage() {
                 />
             </Row>
 
-            <BudgetTable
-                groupedBudgets={groupedBudgets}
-                editBudget={editBudget}
-            />
+            {groupedBudgets ? (
+                <BudgetTable
+                    groupedBudgets={groupedBudgets}
+                    editBudget={editBudget}
+                />
+            ) : (
+                <StatusIndicator status="loading" />
+            )}
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <BudgetForm
@@ -94,7 +99,7 @@ function BudgetPage() {
             .then(() => {
                 if (event.target instanceof HTMLButtonElement)
                     event.target.blur();
-                setIsRefreshed(!isRefreshed);
+                refresh();
                 setIsDrawerOpen(false);
                 formValues.setErrors(undefined);
             })
@@ -105,7 +110,7 @@ function BudgetPage() {
     async function deleteFormat() {
         if (!formValues.values.id) return;
         await BudgetService.deleteBudget(formValues.values.id);
-        setIsRefreshed(!isRefreshed);
+        refresh();
         setIsDrawerOpen(false);
     }
 }

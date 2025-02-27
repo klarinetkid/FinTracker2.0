@@ -7,11 +7,11 @@ import { ExpandDownIcon, ExpandUpIcon } from "../utils/Icons";
 interface TransactionTableHeaderCellProps {
     formValues: FormValues<TransactionQuery>;
     columnName: string;
-    width?: string | number;
+    className?: string;
 }
 
 function TransactionTableHeaderCell(props: TransactionTableHeaderCellProps) {
-    const { formValues, columnName, width } = props;
+    const { formValues, columnName, className } = props;
     const isActive =
         formValues.values.orderBy?.toLowerCase() === columnName.toLowerCase();
 
@@ -25,16 +25,13 @@ function TransactionTableHeaderCell(props: TransactionTableHeaderCellProps) {
     );
 
     const title = `Sort ${columnName} ${targetOrder === "asc" ? "ascending" : "descending"}`;
+    const Icon = currentOrder === "asc" ? ExpandUpIcon : ExpandDownIcon;
 
     return (
-        <th onClick={setOrdering} title={title} style={{ width }}>
+        <th onClick={setOrdering} title={title} className={className}>
             {props.columnName}
 
-            {currentOrder === "asc" ? (
-                <ExpandUpIcon className={iconClass} />
-            ) : (
-                <ExpandDownIcon className={iconClass} />
-            )}
+            <Icon className={classList(iconClass, "themed")} />
         </th>
     );
 

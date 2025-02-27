@@ -1,5 +1,6 @@
 
 using FinTracker.Api.Common;
+using FinTracker.Api.Middleware;
 
 namespace FinTracker.Api
 {
@@ -29,8 +30,7 @@ namespace FinTracker.Api
                 app.UseSwaggerUI();
             }
 
-            //app.UseAuthorization();
-
+            app.UseMiddleware<ApiVersionMiddleware>();
 
             app.MapControllers();
 

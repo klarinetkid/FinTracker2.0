@@ -23,17 +23,21 @@ export class GlobalDataCacheItem<T> {
             this.setValue(value);
         }
     }
+
+    public hasValue() {
+        return this.value !== undefined;
+    }
 }
 
 export class GlobalDataCacheContextManager {
     public availableYears: GlobalDataCacheItem<number[] | undefined>;
     public categories: GlobalDataCacheItem<Category[]>;
-    public importFormats: GlobalDataCacheItem<ImportFormat[]>;
+    public importFormats: GlobalDataCacheItem<ImportFormat[] | undefined>;
 
     constructor(params?: {
         availableYears: GlobalDataCacheItem<number[] | undefined>;
         categories: GlobalDataCacheItem<Category[]>;
-        importFormats: GlobalDataCacheItem<ImportFormat[]>;
+        importFormats: GlobalDataCacheItem<ImportFormat[] | undefined>;
     }) {
         this.availableYears =
             params?.availableYears ??
@@ -42,7 +46,7 @@ export class GlobalDataCacheContextManager {
             params?.categories ?? new GlobalDataCacheItem<Category[]>([]);
         this.importFormats =
             params?.importFormats ??
-            new GlobalDataCacheItem<ImportFormat[]>([]);
+            new GlobalDataCacheItem<ImportFormat[] | undefined>(undefined);
     }
 
     public initializeData() {

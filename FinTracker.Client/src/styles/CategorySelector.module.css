@@ -49,12 +49,16 @@
         background-color: var(--border-200)
     }
 
-.clearBtn {
-    position: absolute;
-    right: 3px;
-    background: none;
-    border-radius: 50px;
-}
+    .option.hovered {
+        background-color: var(--purple);
+    }
+
+    .clearBtn {
+        position: absolute;
+        right: 3px;
+        background: none;
+        border-radius: 50px;
+    }
 
     .clearBtn:hover {
         background-color: var(--light-bg);

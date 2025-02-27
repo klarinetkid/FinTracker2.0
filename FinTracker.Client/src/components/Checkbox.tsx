@@ -16,13 +16,14 @@ function Checkbox(props: CheckboxProps) {
 
     // controlled if onchange
     const value = onChange ? checked : isUncontrolledChecked;
+    const Icon = value ? CheckRingIcon : CheckRingCircleIcon;
 
     return (
         <button
             className={classList(styles.cbox, value ? styles.active : "")}
             onClick={toggleCheckboxState}
         >
-            {value ? <CheckRingIcon /> : <CheckRingCircleIcon />}
+            <Icon className="themed" />
         </button>
     );
 

@@ -10,19 +10,20 @@ import Memo from "../../types/Memo";
 import MemoViewModel from "../../types/MemoViewModel";
 import MemoForm from "./MemoForm";
 import MemoTable from "./MemoTable";
+import useRefresh from "../../hooks/useRefresh";
+import StatusIndicator from "../../components/StatusIndicator";
 
 function MemosPage() {
-    const [groupedMemos, setGroupedMemos] = useState<
-        Grouping<Category | undefined, Memo>[]
-    >([]);
+    const [groupedMemos, setGroupedMemos] =
+        useState<Grouping<Category | undefined, Memo>[]>();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [isRefreshed, setIsRefreshed] = useState(false);
+    const { refreshed, refresh } = useRefresh();
 
     const formValues = useFormValues<MemoViewModel>({});
 
     useEffect(() => {
         MemoService.getGrouped().then(setGroupedMemos);
-    }, [isRefreshed]);
+    }, [refreshed]);
 
     return (
         <Page>
@@ -30,7 +31,11 @@ function MemosPage() {
                 <h1>Memos</h1>
             </Row>
 
-            <MemoTable memos={groupedMemos} editMemo={editMemo} />
+            {groupedMemos ? (
+                <MemoTable memos={groupedMemos} editMemo={editMemo} />
+            ) : (
+                <StatusIndicator status="loading" />
+            )}
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <MemoForm
@@ -53,13 +58,13 @@ function MemosPage() {
         await MemoService.patchCategorization(formValues.values);
 
         if (event.target instanceof HTMLButtonElement) event.target.blur();
-        setIsRefreshed(!isRefreshed);
+        refresh();
         setIsDrawerOpen(false);
     }
     async function deleteMemo() {
         if (!formValues.values.id) return;
         await MemoService.deleteMemo(formValues.values.id);
-        setIsRefreshed(!isRefreshed);
+        refresh();
         setIsDrawerOpen(false);
     }
 }

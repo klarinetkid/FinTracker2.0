@@ -16,6 +16,7 @@
 
 html {
     padding-left: calc(100vw - 100%);
+    scrollbar-width: thin;
 }
 
 body {
@@ -34,7 +35,8 @@ body {
 */
 a {
     font-weight: 500;
-    color: #646cff;
+    /*color: #646cff;*/
+    color: var(--blue);
     text-decoration: inherit;
 }
 
@@ -47,15 +49,15 @@ h1 {
     font-size: 3.2em;
     line-height: 1.1;
 }
-svg:not(.notheme) *[stroke] {
+svg.themed *[stroke] {
     stroke: var(--icon);
 }
-svg:not(.notheme) *[fill] {
+svg.themed *[fill] {
     fill: var(--icon);
 }
 
 /*
-    Quick property classes
+    Quick styles
 */
 .ralign {
     text-align: right;
@@ -85,24 +87,11 @@ svg:not(.notheme) *[fill] {
     font-style: italic;
 }
 
-/*
-    TODO: Theme
-*/
-/* TODO: dark mode */
-/*@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
-
-    a:hover {
-        color: #747bff;
-    }
-}*/
-
-/*:root {
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+.selectable:hover, .selectable:hover input {
+    color: var(--blue);
+    cursor: pointer;
 }
-*/
+
+.nowidth {
+    width: 0;
+}

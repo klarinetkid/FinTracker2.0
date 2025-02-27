@@ -31,3 +31,7 @@
 .saveMemo {
     background-color: var(--tan);
 }
+
+.memoCell {
+    position: relative;
+}

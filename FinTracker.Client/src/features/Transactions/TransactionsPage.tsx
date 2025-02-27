@@ -7,6 +7,7 @@ import Page from "../../components/Page";
 import Row from "../../components/Row";
 import TransactionTable from "../../components/TransactionTable";
 import { useFormValues } from "../../hooks/useFormValues";
+import useRefresh from "../../hooks/useRefresh";
 import { ErrorResponse } from "../../services/BaseService";
 import TransactionService from "../../services/TransactionService";
 import TransactionQuery from "../../types/TransactionQuery";
@@ -16,7 +17,7 @@ import TransactionForm from "./TransactionForm";
 
 function TransactionsPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [isRefreshed, setIsRefreshed] = useState(false);
+    const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
 
     const filterValues = useFormValues<TransactionQuery>({
@@ -40,8 +41,8 @@ function TransactionsPage() {
             <TransactionTable
                 query={filterValues.values}
                 onRowSelect={editTransaction}
-                refresh={isRefreshed}
-                onChange={onTransactionChange}
+                refreshed={refreshed}
+                onChange={refresh}
             />
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
@@ -54,10 +55,6 @@ function TransactionsPage() {
             </Drawer>
         </Page>
     );
-
-    function onTransactionChange() {
-        setIsRefreshed(!isRefreshed);
-    }
 
     function newCashTransaction() {
         formValues.setValues({
@@ -90,7 +87,7 @@ function TransactionsPage() {
             .then(() => {
                 if (event.target instanceof HTMLButtonElement)
                     event.target.blur();
-                setIsRefreshed(!isRefreshed);
+                refresh();
                 setIsDrawerOpen(false);
                 formValues.setErrors(undefined);
             })
@@ -102,7 +99,7 @@ function TransactionsPage() {
     async function deleteTransaction() {
         if (!formValues.values.id) return;
         await TransactionService.deleteTransaction(formValues.values.id);
-        setIsRefreshed(!isRefreshed);
+        refresh();
         setIsDrawerOpen(false);
     }
 }

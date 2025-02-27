@@ -4,7 +4,7 @@ import useCategorySelection from "../../hooks/useCategorySelection";
 import styles from "../../styles/SpendingTable.module.css";
 import { Total, Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
-import { sum } from "../../utils/ArrayHelper";
+import { sum } from "../../utils/NumberHelper";
 import SpendingTableRow from "./SpendingTableRow";
 
 interface SpendingTableProps {
@@ -82,15 +82,30 @@ function SpendingTable(props: SpendingTableProps) {
     function aggregateSelectedCategoryTotals(): CategoryTotal {
         const selectedCategoryTotals = selectedSpendingCategories();
 
+        const total = sum(selectedCategoryTotals.map((c) => c.total));
+
         return {
             category: Total,
-            total: sum(selectedCategoryTotals.map((c) => c.total)),
+            total,
             percentOfIncome: sum(
                 selectedCategoryTotals.map((c) => c.percentOfIncome)
             ),
             percentOfSpend: sum(
                 selectedCategoryTotals.map((c) => c.percentOfSpend)
             ),
+            ...getCombinedBudget(selectedCategoryTotals),
+        };
+    }
+
+    function getCombinedBudget(categoryTotals: CategoryTotal[]) {
+        if (categoryTotals.filter(c => !c.budget).length > 0) return {};
+
+        const totalSpent = sum(categoryTotals.map((c) => c.total));
+        const totalBudget = sum(categoryTotals.map((c) => c.budget));
+
+        return {
+            budget: totalBudget,
+            budgetDeviation: Math.abs(totalSpent) - Math.abs(totalBudget),
         };
     }
 }

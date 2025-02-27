@@ -23,6 +23,11 @@ function SystemSubmenu() {
                 icon={Icons.FileDockFillIcon}
                 onClick={() => navigate(Pages.Formats)}
             />
+            <MenuTile
+                title="About"
+                icon={Icons.InfoIcon}
+                onClick={() => navigate(Pages.About)}
+            />
         </>
     );
 }

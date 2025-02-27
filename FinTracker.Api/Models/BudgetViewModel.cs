@@ -13,7 +13,6 @@ namespace FinTracker.Api.Models
         public int? CategoryId { get; set; }
 
         [Required]
-        [Range(-1_000_000, 1_000_000)]
         public int? Amount { get; set; }
 
         [Required]
