@@ -5,15 +5,16 @@ import ButtonFill from "../../components/ButtonFill";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import StatusIndicator from "../../components/StatusIndicator";
-import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import useTransactionImport from "../../hooks/useTransactionImport";
-import Pages from "../../types/Pages";
-import ImportTable from "./ImportTable";
 import {
     ImportParams,
     ImportResult,
 } from "../../contexts/TransactionImportContext";
+import useGlobalDataCache from "../../hooks/useGlobalDataCache";
+import useTransactionImport from "../../hooks/useTransactionImport";
+import Pages from "../../types/Pages";
 import { pluralize } from "../../utils/StringHelper";
+import ImportTable from "./ImportTable";
+import { minimumTime } from "../../utils/PromiseHelper";
 
 // import process is linear:
 // loading -> editing -> submitting -> complete
@@ -33,23 +34,20 @@ function ImportPage() {
 
     const [flowStep, setFlowStep] = useState<ImportFlowStep>("loading");
 
-    useBlocker(flowStep === "editing" || flowStep === "submitting");
+    //useBlocker(flowStep === "editing" || flowStep === "submitting");
 
     // TODO more readable way to validate location state
     const { importParams, importResult } = location.state ?? {};
 
     useEffect(() => {
         if (importParams) {
-            const params = importParams as ImportParams;
             setFlowStep("loading");
-            setTimeout(
-                () =>
-                    transactionImport
-                        .PrepareImport(params.format, params.filesContent)
-                        .then(() => setFlowStep("editing"))
-                        .catch(() => setFlowStep("error")),
-                1200
-            );
+
+            const params = importParams as ImportParams;
+            minimumTime(1200, () => transactionImport.PrepareImport(params))
+                .then(() => setFlowStep("editing"))
+                .catch(() => setFlowStep("error"));
+
         } else if (importResult) {
             setFlowStep("complete");
         } else {
@@ -130,16 +128,13 @@ function ImportPage() {
     function submitImport() {
         setFlowStep("submitting");
 
-        transactionImport
-            .Submit()
+        minimumTime(2200, () => transactionImport.Submit())
             .then((result: ImportResult | undefined) => {
-                setTimeout(() => {
-                    globalDataCache.availableYears.refresh();
-                    navigate(Pages.Import, {
-                        state: { importResult: result },
-                        replace: true,
-                    });
-                }, 1800);
+                globalDataCache.availableYears.refresh();
+                navigate(Pages.Import, {
+                    state: { importResult: result },
+                    replace: true,
+                });
             })
             .catch(() => {
                 setFlowStep("error");

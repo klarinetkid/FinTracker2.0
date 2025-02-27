@@ -2,139 +2,113 @@ import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import IconButton from "../../components/IconButton";
-import InOutPills from "../../components/InOutPills";
 import Page from "../../components/Page";
-import Row from "../../components/Row";
-import Spacer from "../../components/Spacer";
-import TransactionTable from "../../components/TransactionTable";
-import CategorySelectionProvider from "../../contexts/CategorySelectionProvider";
+import StatusIndicator from "../../components/StatusIndicator";
+import useRefresh from "../../hooks/useRefresh";
 import BreakdownService from "../../services/BreakdownService";
 import styles from "../../styles/BreakdownPage.module.css";
 import Breakdown from "../../types/Breakdown";
-import {
-    breakdownParamsAreValid,
-    getIncomeCategories,
-    getSpendingCategories,
-} from "../../utils/BreakdownHelper";
-import { formatDateOnly } from "../../utils/DateHelper";
+import { breakdownParamsAreValid } from "../../utils/BreakdownHelper";
 import { BackIcon } from "../../utils/Icons";
-import IncomeCard from "./IncomeCard";
-import SpendingTable from "./SpendingTable";
-import useRefresh from "../../hooks/useRefresh";
-import StatusIndicator from "../../components/StatusIndicator";
-import { classList } from "../../utils/HtmlHelper";
+import BreakdownDataView from "./BreakdownDataView";
 
 // states: loading, view, no data, invalid
+type BreakdownPageState =
+    | "loading"
+    | "show data"
+    | "no data"
+    | "invalid"
+    | "error";
 
 function BreakdownPage() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const [pageState, setPageState] = useState<BreakdownPageState>("loading");
+    const [breakdown, setBreakdown] = useState<Breakdown>();
+    const { refreshed, refresh } = useRefresh();
 
     const start = useMemo(
         () => searchParams.get("start") ?? "",
         [searchParams]
     );
     const end = useMemo(() => searchParams.get("end") ?? "", [searchParams]);
-    const paramsAreValid = breakdownParamsAreValid(moment(start), moment(end));
-
-    const [breakdown, setBreakdown] = useState<Breakdown>();
-    const { refreshed, refresh } = useRefresh();
 
     useEffect(() => {
-        if (!paramsAreValid) return;
-        setBreakdown(undefined);
-        BreakdownService.getBreakdown(start, end).then(setBreakdown);
-    }, [paramsAreValid, start, end]);
+        if (!breakdownParamsAreValid(start, end)) {
+            setPageState("invalid");
+        } else {
+            setPageState("loading");
+            getData();
+        }
+    }, [start, end, refreshed]);
 
-    useEffect(() => {
-        BreakdownService.getBreakdown(start, end).then(setBreakdown);
-    }, [refreshed]);
-
-    const spendingCategories = getSpendingCategories(breakdown?.categoryTotals);
-    const incomeCategories = getIncomeCategories(breakdown?.categoryTotals);
-
-    return !paramsAreValid ? (
+    return (
         <Page>
-            <Row justifyContent="space-between">
+            <div className={styles.header}>
                 <IconButton
+                    title="Back to dashboard"
                     icon={BackIcon}
-                    title="To dashboard"
-                    onClick={() => navigate("/")}
+                    onClick={backClick}
                 />
-                <h1 className="centre">Invalid Query</h1>
-                <div></div>
-            </Row>
-        </Page>
-    ) : (
-        <Page>
-            {breakdown ? (
-                <>
-                    <div className={styles.header}>
-                        <IconButton
-                            title="Back to dashboard"
-                            icon={BackIcon}
-                            onClick={backClick}
-                        />
-                        <div>
-                            <h1>{breakdown ? breakdown.title : ""}</h1>
+                <div>
+                    <h1>{breakdown ? breakdown.title : ""}</h1>
 
-                            <div className={styles.subtitle}>
-                                {breakdown ? breakdown.subtitle : ""}
-                            </div>
-                        </div>
+                    <div className={styles.subtitle}>
+                        {breakdown ? breakdown.subtitle : ""}
                     </div>
-                    <div className={styles.inOutPillHolder}>
-                        <InOutPills
-                            totalIn={breakdown.totalIn}
-                            totalOut={breakdown.totalOut}
-                        />
-                    </div>
+                </div>
+            </div>
 
-                    <Spacer height={26} />
-
-                    <CategorySelectionProvider>
-                        <div className={styles.details}>
-                            {spendingCategories.length > 0 ? (
-                                <div className={styles.spendingTableHolder}>
-                                    <SpendingTable
-                                        spendingCategories={spendingCategories}
-                                    />
-                                </div>
-                            ) : (
-                                ""
-                            )}
-
-                            {incomeCategories.length > 0 ? (
-                                <div
-                                    className={classList(
-                                        styles.incomeColumn,
-                                        spendingCategories.length === 0
-                                            ? styles.horizontal
-                                            : ""
-                                    )}
-                                >
-                                    {incomeCategories.map((c, i) => (
-                                        <IncomeCard key={i} categoryTotal={c} />
-                                    ))}
-                                </div>
-                            ) : (
-                                ""
-                            )}
-                        </div>
-
-                        <Spacer height={26} />
-
-                        <TransactionTable
-                            query={getTransactionQuery()}
-                            onChange={refresh}
-                        />
-                    </CategorySelectionProvider>
-                </>
-            ) : (
-                <StatusIndicator status="loading" />
-            )}
+            {getPageBody()}
         </Page>
     );
+
+    function getData() {
+        BreakdownService.getBreakdown(start, end)
+            .then((result) => {
+                setBreakdown(result);
+                setPageState(result.isEmpty ? "no data" : "show data");
+            })
+            .catch(() => {
+                setPageState("error");
+            });
+    }
+
+    function getPageBody(): JSX.Element {
+        switch (pageState) {
+            case "no data":
+                return <StatusIndicator status="info" message="No data" />;
+
+            case "error":
+                return <StatusIndicator status="error" />;
+
+            case "invalid":
+                return (
+                    <StatusIndicator status="error" message="Invalid query" />
+                );
+
+            case "loading":
+            case "show data":
+                return (
+                    <>
+                        {breakdown ? (
+                            <BreakdownDataView
+                                breakdown={breakdown}
+                                refresh={refresh}
+                            />
+                        ) : (
+                            ""
+                        )}
+
+                        {pageState === "loading" ? (
+                            <StatusIndicator status="loading" />
+                        ) : (
+                            ""
+                        )}
+                    </>
+                );
+        }
+    }
 
     function backClick() {
         const year = moment(breakdown?.start).get("year");
@@ -148,17 +122,6 @@ function BreakdownPage() {
         }
 
         navigate("/");
-    }
-
-    function getTransactionQuery() {
-        if (!breakdown) return {};
-
-        return {
-            after: formatDateOnly(breakdown.start),
-            before: formatDateOnly(breakdown.end),
-            orderBy: "date",
-            order: "asc",
-        };
     }
 }
 

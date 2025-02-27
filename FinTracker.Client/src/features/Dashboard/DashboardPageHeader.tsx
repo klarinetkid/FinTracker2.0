@@ -17,14 +17,12 @@ function DashboardPageHeader({
     const title =
         viewType === "yearly" ? "All Years" : `Dashboard ${year ?? ""}`;
 
-    const btnsVisible =
-        viewType !== "yearly" &&
-        (pageState === "show data" || pageState === "refresh");
+    const btnsVisible = viewType !== "yearly" && pageState !== "invalid view";
 
     const btnCommonProps = {
         currentYear: year,
         visible: btnsVisible,
-        viewType
+        viewType,
     };
 
     return (

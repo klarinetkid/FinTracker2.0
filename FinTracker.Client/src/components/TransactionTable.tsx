@@ -12,32 +12,41 @@ import TransactionTableHeaderCell from "./TransactionTableHeaderCell";
 import { useFormValues } from "../hooks/useFormValues";
 import styles from "../styles/TransactionTable.module.css";
 import EmptyTableMessage from "./EmptyTableMessage";
+import StatusIndicator from "./StatusIndicator";
 
 interface TransactionTableProps {
     query?: TransactionQuery;
     onChange?: () => void;
     onRowSelect?: (transaction: TransactionViewModel) => void;
     refreshed?: boolean;
+    showLoading?: boolean;
 }
 
 function TransactionTable(props: TransactionTableProps) {
-    const { query, onChange, onRowSelect, refreshed } = props;
+    const { query, onChange, onRowSelect, refreshed, showLoading } = props;
 
     const tableHeadRef = useRef<HTMLTableRowElement>(null);
 
     const [page, setPage] = useState<PaginatedResponse<Transaction>>();
     const [currentPage, setCurrentPage] = useState(0);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const formValues = useFormValues<TransactionQuery>(query ?? {});
 
     useEffect(() => {
+        setIsLoading(true);
+
         const combinedQuery: TransactionQuery = {
             ...query,
             order: formValues.values.order ?? query?.order,
             orderBy: formValues.values.orderBy ?? query?.orderBy,
             pageNumber: currentPage,
         };
-        TransactionService.getTransactions(combinedQuery).then(setPage);
+        TransactionService.getTransactions(combinedQuery).then((result) => {
+            setIsLoading(false);
+            setPage(result);
+        });
     }, [currentPage, query, formValues.values, refreshed]);
 
     // refresh when query changes
@@ -102,6 +111,12 @@ function TransactionTable(props: TransactionTableProps) {
                     <PaginationNav pagination={page} onNavigate={onPageNav} />
                     <Spacer height={100} />
                 </>
+            ) : (
+                ""
+            )}
+
+            {showLoading && isLoading ? (
+                <StatusIndicator status="loading" />
             ) : (
                 ""
             )}

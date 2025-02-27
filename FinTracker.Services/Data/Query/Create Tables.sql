@@ -35,6 +35,19 @@ Create table TblTransaction (
 	[IsCashTransaction] bit NOT NULL DEFAULT 0,
 	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount])
 );
+--drop table if exists TblTransaction;
+--Create table TblTransaction (
+--	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
+--	[Date] date NOT NULL,
+--	[Amount] int NOT NULL,
+--	[Memo] varchar(200),
+--	[CategoryId] int references TblCategory(id),
+--	[IsCashTransaction] bit NOT NULL DEFAULT 0,
+--	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount]),
+--	index IX_Date ([date]),
+--	index IX_Amount ([amount]),
+--	index IX_Memo ([memo])
+--) with (memory_optimized = on, durability = schema_and_data);
 
 ----------------------------------
 ---- create TblImportFormat

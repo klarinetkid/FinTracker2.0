@@ -4,6 +4,7 @@ type CountsViewModel = {
     importFormats: number;
     memos: number;
     transactions: number;
+    years: number;
 };
 
 export default CountsViewModel;

@@ -1,0 +1,27 @@
+
+.details {
+    display: flex;
+    gap: 14px;
+}
+
+.spendingTableHolder {
+    flex-grow: 1;
+    padding: 4px;
+}
+
+.incomeColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+    .incomeColumn.horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+
+.inOutPillHolder {
+    width: 35%;
+}

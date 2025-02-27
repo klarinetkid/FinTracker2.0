@@ -19,44 +19,56 @@ function AboutPage() {
         <Page className={styles.page}>
             <h1>About</h1>
 
-            {info ? (
-                <Table className={styles.table}>
-                    <tbody>
-                        <tr>
-                            <td>Client version</td>
-                            <td>{AppSettings.appVersion}</td>
-                        </tr>
-                        <tr>
-                            <td>API version</td>
-                            <td>{info.apiVersion}</td>
-                        </tr>
-                        <tr>
-                            <td>Budgets</td>
-                            <td>{info.counts.budgets.toLocaleString()}</td>
-                        </tr>
-                        <tr>
-                            <td>Categories</td>
-                            <td>{info.counts.categories.toLocaleString()}</td>
-                        </tr>
-                        <tr>
-                            <td>Import Formats</td>
-                            <td>
-                                {info.counts.importFormats.toLocaleString()}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Memos</td>
-                            <td>{info.counts.memos.toLocaleString()}</td>
-                        </tr>
-                        <tr>
-                            <td>Transactions</td>
-                            <td>{info.counts.transactions.toLocaleString()}</td>
-                        </tr>
-                    </tbody>
-                </Table>
-            ) : (
-                <StatusIndicator status="loading" />
-            )}
+            <Table className={styles.table}>
+                <tbody>
+                    <tr>
+                        <td>Client version</td>
+                        <td>{AppSettings.appVersion}</td>
+                    </tr>
+                    {info ? (
+                        <>
+                            <tr>
+                                <td>API version</td>
+                                <td>{info?.apiVersion}</td>
+                            </tr>
+                            <tr>
+                                <td>Budgets</td>
+                                <td>{info.counts.budgets.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td>Categories</td>
+                                <td>
+                                    {info.counts.categories.toLocaleString()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Import Formats</td>
+                                <td>
+                                    {info.counts.importFormats.toLocaleString()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Memos</td>
+                                <td>{info.counts.memos.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td>Transactions</td>
+                                <td>
+                                    {info.counts.transactions.toLocaleString()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Years</td>
+                                <td>{info.counts.years.toLocaleString()}</td>
+                            </tr>
+                        </>
+                    ) : (
+                        ""
+                    )}
+                </tbody>
+            </Table>
+
+            {!info ? <StatusIndicator status="loading" /> : ""}
         </Page>
     );
 }

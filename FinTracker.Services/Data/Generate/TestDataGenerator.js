@@ -4,9 +4,9 @@
 */
 const fs = require("fs");
 
-const year = 1990;
+const year = 9999;
 const month = 1;
-const monthCount = 1200;
+const monthCount = 12;
 
 const categories = [
     {
@@ -118,11 +118,11 @@ for (let i = 0; i < monthCount; i++) {
 }
 writeTransactionsToCsv(
     transactions,
-    `results\\${year}-${pad(month)}-${monthCount}.csv`
+    `results\\${pad(year, 4)}-${pad(month)}-${monthCount}.csv`
 );
 writeTransactionsToSql(
     transactions,
-    `results\\${year}-${pad(month)}-${monthCount}.sql`
+    `results\\${pad(year, 4)}-${pad(month)}-${monthCount}.sql`
 );
 console.info("success");
 
@@ -135,7 +135,7 @@ function getRandomNum(min, max) {
 }
 
 function getRandomDate(year, month) {
-    return `${year}-${pad(month)}-${pad(getRandomNum(1, 28))}`;
+    return `${pad(year, 4)}-${pad(month)}-${pad(getRandomNum(1, 28))}`;
 }
 
 function generateMonthTransactions(year, month) {
@@ -154,8 +154,8 @@ function generateMonthTransactions(year, month) {
     return output;
 }
 
-function pad(value) {
-    return value.toString().padStart(2, "0");
+function pad(value, num = 2) {
+    return value.toString().padStart(num, "0");
 }
 
 function writeTransactionsToCsv(output, fileName) {

@@ -34,10 +34,9 @@ export class TransactionImportManager {
         this.setTransactions = setTransactions ?? (() => undefined);
     }
 
-    public async PrepareImport(
-        format?: ImportFormat,
-        filesContent?: FileContent<ArrayBuffer>[]
-    ): Promise<void> {
+    public async PrepareImport(params: ImportParams): Promise<void> {
+        const { format, filesContent } = params;
+
         if (!format || !filesContent) return;
 
         //const prepared = await chunkedPrepareImport(format, filesContent, 100);

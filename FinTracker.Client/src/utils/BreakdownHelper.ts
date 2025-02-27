@@ -1,11 +1,16 @@
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import { createSearchParams } from "react-router-dom";
 import CategoryTotal from "../types/CategoryTotal";
 import Pages from "../types/Pages";
 import { formatDateOnly } from "./DateHelper";
 
-export function breakdownParamsAreValid(start: Moment, end: Moment) {
-    return start.isValid() && end.isValid() && end.isAfter(start);
+export function breakdownParamsAreValid(
+    start: Moment | string,
+    end: Moment | string
+) {
+    const from = moment(start);
+    const to = moment(end);
+    return from.isValid() && to.isValid() && to.isAfter(from);
 }
 
 export function toBreakdown(start: Moment | string, end: Moment | string) {

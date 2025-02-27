@@ -43,6 +43,7 @@ function TransactionsPage() {
                 onRowSelect={editTransaction}
                 refreshed={refreshed}
                 onChange={refresh}
+                showLoading={true}
             />
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>

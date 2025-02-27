@@ -40,12 +40,14 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpPost("$batch")]
+        [RequestSizeLimit(100_000_000_000)]
         public int BatchCreate(TransactionViewModel[] transactions)
         {
             return service.BatchCreate(transactions);
         }
 
         [HttpPost("PrepareImport")]
+        [RequestSizeLimit(100_000_000_000)]
         public TransactionViewModel[] PrepareImport(TransactionViewModel[] transactions)
         {
             return service.PrepareImport(transactions);

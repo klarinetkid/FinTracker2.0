@@ -19,6 +19,7 @@ namespace FinTracker.Api.Services
                 ImportFormats = db.TblImportFormats.Count(),
                 Memos = db.TblMemos.Count(),
                 Transactions = db.TblTransactions.Count(),
+                Years = GetAvailableYears().Count(),
             };
         }
     }

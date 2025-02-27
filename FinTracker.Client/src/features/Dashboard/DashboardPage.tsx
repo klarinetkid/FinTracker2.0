@@ -13,7 +13,6 @@ import styles from "../../styles/DashboardPage.module.css";
 export type DashboardPageState =
     | "loading"
     | "show data"
-    | "refresh"
     | "no data"
     | "error"
     | "invalid view";
@@ -46,14 +45,21 @@ function DashboardPage() {
 
     // load breakdowns
     useEffect(() => {
-        setPageState(pageState === "show data" ? "refresh" : "loading");
+        setPageState("loading");
+
+        if (
+            globalDataCache.availableYears.value !== undefined &&
+            globalDataCache.availableYears.value.length === 0
+        ) {
+            setPageState("no data");
+            return;
+        }
 
         const reqTime = new Date().getTime();
-        console.log(reqTime)
         setLastReqTime(reqTime);
         getData()
             .then((result) => {
-                if (!result || reqStateRef.current !== reqTime) return;
+                if (!result || !isLastRequest(reqTime)) return;
 
                 if (result.isEmpty) {
                     setPageState("no data");
@@ -64,9 +70,11 @@ function DashboardPage() {
                 }
             })
             .catch(() => {
-                setPageState("error");
+                if (isLastRequest(reqTime)) {
+                    setPageState("error");
+                }
             });
-    }, [year, viewType]);
+    }, [year, viewType, globalDataCache.availableYears.value]);
 
     return (
         <>
@@ -94,9 +102,6 @@ function DashboardPage() {
 
     function getPageBody(): JSX.Element {
         switch (pageState) {
-            case "loading":
-                return <StatusIndicator status="loading" />;
-
             case "no data":
                 return <StatusIndicator status="info" message="No data" />;
 
@@ -108,27 +113,25 @@ function DashboardPage() {
                     <StatusIndicator status="error" message="Invalid view" />
                 );
 
+            case "loading":
             case "show data":
-                return breakdowns ? (
-                    <DashboardDataView
-                        breakdowns={breakdowns}
-                        viewType={loadedView}
-                    />
-                ) : (
-                    <></>
-                );
-
-            case "refresh":
-                return breakdowns ? (
+                return (
                     <>
-                        <DashboardDataView
-                            breakdowns={breakdowns}
-                            viewType={loadedView}
-                        />
-                        <StatusIndicator status="loading" />
+                        {breakdowns ? (
+                            <DashboardDataView
+                                breakdowns={breakdowns}
+                                viewType={loadedView}
+                            />
+                        ) : (
+                            ""
+                        )}
+
+                        {pageState === "loading" ? (
+                            <StatusIndicator status="loading" />
+                        ) : (
+                            ""
+                        )}
                     </>
-                ) : (
-                    <></>
                 );
         }
     }
@@ -151,6 +154,10 @@ function DashboardPage() {
     function setViewType(viewType: string) {
         searchParams.set("view", viewType);
         setSearchParams(searchParams);
+    }
+
+    function isLastRequest(reqTime: number) {
+        return reqStateRef.current === reqTime;
     }
 }
 
