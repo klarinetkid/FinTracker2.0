@@ -1,7 +1,9 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/_Layout";
+import NotFoundPage from "./components/NotFoundPage";
 import GlobalDataCacheProvider from "./contexts/GlobalDataCacheProvider";
 import TransactionImportProvider from "./contexts/TransactionImportProvider";
+import AboutPage from "./features/About/AboutPage";
 import BreakdownPage from "./features/Breakdown/BreakdownPage";
 import BudgetPage from "./features/Budget/BudgetPage";
 import CategoriesPage from "./features/Categories/CategoriesPage";
@@ -13,44 +15,37 @@ import TransactionsPage from "./features/Transactions/TransactionsPage";
 import "./styles/_global.css";
 import "./styles/_variables.css";
 import Pages from "./types/Pages";
-import NotFoundPage from "./components/NotFoundPage";
-import AboutPage from "./features/About/AboutPage";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout />,
+        children: [
+            { index: true, element: <DashboardPage /> },
+            { path: Pages.Breakdown, element: <BreakdownPage /> },
+            { path: Pages.Categories, element: <CategoriesPage /> },
+            { path: Pages.Formats, element: <FormatsPage /> },
+            { path: Pages.Budget, element: <BudgetPage /> },
+            {
+                path: Pages.Import,
+                element: (
+                    <TransactionImportProvider>
+                        <ImportPage />
+                    </TransactionImportProvider>
+                ),
+            },
+            { path: Pages.Memos, element: <MemosPage /> },
+            { path: Pages.Transactions, element: <TransactionsPage /> },
+            { path: Pages.About, element: <AboutPage /> },
+            { path: "*", element: <NotFoundPage /> },
+        ],
+    },
+]);
 
 function App() {
     return (
         <GlobalDataCacheProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={<DashboardPage />} />
-                        <Route
-                            path={Pages.Breakdown}
-                            element={<BreakdownPage />}
-                        />
-                        <Route
-                            path={Pages.Categories}
-                            element={<CategoriesPage />}
-                        />
-                        <Route path={Pages.Formats} element={<FormatsPage />} />
-                        <Route path={Pages.Budget} element={<BudgetPage />} />
-                        <Route
-                            path={Pages.Import}
-                            element={
-                                <TransactionImportProvider>
-                                    <ImportPage />
-                                </TransactionImportProvider>
-                            }
-                        />
-                        <Route path={Pages.Memos} element={<MemosPage />} />
-                        <Route
-                            path={Pages.Transactions}
-                            element={<TransactionsPage />}
-                        />
-                        <Route path={Pages.About} element={<AboutPage />} />
-                        <Route path="*" element={<NotFoundPage />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <RouterProvider router={router} />
         </GlobalDataCacheProvider>
     );
 }
