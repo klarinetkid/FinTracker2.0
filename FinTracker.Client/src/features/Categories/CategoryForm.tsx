@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import CategoryPill from "../../components/CategoryPill";
@@ -9,46 +11,51 @@ import CategoryViewModel from "../../types/CategoryViewModel";
 import FormProps from "../../types/FormProps";
 
 function CategoryForm(props: FormProps<CategoryViewModel>) {
-    const { formValues, onSubmit, onDelete, onCancel } = props;
+    const { onSubmit, onCancel, onDelete, values } = props;
+
+    const {
+        register,
+        watch,
+        formState: { errors },
+        handleSubmit,
+        reset,
+    } = useForm<CategoryViewModel>();
+
+    useEffect(() => {
+        reset(values);
+    }, [values]);
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <h2>{formValues.values.id ? "Edit" : "New"} Category</h2>
+                <h2>{values?.id ? "Edit" : "New"} Category</h2>
 
                 <CategoryPill
                     category={{
                         id: 1,
-                        categoryName:
-                            formValues.values.categoryName || "New Category",
-                        colour: formValues.values.colour || Total.colour,
+                        categoryName: watch("categoryName") || "New Category",
+                        colour: watch("colour") || Total.colour,
                     }}
                 />
                 <Spacer height={24} />
 
-                <input
-                    name="id"
-                    type="hidden"
-                    value={formValues.values.id ?? ""}
-                />
                 <FormGroup
                     fieldName="Category Name"
-                    error={formValues.getFieldError("CategoryName")}
+                    error={errors.categoryName}
                 >
                     <Input
-                        name="categoryName"
-                        value={formValues.values.categoryName ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("categoryName", {
+                            required: true,
+                            maxLength: 40,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Colour"
-                    error={formValues.getFieldError("Colour")}
-                >
+                <FormGroup fieldName="Colour" error={errors.colour}>
                     <Input
-                        name="colour"
-                        value={formValues.values.colour ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("colour", {
+                            required: true,
+                            maxLength: 25,
+                        })}
                     />
                 </FormGroup>
             </div>
@@ -57,26 +64,22 @@ function CategoryForm(props: FormProps<CategoryViewModel>) {
                     <Button type="button" onClick={onCancel}>
                         Cancel
                     </Button>
-                    <ButtonFill type="submit" onClick={onSubmit}>
-                        Submit
-                    </ButtonFill>
+                    <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
                 <div>
-                    {formValues.values.id ? (
+                    {values?.id && (
                         <Button
                             type="button"
-                            disabled={formValues.values.transactionCount > 0}
+                            disabled={values?.transactionCount !== 0}
                             onClick={onDelete}
                             title={
-                                formValues.values.transactionCount === 0
+                                values?.transactionCount === 0
                                     ? ""
                                     : "Cannot be deleted as category has linked transactions."
                             }
                         >
                             Delete
                         </Button>
-                    ) : (
-                        ""
                     )}
                 </div>
             </div>

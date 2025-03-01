@@ -1,31 +1,29 @@
-import { AxiosError } from "axios";
 import moment from "moment";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FieldValues } from "react-hook-form";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import { useFormValues } from "../../hooks/useFormValues";
-import { ErrorResponse } from "../../services/BaseService";
+import StatusIndicator from "../../components/StatusIndicator";
+import useRefresh from "../../hooks/useRefresh";
 import BudgetService from "../../services/BudgetService";
 import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import { formatDateOnly } from "../../utils/DateHelper";
-import { AddRoundLightFillIcon } from "../../utils/Icons";
+import { AddBudgetIcon } from "../../utils/Icons";
+import { dollarsToCents } from "../../utils/NumberHelper";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
-import useRefresh from "../../hooks/useRefresh";
-import StatusIndicator from "../../components/StatusIndicator";
 
 function BudgetPage() {
     const [groupedBudgets, setGroupedBudgets] =
         useState<Grouping<Category, Budget>[]>();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
-
-    const formValues = useFormValues<BudgetViewModel>({});
+    const [editingValues, setEditingValues] = useState<BudgetViewModel>();
 
     useEffect(() => {
         BudgetService.getGrouped().then(setGroupedBudgets);
@@ -37,7 +35,7 @@ function BudgetPage() {
                 <h1>Budget</h1>
                 <IconButton
                     title="New budget item"
-                    icon={AddRoundLightFillIcon}
+                    icon={AddBudgetIcon}
                     onClick={newBudget}
                 />
             </Row>
@@ -53,63 +51,47 @@ function BudgetPage() {
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <BudgetForm
-                    formValues={formValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteFormat}
                     onSubmit={submitBudget}
+                    values={editingValues}
                 />
             </Drawer>
         </Page>
     );
 
     function newBudget() {
-        formValues.setErrors(undefined);
-        formValues.setValues({
+        setEditingValues({
             amount: "0.00",
             effectiveDate: formatDateOnly(moment()),
         });
         setIsDrawerOpen(true);
     }
     function editBudget(budget: Budget) {
-        formValues.setErrors(undefined);
-        const model = {
+        setEditingValues({
             ...budget,
-            category: undefined,
             amount: (budget.amount / 100).toFixed(2),
-        };
-        formValues.setValues(model);
+        });
         setIsDrawerOpen(true);
     }
-    function submitBudget(event: SyntheticEvent) {
-        event.preventDefault();
+    function submitBudget(values: FieldValues) {
 
-        // cast values
         const model: BudgetViewModel = {
-            ...formValues.values,
-            amount:
-                Math.floor(
-                    Number(formValues.values?.amount?.toString() ?? NaN) * 100
-                ) ?? undefined,
+            ...values,
+            amount: dollarsToCents(values.amount),
         };
 
-        (formValues.values.id
+        (model.id
             ? BudgetService.putBudget(model)
             : BudgetService.createBudget(model)
-        )
-            .then(() => {
-                if (event.target instanceof HTMLButtonElement)
-                    event.target.blur();
-                refresh();
-                setIsDrawerOpen(false);
-                formValues.setErrors(undefined);
-            })
-            .catch((error: AxiosError<ErrorResponse>) => {
-                formValues.setErrors(error.response?.data);
-            });
+        ).then(() => {
+            refresh();
+            setIsDrawerOpen(false);
+        });
     }
     async function deleteFormat() {
-        if (!formValues.values.id) return;
-        await BudgetService.deleteBudget(formValues.values.id);
+        if (!editingValues?.id) return;
+        await BudgetService.deleteBudget(editingValues.id);
         refresh();
         setIsDrawerOpen(false);
     }

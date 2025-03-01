@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBlocker, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
@@ -12,12 +12,12 @@ import {
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
 import Pages from "../../types/Pages";
+import { minimumTime } from "../../utils/PromiseHelper";
 import { pluralize } from "../../utils/StringHelper";
 import ImportTable from "./ImportTable";
-import { minimumTime } from "../../utils/PromiseHelper";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
+import useConfirmLeave from "../../hooks/useConfirmLeave";
 
-// import process is linear:
-// loading -> editing -> submitting -> complete
 type ImportFlowStep =
     | "loading" // initial processing and loading of data into form
     | "editing" // user is editing the data
@@ -32,12 +32,20 @@ function ImportPage() {
     const transactionImport = useTransactionImport();
     const globalDataCache = useGlobalDataCache();
 
-    const [flowStep, setFlowStep] = useState<ImportFlowStep>("loading");
-
-    //useBlocker(flowStep === "editing" || flowStep === "submitting");
-
-    // TODO more readable way to validate location state
     const { importParams, importResult } = location.state ?? {};
+    const [flowStep, setFlowStep] = useState<ImportFlowStep>(
+        importResult ? "complete" : "loading"
+    );
+
+    const flowStepRef = useRef<ImportFlowStep>();
+    flowStepRef.current = flowStep;
+
+    useConfirmLeave(() => flowStepRef.current === "editing" || flowStepRef.current === "submitting");
+    const blocker = useBlocker(
+        ({ currentLocation, nextLocation }) =>
+            (flowStep === "editing" || flowStep === "submitting") &&
+            currentLocation.pathname !== nextLocation.pathname
+    );
 
     useEffect(() => {
         if (importParams) {
@@ -47,7 +55,6 @@ function ImportPage() {
             minimumTime(1200, () => transactionImport.PrepareImport(params))
                 .then(() => setFlowStep("editing"))
                 .catch(() => setFlowStep("error"));
-
         } else if (importResult) {
             setFlowStep("complete");
         } else {
@@ -82,6 +89,16 @@ function ImportPage() {
                     )}
                 </div>
             </Row>
+
+            <ConfirmationPopup
+                title="Are you sure you want to leave?"
+                body="Unsaved changes will be discarded."
+                active={blocker.state === "blocked"}
+                onCancel={() => blocker.reset && blocker.reset()}
+                onConfirm={() =>
+                    blocker.proceed && blocker.proceed() && blocker.reset()
+                }
+            />
 
             {getPageBody()}
         </Page>

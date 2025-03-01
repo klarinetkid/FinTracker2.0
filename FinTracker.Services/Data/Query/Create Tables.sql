@@ -2,66 +2,50 @@
 ---- create TblCategory
 ----------------------------------
 drop table if exists TblCategory;
-Create table TblCategory (
-	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[CategoryName] varchar(40) NOT NULL,
-	[Colour] varchar(25) NOT NULL
+create table TblCategory (
+	[Id] int primary key clustered identity(1,1) not null,
+	[CategoryName] varchar(40) not null,
+	[Colour] varchar(25) not null
 );
 
 ----------------------------------
 ---- create TblBudget
 ----------------------------------
 drop table if exists TblBudget;
-Create table TblBudget (
-	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[CategoryId] int references TblCategory(Id) NOT NULL,
-	[Amount] int NOT NULL,
-	[EffectiveDate] date NOT NULL,
-	constraint CK_TblBudget_Amount_Range check (
-	   [Amount] >= -100000000 AND [Amount] <= 100000000
-	)
+create table TblBudget (
+	[Id] int primary key clustered identity(1,1) not null,
+	[CategoryId] int references TblCategory(Id) not null,
+	[Amount] int not null,
+	[EffectiveDate] date not null
 );
 
 ----------------------------------
 ---- create TblTransaction
 ----------------------------------
 drop table if exists TblTransaction;
-Create table TblTransaction (
-	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[Date] date NOT NULL,
-	[Amount] int NOT NULL,
+create table TblTransaction (
+	[Id] int primary key clustered identity(1,1) not null,
+	[Date] date not null,
+	[Amount] int not null,
 	[Memo] varchar(200),
 	[CategoryId] int references TblCategory(id),
-	[IsCashTransaction] bit NOT NULL DEFAULT 0,
+	[IsCashTransaction] bit not null DEFAULT 0,
 	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount])
 );
---drop table if exists TblTransaction;
---Create table TblTransaction (
---	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
---	[Date] date NOT NULL,
---	[Amount] int NOT NULL,
---	[Memo] varchar(200),
---	[CategoryId] int references TblCategory(id),
---	[IsCashTransaction] bit NOT NULL DEFAULT 0,
---	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount]),
---	index IX_Date ([date]),
---	index IX_Amount ([amount]),
---	index IX_Memo ([memo])
---) with (memory_optimized = on, durability = schema_and_data);
 
 ----------------------------------
 ---- create TblImportFormat
 ----------------------------------
 drop table if exists TblImportFormat;
-Create table TblImportFormat (
-	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[ImportFormatName] varchar(50) NOT NULL,
-	[DateKey] varchar(25) NOT NULL,
-	[MemoFormat] varchar(50) NOT NULL,
-	[AmountKey] varchar(25) NOT NULL,
-	[InvertAmounts] bit NOT NULL,
-	[HeaderLines] int NOT NULL,
-	[Delimiter] varchar(1) NOT NULL,
+create table TblImportFormat (
+	[Id] int primary key clustered identity(1,1) not null,
+	[ImportFormatName] varchar(50) not null,
+	[DateKey] varchar(25) not null,
+	[MemoFormat] varchar(50) not null,
+	[AmountKey] varchar(25) not null,
+	[InvertAmounts] bit not null,
+	[HeaderLines] int not null,
+	[Delimiter] varchar(1) not null,
 	[Image] varchar(25)
 );
 
@@ -69,13 +53,13 @@ Create table TblImportFormat (
 ---- create TblMemo
 ----------------------------------
 drop table if exists TblMemo;
-Create table TblMemo (
-	[Id] int PRIMARY KEY CLUSTERED IDENTITY(1,1) NOT NULL,
-	[Memo] varchar(200) NOT NULL,
+create table TblMemo (
+	[Id] int primary key clustered identity(1,1) not null,
+	[Memo] varchar(200) not null,
 	[CategoryId] int references TblCategory(id) NULL,
-	[IsImported] bit NOT NULL default 1,
+	[IsImported] bit not null default 1,
 	constraint AK_TblMemo_Memo unique([Memo]),
-	constraint CK_TblMemo_IsImportedCategoryId check (
+	constraint CK_TblMemo_IsImported_CategoryId check (
 		(
 			IsImported = 0
 			and CategoryId is null

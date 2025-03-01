@@ -1,27 +1,25 @@
-import { AxiosError } from "axios";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FieldValues } from "react-hook-form";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import { useFormValues } from "../../hooks/useFormValues";
+import StatusIndicator from "../../components/StatusIndicator";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import { ErrorResponse } from "../../services/BaseService";
+import useRefresh from "../../hooks/useRefresh";
 import CategoryService from "../../services/CategoryService";
 import { CategoryTransactionCount } from "../../types/Category";
 import CategoryViewModel from "../../types/CategoryViewModel";
-import { AddRoundLightFillIcon } from "../../utils/Icons";
+import { AddCategoryIcon } from "../../utils/Icons";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
-import useRefresh from "../../hooks/useRefresh";
-import StatusIndicator from "../../components/StatusIndicator";
 
 function CategoriesPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
-    const formValues = useFormValues<CategoryViewModel>({});
     const [categories, setCategories] = useState<CategoryTransactionCount[]>();
+    const [editingValues, setEditingValues] = useState<CategoryViewModel>();
 
     useEffect(() => {
         globalDataCache.categories.refresh();
@@ -34,8 +32,8 @@ function CategoriesPage() {
                 <h1>Categories</h1>
                 <IconButton
                     title="New category"
-                    icon={AddRoundLightFillIcon}
-                    onClick={() => openCategoryForm({})}
+                    icon={AddCategoryIcon}
+                    onClick={() => openCategoryForm(undefined)}
                 />
             </Row>
 
@@ -50,42 +48,31 @@ function CategoriesPage() {
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <CategoryForm
-                    formValues={formValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteCategory}
                     onSubmit={submitCategory}
+                    values={editingValues}
                 />
             </Drawer>
         </Page>
     );
 
-    function openCategoryForm(category: CategoryViewModel) {
-        formValues.setErrors(undefined);
-        formValues.setValues(category);
+    function openCategoryForm(category: CategoryViewModel | undefined) {
+        setEditingValues(category);
         setIsDrawerOpen(true);
     }
-    function submitCategory(event: SyntheticEvent) {
-        event.preventDefault();
-
-        if (!formValues.values) return;
-
-        (formValues.values.id
-            ? CategoryService.putCategory(formValues.values)
-            : CategoryService.createCategory(formValues.values)
-        )
-            .then(() => {
-                if (event.target instanceof HTMLButtonElement)
-                    event.target.blur();
-                refresh();
-                setIsDrawerOpen(false);
-            })
-            .catch((error: AxiosError<ErrorResponse>) => {
-                formValues.setErrors(error.response?.data);
-            });
+    function submitCategory(model: FieldValues) {
+        (model.id
+            ? CategoryService.putCategory(model)
+            : CategoryService.createCategory(model)
+        ).then(() => {
+            refresh();
+            setIsDrawerOpen(false);
+        });
     }
     async function deleteCategory() {
-        if (!formValues.values.id) return;
-        await CategoryService.deleteCategory(formValues.values.id);
+        if (!editingValues?.id) return;
+        await CategoryService.deleteCategory(editingValues.id);
         refresh();
         setIsDrawerOpen(false);
     }

@@ -25,11 +25,6 @@ function MemoForm(props: FormProps<MemoViewModel>) {
 
                 <Spacer height={24} />
 
-                <input
-                    name="id"
-                    type="hidden"
-                    value={formValues.values.id ?? 0}
-                />
                 <FormGroup fieldName="Memo">
                     <Input
                         readOnly

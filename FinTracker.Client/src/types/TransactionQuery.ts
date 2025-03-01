@@ -4,6 +4,8 @@ type TransactionQuery = {
     categoryId?: number;
     before?: string;
     after?: string;
+    moreThan?: number | string;
+    lessThan?: number | string;
     orderBy?: string;
     order?: string;
 };

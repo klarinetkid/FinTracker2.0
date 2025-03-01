@@ -1,4 +1,7 @@
-﻿import AddRoundLightFillIcon from "../assets/AddRoundLightFill.svg?react";
+﻿import AddBudgetIcon from "../assets/AddBudget.svg?react";
+import AddCategoryIcon from "../assets/AddCategory.svg?react";
+import AddFormatIcon from "../assets/AddFormat.svg?react";
+import AddTransactionIcon from "../assets/AddTransaction.svg?react";
 import ArrowLeftSquareIcon from "../assets/ArrowLeftSquare.svg?react";
 import ArrowRightSquareIcon from "../assets/ArrowRightSquare.svg?react";
 import BackIcon from "../assets/Back.svg?react";
@@ -13,6 +16,7 @@ import DateRangeFillIcon from "../assets/DateRangeFill.svg?react";
 import ExpandDownIcon from "../assets/ExpandDown.svg?react";
 import ExpandUpIcon from "../assets/ExpandUp.svg?react";
 import FileDockFillIcon from "../assets/FileDockFill.svg?react";
+import FilterRemoveIcon from "../assets/FilterRemove.svg?react";
 import HomeIcon from "../assets/Home.svg?react";
 import ImportFillIcon from "../assets/ImportFill.svg?react";
 import InfoIcon from "../assets/Info.svg?react";
@@ -31,7 +35,10 @@ import SunFillIcon from "../assets/SunFill.svg?react";
 import WalletFillIcon from "../assets/WalletFill.svg?react";
 
 export {
-    AddRoundLightFillIcon,
+    AddBudgetIcon,
+    AddCategoryIcon,
+    AddFormatIcon,
+    AddTransactionIcon,
     ArrowLeftSquareIcon,
     ArrowRightSquareIcon,
     BackIcon,
@@ -46,6 +53,7 @@ export {
     ExpandDownIcon,
     ExpandUpIcon,
     FileDockFillIcon,
+    FilterRemoveIcon,
     HomeIcon,
     ImportFillIcon,
     InfoIcon,

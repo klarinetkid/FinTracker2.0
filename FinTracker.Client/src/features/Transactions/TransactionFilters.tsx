@@ -19,7 +19,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
         <Row gap={6}>
             <FormGroup fieldName="Search">
                 <Input
-                    placeholder="Search"
+                    placeholder="Keyword"
                     name="search"
                     value={formValues.values.search ?? ""}
                     onChange={formValues.updateValue}
@@ -29,7 +29,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <CategorySelector
                     allowEmpty={true}
                     categories={globalDataCache.categories.value}
-                    onChange={(c: Category | undefined) => {
+                    onChange={(c) => {
                         const categoryId = c && c.id === undefined ? -1 : c?.id;
                         formValues.setValues({
                             ...formValues.values,
@@ -46,6 +46,7 @@ function TransactionFilters(props: TransactionFiltersProps) {
             <FormGroup fieldName="After">
                 <Input
                     name="after"
+                    placeholder="yyyy-mm-dd"
                     value={formValues.values.after ?? ""}
                     onChange={formValues.updateValue}
                 />
@@ -53,7 +54,26 @@ function TransactionFilters(props: TransactionFiltersProps) {
             <FormGroup fieldName="Before">
                 <Input
                     name="before"
+                    placeholder="yyyy-mm-dd"
                     value={formValues.values.before ?? ""}
+                    onChange={formValues.updateValue}
+                />
+            </FormGroup>
+            <FormGroup fieldName="More Than">
+                <Input
+                    className="ralign"
+                    placeholder="$0.00"
+                    name="moreThan"
+                    value={formValues.values.moreThan ?? ""}
+                    onChange={formValues.updateValue}
+                />
+            </FormGroup>
+            <FormGroup fieldName="Less Than">
+                <Input
+                    className="ralign"
+                    placeholder="$0.00"
+                    name="lessThan"
+                    value={formValues.values.lessThan ?? ""}
                     onChange={formValues.updateValue}
                 />
             </FormGroup>

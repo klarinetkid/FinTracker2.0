@@ -95,3 +95,7 @@ svg.themed *[fill] {
 .nowidth {
     width: 0;
 }
+
+.flex {
+    display: flex;
+}

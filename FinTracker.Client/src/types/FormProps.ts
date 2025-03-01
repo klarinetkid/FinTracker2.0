@@ -1,11 +1,10 @@
-import { SyntheticEvent } from "react";
-import { FormValues } from "../hooks/useFormValues";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 
-interface FormProps<T> {
-    formValues: FormValues<T>;
-    onSubmit: (event: SyntheticEvent) => void;
-    onDelete: () => void;
+type FormProps<T> = {
+    onSubmit: SubmitHandler<FieldValues>;
     onCancel: () => void;
-}
+    onDelete: () => void;
+    values?: T;
+};
 
 export default FormProps;

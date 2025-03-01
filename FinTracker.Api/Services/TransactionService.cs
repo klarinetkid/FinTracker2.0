@@ -28,6 +28,12 @@ namespace FinTracker.Api.Services
                 if (query.CategoryId != null)
                     trxs = trxs.Where(t => t.CategoryId == (query.CategoryId >= 0 ? query.CategoryId : null));
 
+                if (query.MoreThan.HasValue)
+                    trxs = trxs.Where(t => t.Amount >= query.MoreThan.Value);
+
+                if (query.LessThan.HasValue)
+                    trxs = trxs.Where(t => t.Amount <= query.LessThan.Value);
+
                 if (query.OrderBy != null)
                 {
                     // don't want to use reflection, just switch case this bitch
@@ -159,8 +165,12 @@ namespace FinTracker.Api.Services
         public int PageNumber { get; set; } = 0;
         public string? Search { get; set; }
         public int? CategoryId { get; set; }
+
         public DateOnly? Before { get; set; }
         public DateOnly? After { get; set; }
+
+        public int? MoreThan { get; set; }
+        public int? LessThan { get; set; }
 
         public string? OrderBy { get; set; }
         public string? Order { get; set; }

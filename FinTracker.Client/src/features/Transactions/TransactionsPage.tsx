@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import ButtonFill from "../../components/ButtonFill";
 import Drawer from "../../components/Drawer";
+import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import TransactionTable from "../../components/TransactionTable";
@@ -12,28 +12,55 @@ import { ErrorResponse } from "../../services/BaseService";
 import TransactionService from "../../services/TransactionService";
 import TransactionQuery from "../../types/TransactionQuery";
 import TransactionViewModel from "../../types/TransactionViewModel";
+import { AddTransactionIcon, FilterRemoveIcon } from "../../utils/Icons";
 import TransactionFilters from "./TransactionFilters";
 import TransactionForm from "./TransactionForm";
+
+const defaultFilters = {
+    orderBy: "date",
+    order: "desc",
+};
 
 function TransactionsPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
+    const filterValues = useFormValues<TransactionQuery>(defaultFilters);
 
-    const filterValues = useFormValues<TransactionQuery>({
-        categoryId: Number(searchParams.get("category")) || undefined,
-        orderBy: "date",
-        order: "desc",
-    });
+    useEffect(() => {
+        const searchCategory = Number(searchParams.get("category")) || undefined;
+        if (searchCategory) {
+            filterValues.setValues({
+                ...filterValues.values,
+                categoryId: searchCategory,
+            });
+        }
+    }, []);
+
     const formValues = useFormValues<TransactionViewModel>({});
+
+    console.log(filterValues.values, defaultFilters)
 
     return (
         <Page>
             <Row justifyContent="space-between">
                 <h1>Transactions</h1>
-                <ButtonFill onClick={newCashTransaction}>
-                    Add a Cash Transaction
-                </ButtonFill>
+                <div className="flex">
+                    {filterValues.values !== defaultFilters && (
+                        <IconButton
+                            icon={FilterRemoveIcon}
+                            title="Reset filters"
+                            onClick={() =>
+                                filterValues.setValues(defaultFilters)
+                            }
+                        />
+                    )}
+                    <IconButton
+                        icon={AddTransactionIcon}
+                        title="Add a cash transaction"
+                        onClick={newCashTransaction}
+                    />
+                </div>
             </Row>
 
             <TransactionFilters formValues={filterValues} />

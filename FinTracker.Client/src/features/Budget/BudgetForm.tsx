@@ -1,3 +1,4 @@
+import { Controller, useForm } from "react-hook-form";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import CategorySelector from "../../components/CategorySelector";
@@ -7,64 +8,77 @@ import Spacer from "../../components/Spacer";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import FormProps from "../../types/FormProps";
+import { useEffect } from "react";
 
 function BudgetForm(props: FormProps<BudgetViewModel>) {
-    const { formValues, onSubmit, onDelete, onCancel } = props;
+    const { onSubmit, onCancel, onDelete, values } = props;
+
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset,
+        setValue,
+        control,
+    } = useForm<BudgetViewModel>();
+
+    useEffect(() => {
+        reset(values);
+    }, [values]);
 
     const globalDataCache = useGlobalDataCache();
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <h2>{formValues.values.id ? "Edit" : "New"} Budget</h2>
+                <h2>{values?.id ? "Edit" : "New"} Budget</h2>
 
                 <Spacer height={24} />
 
-                <input
-                    name="id"
-                    type="hidden"
-                    value={formValues.values.id ?? ""}
-                />
-                <FormGroup
-                    fieldName="Category"
-                    error={formValues.getFieldError("CategoryId")}
-                >
-                    <CategorySelector
-                        categories={globalDataCache.categories.value}
-                        onChange={(c) => {
-                            formValues.setValues({
-                                ...formValues.values,
-                                categoryId: c?.id,
-                            });
-                        }}
-                        value={globalDataCache.getCategoryById(
-                            formValues.values.categoryId
+                <FormGroup fieldName="Category" error={errors.categoryId}>
+                    <Controller
+                        control={control}
+                        name="categoryId"
+                        render={({ field: { value } }) => (
+                            <CategorySelector
+                                categories={globalDataCache.categories.value}
+                                onChange={(c) => setValue("categoryId", c?.id)}
+                                value={globalDataCache.getCategoryById(value)}
+                            />
                         )}
+                        rules={{
+                            required: true,
+                        }}
                     />
                 </FormGroup>
 
-                <FormGroup
-                    fieldName="Monthly Amount"
-                    error={formValues.getFieldError("Amount")}
-                >
+                <FormGroup fieldName="Monthly Amount" error={errors.amount}>
                     <Input
-                        name="amount"
-                        type="text"
                         className="ralign"
-                        value={formValues.values.amount?.toString() ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("amount", {
+                            required: true,
+                            pattern: /^\d+.\d?\d{0,2}$/,
+                            min: {
+                                value: -20_000_000,
+                                message: "Cannot be less than -20,000,000.",
+                            },
+                            max: {
+                                value: 20_000_000,
+                                message: "Cannot be more than 20,000,000.",
+                            },
+                        })}
                     />
                 </FormGroup>
 
                 <FormGroup
                     fieldName="Effective Date"
-                    error={formValues.getFieldError("EffectiveDate")}
+                    error={errors.effectiveDate}
                 >
                     <Input
-                        name="effectiveDate"
-                        className="ralign"
-                        value={formValues.values.effectiveDate ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("effectiveDate", {
+                            required: true,
+                            pattern: /\d{4}-\d{2}-\d{2}/,
+                        })}
                     />
                 </FormGroup>
             </div>
@@ -76,12 +90,10 @@ function BudgetForm(props: FormProps<BudgetViewModel>) {
                     <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
                 <div>
-                    {formValues.values.id ? (
+                    {values?.id && (
                         <Button type="button" onClick={onDelete}>
                             Delete
                         </Button>
-                    ) : (
-                        ""
                     )}
                 </div>
             </div>

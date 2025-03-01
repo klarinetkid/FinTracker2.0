@@ -13,6 +13,8 @@ import { useFormValues } from "../hooks/useFormValues";
 import styles from "../styles/TransactionTable.module.css";
 import EmptyTableMessage from "./EmptyTableMessage";
 import StatusIndicator from "./StatusIndicator";
+import { dollarsToCents } from "../utils/NumberHelper";
+import { formatDateOnly } from "../utils/DateHelper";
 
 interface TransactionTableProps {
     query?: TransactionQuery;
@@ -39,6 +41,10 @@ function TransactionTable(props: TransactionTableProps) {
 
         const combinedQuery: TransactionQuery = {
             ...query,
+            after: formatDateOnly(query?.after),
+            before: formatDateOnly(query?.before),
+            moreThan: dollarsToCents(query?.moreThan),
+            lessThan: dollarsToCents(query?.lessThan),
             order: formValues.values.order ?? query?.order,
             orderBy: formValues.values.orderBy ?? query?.orderBy,
             pageNumber: currentPage,

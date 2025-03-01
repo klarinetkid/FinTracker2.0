@@ -36,7 +36,7 @@ function BudgetTable(props: BudgetTableProps) {
                             <td className="bold centre">
                                 {i === 0 ? groupIndex + 1 : ""}
                             </td>
-                            <td className="centre selectable">
+                            <td className="centre">
                                 <CategoryPill
                                     category={budget.category}
                                     onClick={() => editBudget(budget)}
@@ -44,14 +44,20 @@ function BudgetTable(props: BudgetTableProps) {
                             </td>
                             <td>
                                 <Input
-                                    className="ralign"
+                                    className="ralign selectable"
+                                    onClick={() => editBudget(budget)}
                                     readOnly
-                                    value={formatCurrency(budget.amount)}
+                                    value={formatCurrency(
+                                        budget.amount,
+                                        false,
+                                        true
+                                    )}
                                 />
                             </td>
                             <td>
                                 <Input
-                                    className="ralign"
+                                    className="ralign selectable"
+                                    onClick={() => editBudget(budget)}
                                     readOnly
                                     value={formatDateOnly(budget.effectiveDate)}
                                 />

@@ -4,16 +4,16 @@ import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import StatusIndicator from "../../components/StatusIndicator";
 import { useFormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import { ErrorResponse } from "../../services/BaseService";
 import ImportFormatService from "../../services/ImportFormatService";
 import ImportFormat from "../../types/ImportFormat";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";
-import { AddRoundLightFillIcon } from "../../utils/Icons";
+import { AddFormatIcon } from "../../utils/Icons";
 import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
-import StatusIndicator from "../../components/StatusIndicator";
 
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
@@ -27,7 +27,7 @@ function FormatsPage() {
                 <div>
                     <IconButton
                         title="New format"
-                        icon={AddRoundLightFillIcon}
+                        icon={AddFormatIcon}
                         onClick={newFormat}
                     />
                 </div>

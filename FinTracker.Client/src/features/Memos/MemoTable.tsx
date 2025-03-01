@@ -49,13 +49,13 @@ function MemoTable(props: MemoTableProps) {
                             <td className="centre">
                                 <CategoryPill
                                     category={getDisplayCategory(memo)}
+                                    onClick={() => editMemo(memo)}
                                 />
                             </td>
                             <td
                                 className="selectable"
                                 onClick={() => editMemo(memo)}
                             >
-                                {/*{memo.memo}*/}
                                 <Input readOnly value={memo.memo} />
                             </td>
                         </GroupedTableRow>
