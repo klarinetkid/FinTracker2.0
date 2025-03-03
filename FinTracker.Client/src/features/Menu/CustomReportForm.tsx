@@ -1,11 +1,11 @@
 import { useEffect } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import Drawer from "../../components/Drawer";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
-import { useFormValues } from "../../hooks/useFormValues";
 import { toBreakdown } from "../../utils/BreakdownHelper";
 
 interface CustomReportFormProps {
@@ -22,30 +22,32 @@ function CustomReportForm(props: CustomReportFormProps) {
     const { isDrawerOpen, setIsDrawerOpen } = props;
 
     const navigate = useNavigate();
-    const formValues = useFormValues<CustomReport>({});
 
-    useEffect(() => formValues.setValues({}), [isDrawerOpen]);
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset,
+    } = useForm<CustomReport>();
+
+    useEffect(() => reset({ start: "", end: "" }), [isDrawerOpen]);
 
     return (
         <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
-            <form className="form" onSubmit={formSubmit}>
+            <form className="form" onSubmit={handleSubmit(formSubmit)}>
                 <div>
                     <h2>Custom Report</h2>
 
-                    <FormGroup fieldName="Start">
+                    <FormGroup fieldName="Start" error={errors.start}>
                         <Input
-                            name="start"
                             placeholder="yyyy-mm-dd"
-                            value={formValues.values.start ?? ""}
-                            onChange={formValues.updateValue}
+                            registration={register("start", { required: true })}
                         />
                     </FormGroup>
-                    <FormGroup fieldName="End">
+                    <FormGroup fieldName="End" error={errors.end}>
                         <Input
-                            name="end"
                             placeholder="yyyy-mm-dd"
-                            value={formValues.values.end ?? ""}
-                            onChange={formValues.updateValue}
+                            registration={register("end", { required: true })}
                         />
                     </FormGroup>
                 </div>
@@ -64,16 +66,8 @@ function CustomReportForm(props: CustomReportFormProps) {
         </Drawer>
     );
 
-    function formSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        navigate(
-            toBreakdown(
-                formValues.values.start ?? "",
-                formValues.values.end ?? ""
-            )
-        );
-
+    function formSubmit(values: FieldValues) {
+        navigate(toBreakdown(values.start, values.end));
         setIsDrawerOpen(false);
     }
 }

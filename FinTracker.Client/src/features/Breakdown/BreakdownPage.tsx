@@ -91,19 +91,15 @@ function BreakdownPage() {
             case "show data":
                 return (
                     <>
-                        {breakdown ? (
+                        {breakdown && (
                             <BreakdownDataView
                                 breakdown={breakdown}
                                 refresh={refresh}
                             />
-                        ) : (
-                            ""
                         )}
 
-                        {pageState === "loading" ? (
+                        {pageState === "loading" && (
                             <StatusIndicator status="loading" />
-                        ) : (
-                            ""
                         )}
                     </>
                 );

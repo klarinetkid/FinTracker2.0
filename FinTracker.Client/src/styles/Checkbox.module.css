@@ -2,7 +2,7 @@
     cursor: pointer;
     display: flex;
     border: none;
-    border-radius: 50px;
+    border-radius: 100%;
     padding: 2px;
     background-color: var(--transparent);
     opacity: 0.5;

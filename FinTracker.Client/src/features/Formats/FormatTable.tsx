@@ -34,9 +34,7 @@ function FormatTable(props: FormatTableProps) {
                             {format.importFormatName}
                         </td>
                         <td className="centre">
-                            {!format.image ? (
-                                ""
-                            ) : (
+                            {format.image && (
                                 <img
                                     src={`/public/format-icons/${format.image}`}
                                     height={30}
@@ -47,7 +45,7 @@ function FormatTable(props: FormatTableProps) {
                 ))}
             </tbody>
 
-            {formats.length === 0 ? <EmptyTableMessage /> : ""}
+            {formats.length === 0 && <EmptyTableMessage />}
         </Table>
     );
 }

@@ -1,11 +1,19 @@
+import { UseFormRegisterReturn } from "react-hook-form";
 import styles from "../styles/Control.module.css";
 import { classList } from "../utils/HtmlHelper";
 
-function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+    registration?: UseFormRegisterReturn;
+}
+
+function Select(props: SelectProps) {
+    const { registration, ...rest } = props;
+
     return (
         <select
-            {...props}
-            className={classList(styles.control, props.className)}
+            {...registration}
+            {...rest}
+            className={classList(styles.control, rest.className)}
         />
     );
 }

@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
+import { ImportParams } from "../../contexts/TransactionImportContext";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormat from "../../types/ImportFormat";
 import Pages from "../../types/Pages";
 import MenuTile from "./MenuTile";
-import { setImportParams } from "../../utils/ImportHelper";
-import { ImportParams } from "../../contexts/TransactionImportContext";
 
 function ImportSubmenu() {
     const navigate = useNavigate();

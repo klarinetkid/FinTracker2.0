@@ -25,7 +25,7 @@ function AboutPage() {
                         <td>Client version</td>
                         <td>{AppSettings.appVersion}</td>
                     </tr>
-                    {info ? (
+                    {info && (
                         <>
                             <tr>
                                 <td>API version</td>
@@ -62,13 +62,11 @@ function AboutPage() {
                                 <td>{info.counts.years.toLocaleString()}</td>
                             </tr>
                         </>
-                    ) : (
-                        ""
                     )}
                 </tbody>
             </Table>
 
-            {!info ? <StatusIndicator status="loading" /> : ""}
+            {!info && <StatusIndicator status="loading" />}
         </Page>
     );
 }

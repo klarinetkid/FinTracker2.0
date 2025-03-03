@@ -61,7 +61,7 @@ function CategoryTable(props: CategoryTableProps) {
                 ))}
             </tbody>
 
-            {categories.length === 0 ? <EmptyTableMessage /> : ""}
+            {categories.length === 0 && <EmptyTableMessage />}
         </Table>
     );
 }

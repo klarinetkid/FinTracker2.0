@@ -12,6 +12,7 @@ import {
     toBreakdown,
 } from "../../utils/BreakdownHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
+import Tooltip from "../../components/Tooltip";
 
 interface BreakdownTableProps {
     breakdowns: BreakdownCollection;
@@ -52,11 +53,11 @@ function BreakdownTable(props: BreakdownTableProps) {
                                                     categoryTotal
                                                 )}
                                             >
-                                                <div className={styles.tooltip}>
+                                                <Tooltip>
                                                     {getTooltipText(
                                                         categoryTotal
                                                     )}
-                                                </div>
+                                                </Tooltip>
                                             </div>
                                         )
                                     )}

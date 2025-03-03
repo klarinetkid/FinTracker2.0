@@ -1,41 +1,19 @@
 import React from "react";
 import styles from "../styles/Control.module.css";
 import { classList } from "../utils/HtmlHelper";
-
-//interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-//    isError?: boolean;
-//}
-
-//function Input(props: InputProps) {
-//    const { isError, ...rest } = props;
-
-//    return (
-//        <input
-//            {...rest}
-//            className={classList(
-//                styles.control,
-//                isError ? styles.error : "",
-//                props.className
-//            )}
-//        />
-//    );
-//}
-
-
+import { UseFormRegisterReturn } from "react-hook-form";
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    registration?: any
+    registration?: UseFormRegisterReturn;
 }
 
 function Input(props: InputProps) {
+    const { registration, ...rest } = props;
 
     return (
         <input
-            {...props}
-            {...props.registration}
-            className={classList(
-                styles.control,
-                props.className
-            )}
+            {...rest}
+            {...registration}
+            className={classList(styles.control, rest.className)}
         />
     );
 }

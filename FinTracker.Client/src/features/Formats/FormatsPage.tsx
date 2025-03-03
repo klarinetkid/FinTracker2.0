@@ -1,13 +1,11 @@
-import { AxiosError } from "axios";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
+import { FieldValues } from "react-hook-form";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import StatusIndicator from "../../components/StatusIndicator";
-import { useFormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import { ErrorResponse } from "../../services/BaseService";
 import ImportFormatService from "../../services/ImportFormatService";
 import ImportFormat from "../../types/ImportFormat";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";
@@ -18,7 +16,7 @@ import FormatTable from "./FormatTable";
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const formValues = useFormValues<ImportFormatViewModel>({});
+    const [editingValues, setEditingValues] = useState<ImportFormatViewModel>();
 
     return (
         <Page>
@@ -41,55 +39,52 @@ function FormatsPage() {
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <FormatForm
-                    formValues={formValues}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteFormat}
                     onSubmit={submitFormat}
+                    values={editingValues}
                 />
             </Drawer>
         </Page>
     );
 
     function newFormat() {
-        formValues.setErrors(undefined);
-        formValues.setValues({});
+        setEditingValues({
+            importFormatName: "",
+            dateKey: "",
+            memoFormat: "",
+            amountKey: "",
+            invertAmounts: "false",
+            headerLines: "0",
+            delimiter: ",",
+            image: "",
+        });
         setIsDrawerOpen(true);
     }
     function editFormat(format: ImportFormat) {
-        formValues.setErrors(undefined);
-        formValues.setValues(format);
+        setEditingValues(format);
         setIsDrawerOpen(true);
     }
-    function submitFormat(event: SyntheticEvent) {
-        event.preventDefault();
-
+    function submitFormat(values: FieldValues) {
         const model: ImportFormatViewModel = {
-            ...formValues.values,
+            ...values,
             invertAmounts:
-                formValues.values.invertAmounts?.toString().toLowerCase() ===
-                "true",
+                values.invertAmounts?.toString().toLowerCase() === "true",
             headerLines:
-                Number(formValues.values.headerLines?.toString() || NaN) ??
-                undefined,
+                Number(values.headerLines?.toString() || NaN) ?? undefined,
         };
 
-        (formValues.values.id
+        (values.id
             ? ImportFormatService.putFormat(model)
             : ImportFormatService.createFormat(model)
-        )
-            .then(() => {
-                if (event.target instanceof HTMLButtonElement)
-                    event.target.blur();
-                globalDataCache.importFormats.refresh();
-                setIsDrawerOpen(false);
-            })
-            .catch((error: AxiosError<ErrorResponse>) => {
-                formValues.setErrors(error.response?.data);
-            });
+        ).then(() => {
+            globalDataCache.importFormats.refresh();
+            setIsDrawerOpen(false);
+        });
     }
     async function deleteFormat() {
-        if (!formValues.values.id) return;
-        await ImportFormatService.deleteFormat(formValues.values.id);
+        if (!editingValues?.id) return;
+        await ImportFormatService.deleteFormat(editingValues.id);
         globalDataCache.importFormats.refresh();
         setIsDrawerOpen(false);
     }

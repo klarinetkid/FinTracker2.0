@@ -98,13 +98,11 @@ function CategorySelector(props: CategorySelectorProps) {
             )}
 
             {/* show close btn if allow empty and no value */}
-            {allowEmpty && currentValue ? (
+            {allowEmpty && currentValue && (
                 <CloseRingIcon
                     className={styles.clearBtn}
                     onClick={clearSelection}
                 />
-            ) : (
-                ""
             )}
 
             {/* menu with options */}

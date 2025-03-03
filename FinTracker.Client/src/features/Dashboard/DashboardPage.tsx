@@ -24,7 +24,6 @@ function DashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const globalDataCache = useGlobalDataCache();
     const [breakdowns, setBreakdowns] = useState<BreakdownCollection>();
-    const [loadedView, setLoadedView] = useState(defaultViewType);
 
     // use ref to get this value in callback
     const [lastReqTime, setLastReqTime] = useState<number>();
@@ -64,7 +63,6 @@ function DashboardPage() {
                 if (result.isEmpty) {
                     setPageState("no data");
                 } else {
-                    setLoadedView(viewType);
                     setBreakdowns(result);
                     setPageState("show data");
                 }
@@ -91,7 +89,7 @@ function DashboardPage() {
             <Page>
                 <DashboardPageHeader
                     year={year}
-                    viewType={breakdowns ? loadedView : viewType}
+                    viewType={breakdowns?.type}
                     pageState={pageState}
                 />
 
@@ -117,19 +115,12 @@ function DashboardPage() {
             case "show data":
                 return (
                     <>
-                        {breakdowns ? (
-                            <DashboardDataView
-                                breakdowns={breakdowns}
-                                viewType={loadedView}
-                            />
-                        ) : (
-                            ""
+                        {breakdowns && (
+                            <DashboardDataView breakdowns={breakdowns} />
                         )}
 
-                        {pageState === "loading" ? (
+                        {pageState === "loading" && (
                             <StatusIndicator status="loading" />
-                        ) : (
-                            ""
                         )}
                     </>
                 );

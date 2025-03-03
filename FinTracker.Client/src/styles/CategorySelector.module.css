@@ -18,6 +18,9 @@
         transition: max-height 0.25s;
     }
 
+    .selector.disabled {
+        background-color: var(--button-active);
+    }
 
 .menu {
     background: var(--bg);
@@ -57,7 +60,7 @@
         position: absolute;
         right: 3px;
         background: none;
-        border-radius: 50px;
+        border-radius: 100%;
     }
 
     .clearBtn:hover {

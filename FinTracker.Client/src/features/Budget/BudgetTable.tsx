@@ -67,7 +67,7 @@ function BudgetTable(props: BudgetTableProps) {
                 </GroupedTableRowSet>
             ))}
 
-            {groupedBudgets.length === 0 ? <EmptyTableMessage /> : ""}
+            {groupedBudgets.length === 0 && <EmptyTableMessage />}
         </GroupedTable>
     );
 }

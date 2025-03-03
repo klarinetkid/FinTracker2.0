@@ -2,17 +2,16 @@ import CategorySelector from "../../components/CategorySelector";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import Row from "../../components/Row";
-import { FormValues } from "../../hooks/useFormValues";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
-import Category from "../../types/Category";
 import TransactionQuery from "../../types/TransactionQuery";
 
 interface TransactionFiltersProps {
-    formValues: FormValues<TransactionQuery>;
+    filterQuery: TransactionQuery;
+    setFilterQuery: React.Dispatch<React.SetStateAction<TransactionQuery>>;
 }
 
 function TransactionFilters(props: TransactionFiltersProps) {
-    const { formValues } = props;
+    const { filterQuery, setFilterQuery } = props;
     const globalDataCache = useGlobalDataCache();
 
     return (
@@ -21,8 +20,8 @@ function TransactionFilters(props: TransactionFiltersProps) {
                 <Input
                     placeholder="Keyword"
                     name="search"
-                    value={formValues.values.search ?? ""}
-                    onChange={formValues.updateValue}
+                    value={filterQuery.search ?? ""}
+                    onChange={updateQuery}
                 />
             </FormGroup>
             <FormGroup fieldName="Category">
@@ -31,32 +30,30 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     categories={globalDataCache.categories.value}
                     onChange={(c) => {
                         const categoryId = c && c.id === undefined ? -1 : c?.id;
-                        formValues.setValues({
-                            ...formValues.values,
+                        setFilterQuery({
+                            ...filterQuery,
                             categoryId: categoryId,
                         });
                     }}
-                    value={
-                        globalDataCache.categories.value.filter(
-                            (c) => c.id === formValues.values?.categoryId
-                        )[0]
-                    }
+                    value={globalDataCache.getCategoryById(
+                        filterQuery?.categoryId
+                    )}
                 />
             </FormGroup>
             <FormGroup fieldName="After">
                 <Input
                     name="after"
                     placeholder="yyyy-mm-dd"
-                    value={formValues.values.after ?? ""}
-                    onChange={formValues.updateValue}
+                    value={filterQuery.after ?? ""}
+                    onChange={updateQuery}
                 />
             </FormGroup>
             <FormGroup fieldName="Before">
                 <Input
                     name="before"
                     placeholder="yyyy-mm-dd"
-                    value={formValues.values.before ?? ""}
-                    onChange={formValues.updateValue}
+                    value={filterQuery.before ?? ""}
+                    onChange={updateQuery}
                 />
             </FormGroup>
             <FormGroup fieldName="More Than">
@@ -64,8 +61,8 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     className="ralign"
                     placeholder="$0.00"
                     name="moreThan"
-                    value={formValues.values.moreThan ?? ""}
-                    onChange={formValues.updateValue}
+                    value={filterQuery.moreThan ?? ""}
+                    onChange={updateQuery}
                 />
             </FormGroup>
             <FormGroup fieldName="Less Than">
@@ -73,12 +70,20 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     className="ralign"
                     placeholder="$0.00"
                     name="lessThan"
-                    value={formValues.values.lessThan ?? ""}
-                    onChange={formValues.updateValue}
+                    value={filterQuery.lessThan ?? ""}
+                    onChange={updateQuery}
                 />
             </FormGroup>
         </Row>
     );
+
+    function updateQuery(event: React.ChangeEvent<HTMLInputElement>): void {
+        const { name, value } = event.target;
+        setFilterQuery({
+            ...filterQuery,
+            [name]: value,
+        });
+    }
 }
 
 export default TransactionFilters;

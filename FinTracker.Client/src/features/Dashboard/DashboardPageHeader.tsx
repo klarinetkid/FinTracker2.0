@@ -5,7 +5,7 @@ import { DashboardPageState } from "./DashboardPage";
 
 interface DashboardPageHeaderProps {
     year: number | undefined;
-    viewType: string;
+    viewType?: string;
     pageState: DashboardPageState;
 }
 
@@ -15,9 +15,9 @@ function DashboardPageHeader({
     pageState,
 }: DashboardPageHeaderProps) {
     const title =
-        viewType === "yearly" ? "All Years" : `Dashboard ${year ?? ""}`;
+        viewType === "Yearly" ? "All Years" : `Dashboard ${year ?? ""}`;
 
-    const btnsVisible = viewType !== "yearly" && pageState !== "invalid view";
+    const btnsVisible = viewType !== "Yearly" && pageState !== "invalid view";
 
     const btnCommonProps = {
         currentYear: year,

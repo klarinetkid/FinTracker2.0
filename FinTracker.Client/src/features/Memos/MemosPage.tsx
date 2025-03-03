@@ -1,8 +1,10 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FieldValues } from "react-hook-form";
 import Drawer from "../../components/Drawer";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
-import { useFormValues } from "../../hooks/useFormValues";
+import StatusIndicator from "../../components/StatusIndicator";
+import useRefresh from "../../hooks/useRefresh";
 import MemoService from "../../services/MemoService";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
@@ -10,16 +12,14 @@ import Memo from "../../types/Memo";
 import MemoViewModel from "../../types/MemoViewModel";
 import MemoForm from "./MemoForm";
 import MemoTable from "./MemoTable";
-import useRefresh from "../../hooks/useRefresh";
-import StatusIndicator from "../../components/StatusIndicator";
 
 function MemosPage() {
     const [groupedMemos, setGroupedMemos] =
         useState<Grouping<Category | undefined, Memo>[]>();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
+    const [editingValues, setEditingValues] = useState<MemoViewModel>();
 
-    const formValues = useFormValues<MemoViewModel>({});
 
     useEffect(() => {
         MemoService.getGrouped().then(setGroupedMemos);
@@ -39,31 +39,27 @@ function MemosPage() {
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <MemoForm
-                    formValues={formValues}
                     onSubmit={submitMemo}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteMemo}
+                    values={editingValues}
                 />
             </Drawer>
         </Page>
     );
 
     function editMemo(memo: MemoViewModel) {
-        formValues.setValues(memo);
+        setEditingValues(memo);
         setIsDrawerOpen(true);
     }
-    async function submitMemo(event: SyntheticEvent) {
-        event.preventDefault();
-
-        await MemoService.patchCategorization(formValues.values);
-
-        if (event.target instanceof HTMLButtonElement) event.target.blur();
+    async function submitMemo(model: FieldValues) {
+        await MemoService.patchCategorization(model);
         refresh();
         setIsDrawerOpen(false);
     }
     async function deleteMemo() {
-        if (!formValues.values.id) return;
-        await MemoService.deleteMemo(formValues.values.id);
+        if (!editingValues?.id) return;
+        await MemoService.deleteMemo(editingValues.id);
         refresh();
         setIsDrawerOpen(false);
     }

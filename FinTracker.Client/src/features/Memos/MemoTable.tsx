@@ -63,7 +63,7 @@ function MemoTable(props: MemoTableProps) {
                 </GroupedTableRowSet>
             ))}
 
-            {memos.length === 0 ? <EmptyTableMessage /> : ""}
+            {memos.length === 0 && <EmptyTableMessage />}
         </GroupedTable>
     );
 

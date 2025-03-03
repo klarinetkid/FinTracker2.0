@@ -7,6 +7,7 @@ import { Uncategorized } from "../../types/Category";
 import CategoryTotal from "../../types/CategoryTotal";
 import { classList } from "../../utils/HtmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
+import Tooltip from "../../components/Tooltip";
 
 interface BreakdownTableRowProps {
     categoryTotal: CategoryTotal;
@@ -48,15 +49,13 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
         >
             <tr>
                 <td rowSpan={2}>
-                    {!noSelect ? (
+                    {!noSelect && (
                         <Checkbox
                             checked={isSelected}
                             onChange={() =>
                                 categorySelection.toggleCategory(category)
                             }
                         />
-                    ) : (
-                        ""
                     )}
                 </td>
                 <td colSpan={1}>
@@ -86,43 +85,47 @@ function SpendingTableRow(props: BreakdownTableRowProps) {
                 </td>
             </tr>
             <tr className={styles.dataRow}>
-                <td className="lalign">
+                <td>
                     <CategoryPill
                         category={categoryTotal.category}
                         openTop={true}
                     />
                 </td>
-                <td className="ralign">{total}</td>
-                <td className="ralign">{percentOfIncome}</td>
-                <td className="ralign">{percentOfSpend}</td>
-                <td className="ralign">{budget}</td>
-                <td className="ralign">
-                    {categoryTotal.budget && categoryTotal.budgetDeviation ? (
-                        <span
-                            className={
-                                categoryTotal.budgetDeviation > 0
-                                    ? styles.budgetOver
-                                    : styles.budgetUnder
-                            }
-                            title={formatCurrency(
-                                categoryTotal.budgetDeviation * -1
-                            )}
-                        >
-                            {(categoryTotal.budgetDeviation > 0 ? "+" : "-") +
-                                Math.abs(
-                                    (categoryTotal.budgetDeviation /
-                                        categoryTotal.budget) *
-                                        100
-                                ).toFixed(1)}
-                            %
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                </td>
+                <td>{total}</td>
+                <td>{percentOfIncome}</td>
+                <td>{percentOfSpend}</td>
+                <td>{budget}</td>
+                <td>{getBudgetDeviationCell()}</td>
             </tr>
         </tbody>
     );
+
+    function getBudgetDeviationCell() {
+        if (!categoryTotal.budget || !categoryTotal.budgetDeviation) return;
+
+        const className = classList(
+            styles.budgetDeviation,
+            categoryTotal.budgetDeviation > 0
+                ? styles.budgetOver
+                : styles.budgetUnder
+        );
+
+        const modifier = categoryTotal.budgetDeviation > 0 ? "+" : "-";
+
+        const tooltip =
+            (categoryTotal.budgetDeviation > 0 ? "Over by " : "Under by ") +
+            formatCurrency(categoryTotal.budgetDeviation, true, true);
+
+        const deviationPct =
+            (categoryTotal.budgetDeviation / categoryTotal.budget) * 100;
+
+        return (
+            <span className={className}>
+                {modifier}
+                {Math.abs(deviationPct).toFixed(1)}%<Tooltip>{tooltip}</Tooltip>
+            </span>
+        );
+    }
 }
 
 export default SpendingTableRow;

@@ -16,7 +16,7 @@ function GroupedTableRow(props: GroupedTableRowProps) {
         <tr {...rest}>
             {children}
             <td>
-                {groupedTable.showExpand(rowIndex) ? (
+                {groupedTable.showExpand(rowIndex) && (
                     <IconButton
                         title={groupedTable.isExpanded ? "Hide" : "Show"}
                         icon={
@@ -26,8 +26,6 @@ function GroupedTableRow(props: GroupedTableRowProps) {
                         }
                         onClick={toggleExpand}
                     />
-                ) : (
-                    ""
                 )}
             </td>
         </tr>

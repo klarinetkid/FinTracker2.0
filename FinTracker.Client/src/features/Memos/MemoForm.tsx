@@ -1,3 +1,4 @@
+import { Controller, useForm } from "react-hook-form";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import CategorySelector from "../../components/CategorySelector";
@@ -8,18 +9,35 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import { NeverImport } from "../../types/Category";
 import FormProps from "../../types/FormProps";
 import MemoViewModel from "../../types/MemoViewModel";
+import { useEffect } from "react";
 
 function MemoForm(props: FormProps<MemoViewModel>) {
-    const { formValues, onSubmit, onDelete, onCancel } = props;
+    const { onSubmit, onDelete, onCancel, values } = props;
+
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset,
+        setValue,
+        control,
+        watch,
+    } = useForm<MemoViewModel>();
+
+    useEffect(() => {
+        reset(values);
+    }, [values]);
 
     const globalDataCache = useGlobalDataCache();
 
-    const catSelectorValue = formValues.values.isImported
-        ? globalDataCache.getCategoryById(formValues.values.categoryId)
+    const catSelectorValue = values?.isImported
+        ? globalDataCache.getCategoryById(watch("categoryId"))
         : NeverImport;
 
+    console.log(values);
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <h2>Edit Memo</h2>
 
@@ -30,19 +48,23 @@ function MemoForm(props: FormProps<MemoViewModel>) {
                         readOnly
                         name="memo"
                         className="ralign"
-                        value={formValues.values.memo ?? ""}
+                        value={values?.memo ?? ""}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Category">
-                    <CategorySelector
-                        categories={globalDataCache.categories.value}
-                        value={catSelectorValue}
-                        disabled={!formValues.values.isImported}
-                        onChange={(c) => {
-                            formValues.setValues({
-                                ...formValues.values,
-                                categoryId: c?.id,
-                            });
+                <FormGroup fieldName="Category" error={errors.categoryId}>
+                    <Controller
+                        control={control}
+                        name="categoryId"
+                        render={({ field: { value } }) => (
+                            <CategorySelector
+                                disabled={!values?.isImported}
+                                categories={globalDataCache.categories.value}
+                                onChange={(c) => setValue("categoryId", c?.id)}
+                                value={catSelectorValue}
+                            />
+                        )}
+                        rules={{
+                            required: true,
                         }}
                     />
                 </FormGroup>
@@ -52,10 +74,7 @@ function MemoForm(props: FormProps<MemoViewModel>) {
                     <Button type="button" onClick={onCancel}>
                         Cancel
                     </Button>
-                    <ButtonFill
-                        type="submit"
-                        disabled={!formValues.values.isImported}
-                    >
+                    <ButtonFill type="submit" disabled={!values?.isImported}>
                         Submit
                     </ButtonFill>
                 </div>

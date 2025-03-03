@@ -4,7 +4,7 @@ import Memo from "./Memo";
 type TransactionViewModel = {
     id?: number;
     date?: string;
-    amount?: number;
+    amount?: number | string;
     memo?: string;
     categoryId?: number;
     category?: CategoryOrUncategorized;
@@ -17,9 +17,6 @@ type TransactionViewModel = {
     // for client
     isToSaveMemo?: boolean;
     isSelectedForImport?: boolean;
-
-    //isToSaveMemoCategory?: boolean;
-    //isToSaveMemoNotImported?: boolean;
 };
 
 export default TransactionViewModel;

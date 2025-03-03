@@ -30,6 +30,10 @@
         padding-bottom: 16px;
     }
 
+        .dataRow td:not(:first-child) {
+            text-align: right;
+        }
+
 .spendingRowGroup:not(:last-child) .dataRow {
     border-bottom: var(--border-200) solid 1px;
 }

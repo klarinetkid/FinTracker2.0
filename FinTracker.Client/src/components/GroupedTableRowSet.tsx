@@ -13,7 +13,7 @@ function GroupedTableRowSet(props: GroupedTableRowSetProps) {
         <GroupedTableContext.Provider
             value={{ isExpanded, setIsExpanded, showExpand }}
         >
-            <tbody className={isExpanded ? styles.active : ""}>
+            <tbody className={isExpanded ? styles.active : undefined}>
                 {props.children}
                 <tr className={styles.spacerRow}></tr>
             </tbody>

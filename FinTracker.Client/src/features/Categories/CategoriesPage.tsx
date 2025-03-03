@@ -33,14 +33,14 @@ function CategoriesPage() {
                 <IconButton
                     title="New category"
                     icon={AddCategoryIcon}
-                    onClick={() => openCategoryForm(undefined)}
+                    onClick={newCategory}
                 />
             </Row>
 
             {categories ? (
                 <CategoryTable
                     categories={categories}
-                    editCategory={(c) => openCategoryForm(c)}
+                    editCategory={(c) => editCategory(c)}
                 />
             ) : (
                 <StatusIndicator status="loading" />
@@ -56,8 +56,14 @@ function CategoriesPage() {
             </Drawer>
         </Page>
     );
-
-    function openCategoryForm(category: CategoryViewModel | undefined) {
+    function newCategory() {
+        setEditingValues({
+            categoryName: "",
+            colour: "",
+        });
+        setIsDrawerOpen(true);
+    }
+    function editCategory(category: CategoryViewModel) {
         setEditingValues(category);
         setIsDrawerOpen(true);
     }

@@ -71,7 +71,7 @@ function ImportPage() {
             <Row justifyContent="space-between">
                 <h1>Import Transactions</h1>
                 <div>
-                    {flowStep === "editing" ? (
+                    {flowStep === "editing" && (
                         <>
                             <Button type="button" onClick={cancelImport}>
                                 Cancel
@@ -84,8 +84,6 @@ function ImportPage() {
                                 Submit
                             </ButtonFill>
                         </>
-                    ) : (
-                        ""
                     )}
                 </div>
             </Row>

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import FormGroup from "../../components/FormGroup";
@@ -8,107 +10,85 @@ import FormProps from "../../types/FormProps";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";
 
 function FormatForm(props: FormProps<ImportFormatViewModel>) {
-    const { formValues, onSubmit, onDelete, onCancel } = props;
+    const { onSubmit, onDelete, onCancel, values } = props;
+
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset,
+    } = useForm<ImportFormatViewModel>();
+
+    useEffect(() => {
+        reset(values);
+    }, [values]);
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <h2>{formValues.values.id ? "Edit" : "New"} Format</h2>
+                <h2>{values?.id ? "Edit" : "New"} Format</h2>
 
                 <Spacer height={24} />
 
-                <input
-                    name="id"
-                    type="hidden"
-                    value={formValues.values.id ?? ""}
-                />
                 <FormGroup
                     fieldName="Import File Format Name"
-                    error={formValues.getFieldError("ImportFormatName")}
+                    error={errors.importFormatName}
                 >
                     <Input
-                        name="importFormatName"
-                        value={formValues.values.importFormatName ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("importFormatName", {
+                            required: true,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Date Key"
-                    error={formValues.getFieldError("DateKey")}
-                >
+                <FormGroup fieldName="Date Key" error={errors.dateKey}>
                     <Input
-                        name="dateKey"
-                        value={formValues.values.dateKey ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("dateKey", { required: true })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Memo Format"
-                    error={formValues.getFieldError("MemoFormat")}
-                >
+                <FormGroup fieldName="Memo Format" error={errors.memoFormat}>
                     <Input
-                        name="memoFormat"
-                        value={formValues.values.memoFormat ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("memoFormat", {
+                            required: true,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Amount Key"
-                    error={formValues.getFieldError("AmountKey")}
-                >
+                <FormGroup fieldName="Amount Key" error={errors.amountKey}>
                     <Input
-                        name="amountKey"
-                        value={formValues.values.amountKey ?? ""}
-                        onChange={formValues.updateValue}
-                        data-field-type="int"
+                        registration={register("amountKey", {
+                            required: true,
+                        })}
                     />
                 </FormGroup>
                 <FormGroup
                     fieldName="Invert Amounts"
-                    error={formValues.getFieldError("InvertAmounts")}
+                    error={errors.invertAmounts}
                 >
-                    <Select
-                        name="invertAmounts"
-                        value={
-                            formValues.values.invertAmounts?.toString() ?? ""
-                        }
-                        onChange={formValues.updateValue}
-                    >
+                    <Select registration={register("invertAmounts")}>
                         <option>false</option>
                         <option>true</option>
                     </Select>
                 </FormGroup>
-                <FormGroup
-                    fieldName="Header Lines"
-                    error={formValues.getFieldError("HeaderLines")}
-                >
+                <FormGroup fieldName="Header Lines" error={errors.headerLines}>
                     <Input
-                        name="headerLines"
-                        type="text"
-                        value={formValues.values.headerLines?.toString() ?? ""}
-                        onChange={formValues.updateValue}
-                        data-field-type="int"
+                        registration={register("headerLines", {
+                            required: true,
+                            pattern: /^\d+$/,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Delimiter"
-                    error={formValues.getFieldError("Delimiter")}
-                >
+                <FormGroup fieldName="Delimiter" error={errors.delimiter}>
                     <Input
-                        name="delimiter"
-                        value={formValues.values.delimiter ?? ""}
-                        onChange={formValues.updateValue}
                         maxLength={1}
+                        registration={register("delimiter", {
+                            required: true,
+                            maxLength: 1,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Image"
-                    error={formValues.getFieldError("Image")}
-                >
+                <FormGroup fieldName="Image" error={errors.image}>
                     <Input
-                        name="image"
-                        value={formValues.values.image ?? ""}
-                        onChange={formValues.updateValue}
+                        maxLength={25}
+                        registration={register("image", { maxLength: 25 })}
                     />
                 </FormGroup>
             </div>
@@ -120,12 +100,10 @@ function FormatForm(props: FormProps<ImportFormatViewModel>) {
                     <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
                 <div>
-                    {formValues.values.id ? (
+                    {values?.id && (
                         <Button type="button" onClick={onDelete}>
                             Delete
                         </Button>
-                    ) : (
-                        ""
                     )}
                 </div>
             </div>

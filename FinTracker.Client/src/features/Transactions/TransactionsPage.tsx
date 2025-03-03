@@ -1,15 +1,14 @@
-import { AxiosError } from "axios";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FieldValues } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import TransactionTable from "../../components/TransactionTable";
-import { useFormValues } from "../../hooks/useFormValues";
 import useRefresh from "../../hooks/useRefresh";
-import { ErrorResponse } from "../../services/BaseService";
 import TransactionService from "../../services/TransactionService";
+import Transaction from "../../types/Transaction";
 import TransactionQuery from "../../types/TransactionQuery";
 import TransactionViewModel from "../../types/TransactionViewModel";
 import { AddTransactionIcon, FilterRemoveIcon } from "../../utils/Icons";
@@ -25,34 +24,31 @@ function TransactionsPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
-    const filterValues = useFormValues<TransactionQuery>(defaultFilters);
+    const [filterQuery, setFilterQuery] =
+        useState<TransactionQuery>(defaultFilters);
+    const [editingValues, setEditingValues] = useState<TransactionViewModel>();
 
     useEffect(() => {
-        const searchCategory = Number(searchParams.get("category")) || undefined;
+        const searchCategory =
+            Number(searchParams.get("category")) || undefined;
         if (searchCategory) {
-            filterValues.setValues({
-                ...filterValues.values,
+            setFilterQuery({
+                ...filterQuery,
                 categoryId: searchCategory,
             });
         }
     }, []);
-
-    const formValues = useFormValues<TransactionViewModel>({});
-
-    console.log(filterValues.values, defaultFilters)
 
     return (
         <Page>
             <Row justifyContent="space-between">
                 <h1>Transactions</h1>
                 <div className="flex">
-                    {filterValues.values !== defaultFilters && (
+                    {filterQuery !== defaultFilters && (
                         <IconButton
                             icon={FilterRemoveIcon}
                             title="Reset filters"
-                            onClick={() =>
-                                filterValues.setValues(defaultFilters)
-                            }
+                            onClick={() => setFilterQuery(defaultFilters)}
                         />
                     )}
                     <IconButton
@@ -63,10 +59,13 @@ function TransactionsPage() {
                 </div>
             </Row>
 
-            <TransactionFilters formValues={filterValues} />
+            <TransactionFilters
+                filterQuery={filterQuery}
+                setFilterQuery={setFilterQuery}
+            />
 
             <TransactionTable
-                query={filterValues.values}
+                query={filterQuery}
                 onRowSelect={editTransaction}
                 refreshed={refreshed}
                 onChange={refresh}
@@ -75,58 +74,54 @@ function TransactionsPage() {
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <TransactionForm
-                    formValues={formValues}
                     onSubmit={submitTransaction}
                     onCancel={() => setIsDrawerOpen(false)}
                     onDelete={deleteTransaction}
+                    values={editingValues}
                 />
             </Drawer>
         </Page>
     );
 
     function newCashTransaction() {
-        formValues.setValues({
+        setEditingValues({
             isCashTransaction: true,
+            amount: "",
+            memo: "",
+            date: "",
         });
         setIsDrawerOpen(true);
     }
 
-    function editTransaction(transaction: TransactionViewModel) {
-        formValues.setValues(transaction);
+    function editTransaction(transaction: Transaction) {
+        setEditingValues({
+            ...transaction,
+            amount: (transaction.amount / 100).toFixed(2),
+        });
         setIsDrawerOpen(true);
     }
 
-    function submitTransaction(event: SyntheticEvent) {
-        event.preventDefault();
-
+    function submitTransaction(values: FieldValues) {
         // cast values
         const model: TransactionViewModel = {
-            ...formValues.values,
+            ...values,
             amount:
-                Math.floor(
-                    Number(formValues.values?.amount?.toString() ?? NaN) * 100
-                ) ?? undefined,
+                Math.floor(Number(values?.amount?.toString() ?? NaN) * 100) ??
+                undefined,
         };
 
-        (formValues.values.id
+        (values.id
             ? TransactionService.patchTransaction(model)
             : TransactionService.createTransaction(model)
-        )
-            .then(() => {
-                if (event.target instanceof HTMLButtonElement)
-                    event.target.blur();
-                refresh();
-                setIsDrawerOpen(false);
-                formValues.setErrors(undefined);
-            })
-            .catch((error: AxiosError<ErrorResponse>) => {
-                formValues.setErrors(error.response?.data);
-            });
+        ).then(() => {
+            refresh();
+            setIsDrawerOpen(false);
+        });
     }
 
     async function deleteTransaction() {
-        if (!formValues.values.id) return;
-        await TransactionService.deleteTransaction(formValues.values.id);
+        if (!editingValues?.id) return;
+        await TransactionService.deleteTransaction(editingValues.id);
         refresh();
         setIsDrawerOpen(false);
     }

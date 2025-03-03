@@ -4,6 +4,8 @@
     {
         public BreakdownViewModel[] Breakdowns { get; set; }
 
+        public string Type { get; set; }
+
         public bool IsEmpty
         {
             get
@@ -38,8 +40,9 @@
             }
         }
 
-        public BreakdownCollection(IEnumerable<BreakdownViewModel> breakdowns)
+        public BreakdownCollection(string type, IEnumerable<BreakdownViewModel> breakdowns)
         {
+            Type = type;
             Breakdowns = breakdowns.ToArray();
         }
     }

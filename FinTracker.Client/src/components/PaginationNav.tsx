@@ -13,19 +13,18 @@ function PaginationNav<T>(props: PaginationNavProps<T>) {
 
     return (
         <div className={styles.pageNav}>
-            {pagination.totalPages > 1
-                ? [...Array(pagination.totalPages).keys()].map((p) =>
-                      pagination.currentPage === p ? (
-                          <ButtonFill key={p} onClick={() => onNavigate(p)}>
-                              {p + 1}
-                          </ButtonFill>
-                      ) : (
-                          <Button key={p} onClick={() => onNavigate(p)}>
-                              {p + 1}
-                          </Button>
-                      )
-                  )
-                : ""}
+            {pagination.totalPages > 1 &&
+                [...Array(pagination.totalPages).keys()].map((p) =>
+                    pagination.currentPage === p ? (
+                        <ButtonFill key={p} onClick={() => onNavigate(p)}>
+                            {p + 1}
+                        </ButtonFill>
+                    ) : (
+                        <Button key={p} onClick={() => onNavigate(p)}>
+                            {p + 1}
+                        </Button>
+                    )
+                )}
         </div>
     );
 }

@@ -14,7 +14,7 @@ function YearSubmenu() {
 
     return (
         <>
-            {years.indexOf(curYear) > -1 ? (
+            {years.indexOf(curYear) > -1 && (
                 <MenuTile
                     title="YTD"
                     icon={DateRangeFillIcon}
@@ -22,8 +22,6 @@ function YearSubmenu() {
                         navigate(`/breakdown?start=${curYear}&end=${ytdEnd}`)
                     }
                 />
-            ) : (
-                ""
             )}
 
             {years.map((year) => (

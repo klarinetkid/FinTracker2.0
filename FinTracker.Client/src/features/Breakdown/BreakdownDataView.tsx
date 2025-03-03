@@ -1,6 +1,3 @@
-import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import IconButton from "../../components/IconButton";
 import InOutPills from "../../components/InOutPills";
 import Spacer from "../../components/Spacer";
 import TransactionTable from "../../components/TransactionTable";
@@ -13,7 +10,6 @@ import {
 } from "../../utils/BreakdownHelper";
 import { formatDateOnly } from "../../utils/DateHelper";
 import { classList } from "../../utils/HtmlHelper";
-import { BackIcon } from "../../utils/Icons";
 import IncomeCard from "./IncomeCard";
 import SpendingTable from "./SpendingTable";
 
@@ -29,7 +25,6 @@ function BreakdownDataView({ breakdown, refresh }: BreakdownDataViewProps) {
 
     return (
         <>
-            
             <div className={styles.inOutPillHolder}>
                 <InOutPills
                     totalIn={breakdown.totalIn}
@@ -41,17 +36,15 @@ function BreakdownDataView({ breakdown, refresh }: BreakdownDataViewProps) {
 
             <CategorySelectionProvider>
                 <div className={styles.details}>
-                    {spendingCategories.length > 0 ? (
+                    {spendingCategories.length > 0 && (
                         <div className={styles.spendingTableHolder}>
                             <SpendingTable
                                 spendingCategories={spendingCategories}
                             />
                         </div>
-                    ) : (
-                        ""
                     )}
 
-                    {incomeCategories.length > 0 ? (
+                    {incomeCategories.length > 0 && (
                         <div
                             className={classList(
                                 styles.incomeColumn,
@@ -64,8 +57,6 @@ function BreakdownDataView({ breakdown, refresh }: BreakdownDataViewProps) {
                                 <IncomeCard key={i} categoryTotal={c} />
                             ))}
                         </div>
-                    ) : (
-                        ""
                     )}
                 </div>
 

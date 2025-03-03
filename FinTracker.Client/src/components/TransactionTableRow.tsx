@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CategoryPill from "../components/CategoryPill";
 import CategorySelector from "../components/CategorySelector";
 import useCategorySelection from "../hooks/useCategorySelection";
@@ -6,32 +6,25 @@ import useGlobalDataCache from "../hooks/useGlobalDataCache";
 import TransactionService from "../services/TransactionService";
 import styles from "../styles/TransactionTable.module.css";
 import { CategoryOrUncategorized, Uncategorized } from "../types/Category";
-import TransactionViewModel from "../types/TransactionViewModel";
+import Transaction from "../types/Transaction";
 import { formatDateOnly } from "../utils/DateHelper";
+import { classList } from "../utils/HtmlHelper";
 import { MoneyFillIcon } from "../utils/Icons";
 import { formatCurrency } from "../utils/NumberHelper";
-import { classList } from "../utils/HtmlHelper";
 
 interface TransactionTableRowProps {
-    transaction: TransactionViewModel;
+    transaction: Transaction;
     num: number;
     onChange?: () => void;
-    onRowSelect?: (transaction: TransactionViewModel) => void;
+    onRowSelect?: (transaction: Transaction) => void;
 }
 
-// TODO: does this really need a state? I guess it prevents the category
-// flashing back momentarily before table is refreshed when updated
 function TransactionTableRow(props: TransactionTableRowProps) {
     const { transaction: trx, num, onChange, onRowSelect } = props;
 
     const [isEditingCat, setIsEditingCat] = useState(false);
-    const [newCategory, setNewCategory] = useState<CategoryOrUncategorized>();
     const categorySelection = useCategorySelection();
     const globalDataCache = useGlobalDataCache();
-
-    useEffect(() => {
-        patchTransaction();
-    }, [newCategory]);
 
     const isSelected = categorySelection.isSelected(
         trx.category ?? Uncategorized
@@ -58,10 +51,8 @@ function TransactionTableRow(props: TransactionTableRowProps) {
                     {trx.memo}
                 </span>
 
-                {trx.isCashTransaction ? (
+                {trx.isCashTransaction && (
                     <MoneyFillIcon className={styles.cashTransactionIcon} />
-                ) : (
-                    ""
                 )}
             </td>
             <td className="ralign">{formatCurrency(trx.amount)}</td>
@@ -69,7 +60,7 @@ function TransactionTableRow(props: TransactionTableRowProps) {
                 {isEditingCat ? (
                     <CategorySelector
                         categories={globalDataCache.categories.value}
-                        onChange={setNewCategory}
+                        onChange={(c) => patchTransaction(c)}
                         value={trx.category}
                         isOpen={true}
                         onClose={() => setIsEditingCat(false)}
@@ -89,12 +80,12 @@ function TransactionTableRow(props: TransactionTableRowProps) {
         setIsEditingCat(true);
     }
 
-    async function patchTransaction() {
-        if (newCategory === undefined) return;
+    async function patchTransaction(category?: CategoryOrUncategorized) {
+        if (!category) return;
 
         const payload = {
             id: trx.id,
-            categoryId: newCategory.id,
+            categoryId: category.id,
         };
         await TransactionService.patchTransaction(payload);
 

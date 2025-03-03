@@ -7,10 +7,9 @@ import styles from "../../styles/DashboardDataView.module.css";
 
 interface DashboardDataViewProps {
     breakdowns: BreakdownCollection;
-    viewType: string;
 }
 
-function DashboardDataView({ breakdowns, viewType }: DashboardDataViewProps) {
+function DashboardDataView({ breakdowns }: DashboardDataViewProps) {
     return (
         <>
             <Row justifyContent="space-between" className={styles.pillsRow}>
@@ -26,7 +25,7 @@ function DashboardDataView({ breakdowns, viewType }: DashboardDataViewProps) {
                 breakdowns={breakdowns}
                 titleFormat={getBreakdownTitleFormat()}
                 bandValueProperty={
-                    viewType === "weekly"
+                    breakdowns.type === "Weekly"
                         ? "percentOfYearlySpend"
                         : "percentOfIncome"
                 }
@@ -35,12 +34,12 @@ function DashboardDataView({ breakdowns, viewType }: DashboardDataViewProps) {
     );
 
     function getBreakdownTitleFormat() {
-        switch (viewType) {
-            case "monthly":
+        switch (breakdowns.type) {
+            case "Monthly":
                 return "MMMM";
-            case "yearly":
+            case "Yearly":
                 return "yyyy";
-            case "weekly":
+            case "Weekly":
                 return "[Week] W";
         }
         return "";

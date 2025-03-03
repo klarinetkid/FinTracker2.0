@@ -46,13 +46,11 @@ function ImportTableRow(props: ImportTableRowProps) {
             </td>
             <td className={styles.memoCell}>
                 <Input readOnly value={trx.memo} />
-                {trx.isAlreadyImported ? (
+                {trx.isAlreadyImported && (
                     <div
                         className={styles.alreadyImportedIndicator}
                         title="A transaction already exists with the same date, memo, and amount."
                     ></div>
-                ) : (
-                    ""
                 )}
             </td>
             <td>

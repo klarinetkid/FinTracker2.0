@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import CategorySelector from "../../components/CategorySelector";
@@ -7,70 +9,75 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import FormProps from "../../types/FormProps";
 import TransactionViewModel from "../../types/TransactionViewModel";
 
-function CashTransactionForm(props: FormProps<TransactionViewModel>) {
-    const { formValues, onSubmit, onDelete, onCancel } = props;
+function TransactionForm(props: FormProps<TransactionViewModel>) {
+    const { onSubmit, onDelete, onCancel, values } = props;
 
     const globalDataCache = useGlobalDataCache();
 
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset,
+        control,
+        setValue,
+        watch,
+    } = useForm<TransactionViewModel>({ defaultValues: values });
+
+    useEffect(() => {
+        reset(values);
+    }, [values]);
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <h2>
-                    {formValues.values.id ? "Edit " : "Add "}
-                    {formValues.values.isCashTransaction ? "Cash " : " "}
-                    Transaction
+                    {values?.id ? "Edit " : "Add "}
+                    {values?.isCashTransaction ? "Cash " : " "}
+                    Transaction {watch("id")}
                 </h2>
 
-                <FormGroup
-                    fieldName="Date"
-                    error={formValues.getFieldError("Date")}
-                >
+                <FormGroup fieldName="Date" error={errors.date}>
                     <Input
-                        readOnly={!formValues.values.isCashTransaction}
-                        name="date"
-                        value={formValues.values.date ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("date", {
+                            required: true,
+                            disabled: !values?.isCashTransaction,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Amount"
-                    error={formValues.getFieldError("Amount")}
-                >
+                <FormGroup fieldName="Amount" error={errors.amount}>
                     <Input
-                        readOnly={!formValues.values.isCashTransaction}
-                        type="text"
-                        name="amount"
-                        value={formValues.values.amount ?? ""}
-                        onChange={formValues.updateValue}
+                        className="ralign"
+                        registration={register("amount", {
+                            required: true,
+                            pattern: /^-?\d+.\d?\d{0,2}$/,
+                            disabled: !values?.isCashTransaction,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Memo"
-                    error={formValues.getFieldError("Memo")}
-                >
+                <FormGroup fieldName="Memo" error={errors.memo}>
                     <Input
-                        readOnly={!formValues.values.isCashTransaction}
-                        type="text"
-                        name="memo"
-                        value={formValues.values.memo ?? ""}
-                        onChange={formValues.updateValue}
+                        registration={register("memo", {
+                            required: true,
+                            maxLength: 200,
+                            disabled: !values?.isCashTransaction,
+                        })}
                     />
                 </FormGroup>
-                <FormGroup
-                    fieldName="Category"
-                    error={formValues.getFieldError("Category")}
-                >
-                    <CategorySelector
-                        categories={globalDataCache.categories.value}
-                        onChange={(c) => {
-                            formValues.setValues({
-                                ...formValues.values,
-                                categoryId: c?.id,
-                            });
-                        }}
-                        value={globalDataCache.getCategoryById(
-                            formValues.values.categoryId
+                <FormGroup fieldName="Category" error={errors.categoryId}>
+                    <Controller
+                        control={control}
+                        name="categoryId"
+                        render={({ field: { value } }) => (
+                            <CategorySelector
+                                categories={globalDataCache.categories.value}
+                                onChange={(c) => setValue("categoryId", c?.id)}
+                                value={globalDataCache.getCategoryById(value)}
+                            />
                         )}
+                        rules={{
+                            required: true,
+                        }}
                     />
                 </FormGroup>
             </div>
@@ -82,12 +89,10 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
                     <ButtonFill type="submit">Submit</ButtonFill>
                 </div>
                 <div>
-                    {formValues.values.id ? (
+                    {values?.id && (
                         <Button type="button" onClick={onDelete}>
                             Delete
                         </Button>
-                    ) : (
-                        ""
                     )}
                 </div>
             </div>
@@ -95,4 +100,4 @@ function CashTransactionForm(props: FormProps<TransactionViewModel>) {
     );
 }
 
-export default CashTransactionForm;
+export default TransactionForm;
