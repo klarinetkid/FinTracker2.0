@@ -1,7 +1,4 @@
-﻿using FinTracker.Api.Validation;
-using FinTracker.Services.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using FinTracker.Services.Data.Entities;
 
 namespace FinTracker.Api.Models
 {

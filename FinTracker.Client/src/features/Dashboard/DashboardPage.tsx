@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Page from "../../components/Page";
 import Select from "../../components/Select";
@@ -9,6 +9,8 @@ import DashboardDataView from "./DashboardDataView";
 import DashboardPageHeader from "./DashboardPageHeader";
 import StatusIndicator from "../../components/StatusIndicator";
 import styles from "../../styles/DashboardPage.module.css";
+import { ToastNotificationContext } from "../../contexts/ToastNotificationContext";
+import useToast from "../../hooks/useToast";
 
 export type DashboardPageState =
     | "loading"
@@ -29,6 +31,8 @@ function DashboardPage() {
     const [lastReqTime, setLastReqTime] = useState<number>();
     const reqStateRef = useRef<number>();
     reqStateRef.current = lastReqTime;
+
+    const toast = useToast();
 
     const year = useMemo(
         () =>
@@ -92,6 +96,29 @@ function DashboardPage() {
                     viewType={breakdowns?.type}
                     pageState={pageState}
                 />
+
+                <button
+                    onClick={() =>
+                        toast?.AddToast({
+                            title: "Success",
+                            body: "the fuckin thing was successfully saved.",
+                            type: "success",
+                        })
+                    }
+                >
+                    test success
+                </button>
+                <button
+                    onClick={() =>
+                        toast?.AddToast({
+                            title: "Remote Server Error",
+                            body: "here is a test notif",
+                            type: "error",
+                        })
+                    }
+                >
+                    test error
+                </button>
 
                 {getPageBody()}
             </Page>

@@ -1,0 +1,53 @@
+.holder {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.toast {
+    width: 16vw;
+    color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.title {
+    font-weight: bold;
+    padding: 3px 12px;
+}
+
+.body {
+    padding: 6px 12px;
+}
+
+
+.success .title {
+    background-color: var(--deep-green);
+}
+
+.success .body {
+    background-color: var(--green);
+}
+
+.error .title {
+    background-color: var(--deep-red);
+}
+
+.error .body {
+    background-color: var(--red);
+}

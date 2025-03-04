@@ -9,6 +9,7 @@ import Spacer from "../../components/Spacer";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import FormProps from "../../types/FormProps";
+import { AmountPattern, DatePattern } from "../../utils/ValidationHelper";
 
 function BudgetForm(props: FormProps<BudgetViewModel>) {
     const { onSubmit, onCancel, onDelete, values } = props;
@@ -57,7 +58,7 @@ function BudgetForm(props: FormProps<BudgetViewModel>) {
                         className="ralign"
                         registration={register("amount", {
                             required: true,
-                            pattern: /^\d+.\d?\d{0,2}$/,
+                            pattern: AmountPattern,
                             min: {
                                 value: -20_000_000,
                                 message: "Cannot be less than -20,000,000.",
@@ -77,7 +78,7 @@ function BudgetForm(props: FormProps<BudgetViewModel>) {
                     <Input
                         registration={register("effectiveDate", {
                             required: true,
-                            pattern: /\d{4}-\d{2}-\d{2}/,
+                            pattern: DatePattern,
                         })}
                     />
                 </FormGroup>

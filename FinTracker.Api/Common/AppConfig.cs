@@ -2,25 +2,15 @@
 {
     public class AppConfig
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString => config.GetConnectionString("Connection") ?? throw new Exception("Connection string not defined");
+        public int ResponsePageSize => config.GetValue<int>("AppSettings:ResponsePageSize");
+        public int OrderingRowLimit => config.GetValue<int>("AppSettings:OrderingRowLimit");
+        public string? ApiVersion => config.GetValue<string>("AppSettings:ApiVersion");
 
-        public int ResponsePageSize { get; set; }
-        public int MaxBreakdownYears { get; set; }
-        public int MaxMonthlyBudget { get; set; }
-
-        public string? ApiVersion { get; set; }
-
-
+        private ConfigurationManager config;
         public AppConfig(ConfigurationManager config)
         {
-            ConnectionString = config.GetConnectionString("Connection")
-                ?? throw new Exception("Connection string not defined");
-
-            ResponsePageSize = config.GetValue<int>("AppSettings:ResponsePageSize");
-
-            if (ResponsePageSize < 1) throw new Exception("ResponsePageSize must be greater than 0");
-
-            ApiVersion = config.GetValue<string>("AppSettings:ApiVersion");
+            this.config = config;
         }
     }
 }

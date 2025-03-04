@@ -5,7 +5,6 @@
     right: 0;
     bottom: 0;
     background-color: var(--overlay-colour);
-    z-index: 99;
 }
 
 .popup {

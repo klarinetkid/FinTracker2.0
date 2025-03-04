@@ -24,7 +24,8 @@ type ImportFlowStep =
     | "submitting" // data is being submitted & saved to the server
     | "complete" // data has been successfully saved
     | "error" // an unexpected error has occurred
-    | "invalid"; // the initial parameters were invalid, can't proceed
+    | "invalid" // the initial parameters were invalid, can't proceed
+    | "no rows"; // the files uploaded produced no results for the selected format
 
 function ImportPage() {
     const location = useLocation();
@@ -40,7 +41,11 @@ function ImportPage() {
     const flowStepRef = useRef<ImportFlowStep>();
     flowStepRef.current = flowStep;
 
-    useConfirmLeave(() => flowStepRef.current === "editing" || flowStepRef.current === "submitting");
+    useConfirmLeave(
+        () =>
+            flowStepRef.current === "editing" ||
+            flowStepRef.current === "submitting"
+    );
     const blocker = useBlocker(
         ({ currentLocation, nextLocation }) =>
             (flowStep === "editing" || flowStep === "submitting") &&
@@ -53,7 +58,13 @@ function ImportPage() {
 
             const params = importParams as ImportParams;
             minimumTime(1200, () => transactionImport.PrepareImport(params))
-                .then(() => setFlowStep("editing"))
+                .then(() => {
+                    if (transactionImport.Transcations.length > 0) {
+                        setFlowStep("editing");
+                    } else {
+                        setFlowStep("no rows");
+                    }
+                })
                 .catch(() => setFlowStep("error"));
         } else if (importResult) {
             setFlowStep("complete");
@@ -88,6 +99,8 @@ function ImportPage() {
                 </div>
             </Row>
 
+            {getPageBody()}
+
             <ConfirmationPopup
                 title="Are you sure you want to leave?"
                 body="Unsaved changes will be discarded."
@@ -97,8 +110,6 @@ function ImportPage() {
                     blocker.proceed && blocker.proceed() && blocker.reset()
                 }
             />
-
-            {getPageBody()}
         </Page>
     );
 
@@ -131,6 +142,14 @@ function ImportPage() {
                     <StatusIndicator
                         status="info"
                         message="Access the menu to select a file to import."
+                    />
+                );
+
+            case "no rows":
+                return (
+                    <StatusIndicator
+                        status="info"
+                        message="No valid rows were produced from the selected file(s) and import format."
                     />
                 );
         }

@@ -27,6 +27,8 @@ namespace FinTracker.Api.Controllers
         [HttpGet("Monthly/{year?}")]
         public BreakdownCollection GetMonthlyBreakdownsForYear(int? year)
         {
+            throw new ArgumentException();
+
             if (year == null) throw new ArgumentNullException();
 
             return service.GetMonthlyBreakdownsForYear(year.Value);

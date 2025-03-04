@@ -34,7 +34,18 @@ namespace FinTracker.Api.Services
                 if (query.LessThan.HasValue)
                     trxs = trxs.Where(t => t.Amount <= query.LessThan.Value);
 
-                if (query.OrderBy != null)
+                if (query.Type != null)
+                    switch (query.Type)
+                    {
+                        case "cash":
+                            trxs = trxs.Where(t => t.IsCashTransaction);
+                            break;
+                        case "credit":
+                            trxs = trxs.Where(t => !t.IsCashTransaction);
+                            break;
+                    }
+
+                if (query.OrderBy != null && trxs.Count() <= Helper.AppConfig.OrderingRowLimit)
                 {
                     // don't want to use reflection, just switch case this bitch
                     switch (query.OrderBy.ToLower()) 
@@ -118,9 +129,12 @@ namespace FinTracker.Api.Services
                     ? db.DoesTransactionExist(transaction.Date.Value, transaction.Memo, transaction.Amount.Value)
                     : false;
                 
-                transaction.SavedMemo = cachedMemos[transaction.Memo];
-                transaction.CategoryId = transaction.SavedMemo?.CategoryId;
-                transaction.Category = transaction.SavedMemo?.Category;
+                if (cachedMemos.ContainsKey(transaction.Memo))
+                {
+                    transaction.SavedMemo = cachedMemos[transaction.Memo];
+                    transaction.CategoryId = transaction.SavedMemo?.CategoryId;
+                    transaction.Category = transaction.SavedMemo?.Category;
+                }
 
                 results.Add(transaction);
             }
@@ -174,5 +188,7 @@ namespace FinTracker.Api.Services
 
         public string? OrderBy { get; set; }
         public string? Order { get; set; }
+
+        public string? Type { get; set; }
     }
 }

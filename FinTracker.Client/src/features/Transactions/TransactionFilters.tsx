@@ -2,6 +2,7 @@ import CategorySelector from "../../components/CategorySelector";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import Row from "../../components/Row";
+import Select from "../../components/Select";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import TransactionQuery from "../../types/TransactionQuery";
 
@@ -74,10 +75,25 @@ function TransactionFilters(props: TransactionFiltersProps) {
                     onChange={updateQuery}
                 />
             </FormGroup>
+            <FormGroup fieldName="Type">
+                <Select
+                    name="type"
+                    value={filterQuery.type ?? ""}
+                    onChange={updateQuery}
+                >
+                    <option value="">All</option>
+                    <option value="cash">Cash</option>
+                    <option value="credit">Digital</option>
+                </Select>
+            </FormGroup>
         </Row>
     );
 
-    function updateQuery(event: React.ChangeEvent<HTMLInputElement>): void {
+    function updateQuery(
+        event:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLSelectElement>
+    ): void {
         const { name, value } = event.target;
         setFilterQuery({
             ...filterQuery,

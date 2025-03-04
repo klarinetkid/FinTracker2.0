@@ -8,6 +8,7 @@ import Input from "../../components/Input";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import FormProps from "../../types/FormProps";
 import TransactionViewModel from "../../types/TransactionViewModel";
+import { AmountPattern, DatePattern } from "../../utils/ValidationHelper";
 
 function TransactionForm(props: FormProps<TransactionViewModel>) {
     const { onSubmit, onDelete, onCancel, values } = props;
@@ -34,7 +35,7 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
                 <h2>
                     {values?.id ? "Edit " : "Add "}
                     {values?.isCashTransaction ? "Cash " : " "}
-                    Transaction {watch("id")}
+                    Transaction
                 </h2>
 
                 <FormGroup fieldName="Date" error={errors.date}>
@@ -42,6 +43,7 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
                         registration={register("date", {
                             required: true,
                             disabled: !values?.isCashTransaction,
+                            pattern: DatePattern,
                         })}
                     />
                 </FormGroup>
@@ -50,7 +52,7 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
                         className="ralign"
                         registration={register("amount", {
                             required: true,
-                            pattern: /^-?\d+.\d?\d{0,2}$/,
+                            pattern: AmountPattern,
                             disabled: !values?.isCashTransaction,
                         })}
                     />

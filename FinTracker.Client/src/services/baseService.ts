@@ -4,6 +4,7 @@ import axios, {
     AxiosRequestConfig,
     AxiosResponse,
 } from "axios";
+import useToast from "../hooks/useToast";
 
 export type ErrorResponse = {
     type: string;
@@ -40,6 +41,12 @@ class BaseService {
 
     private handleError(error: AxiosError<ErrorResponse>) {
         // Handle errors here (e.g., logging, showing user-friendly messages)
+        //const toast = useToast();
+        //toast.AddToast({
+        //    title: "Remote Error",
+        //    type: "error",
+        //    body: "An unexpected error has occurred on the remote server.",
+        //});
         return Promise.reject(error);
     }
 

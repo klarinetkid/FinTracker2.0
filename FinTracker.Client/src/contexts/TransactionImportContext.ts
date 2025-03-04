@@ -6,7 +6,7 @@ import { CategoryOrUncategorized } from "../types/Category";
 import ImportFormat from "../types/ImportFormat";
 import MemoViewModel from "../types/MemoViewModel";
 import TransactionViewModel from "../types/TransactionViewModel";
-import { prepareImport } from "../utils/CsvHelper";
+import { parseCsvToTransactions } from "../utils/CsvHelper";
 
 export type ImportParams = {
     format: ImportFormat;
@@ -40,7 +40,7 @@ export class TransactionImportManager {
         if (!format || !filesContent) return;
 
         //const prepared = await chunkedPrepareImport(format, filesContent, 100);
-        const prepared = await prepareImport(format, filesContent);
+        const prepared = await parseCsvToTransactions(format, filesContent);
 
         const transactions = await TransactionService.prepareImport(prepared);
         //const transactionModels = transactions

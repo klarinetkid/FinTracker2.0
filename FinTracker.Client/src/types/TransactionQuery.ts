@@ -8,6 +8,7 @@ type TransactionQuery = {
     lessThan?: number | string;
     orderBy?: string;
     order?: string;
+    type?: string;
 };
 
 export default TransactionQuery;

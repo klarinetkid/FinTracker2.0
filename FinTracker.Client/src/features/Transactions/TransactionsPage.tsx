@@ -15,7 +15,14 @@ import { AddTransactionIcon, FilterRemoveIcon } from "../../utils/Icons";
 import TransactionFilters from "./TransactionFilters";
 import TransactionForm from "./TransactionForm";
 
-const defaultFilters = {
+const defaultFilters: TransactionQuery = {
+    after: "",
+    before: "",
+    categoryId: undefined,
+    lessThan: "",
+    moreThan: "",
+    search: "",
+    type: "",
     orderBy: "date",
     order: "desc",
 };
@@ -44,7 +51,8 @@ function TransactionsPage() {
             <Row justifyContent="space-between">
                 <h1>Transactions</h1>
                 <div className="flex">
-                    {filterQuery !== defaultFilters && (
+                    {JSON.stringify(filterQuery) !==
+                        JSON.stringify(defaultFilters) && (
                         <IconButton
                             icon={FilterRemoveIcon}
                             title="Reset filters"
