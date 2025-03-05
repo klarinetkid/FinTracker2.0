@@ -15,6 +15,9 @@ export class TrendGraphPlotter {
     public upperBound: number;
     public numPoints: number;
 
+    public boundDiff() {
+        return this.upperBound - this.lowerBound;
+    }
     constructor(
         sizing: TrendGraphSizing,
         lowerBound: number,
@@ -25,6 +28,9 @@ export class TrendGraphPlotter {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.numPoints = numPoints;
+
+        if (this.lowerBound > this.upperBound)
+            console.error("lowerBound is more than upperBound");
     }
 
     public plotY(value: number): number {
@@ -52,25 +58,19 @@ function TrendGraph(props: TrendGraphProps) {
 
     const snapTo = 500;
 
-    // TODO: if all values <= 0, invert the graph
-    // otherwise use actual bounds
-    const truLower = Math.min(
-        Math.abs(trend.upperBound),
-        Math.abs(trend.lowerBound)
-    );
-    const _truLower = truLower - (truLower % snapTo);
-    const truUpper =
-        Math.max(Math.abs(trend.upperBound), Math.abs(trend.lowerBound)) *
-        1.025;
-    const _truUpper = truUpper + snapTo - (truUpper % snapTo);
+    const lbound =
+        trend.lowerBound -
+        (trend.lowerBound < 0 ? snapTo : 0) -
+        (trend.lowerBound % snapTo);
+
+    const ubound = trend.upperBound + snapTo - (trend.upperBound % snapTo);
 
     const numPoints = trend.lines[0].points.length - 1;
 
-    // TODO: use memo
     const graphPlotter = new TrendGraphPlotter(
         sizing,
-        _truLower,
-        _truUpper,
+        lbound,
+        ubound,
         numPoints
     );
 
@@ -160,9 +160,10 @@ function TrendGraph(props: TrendGraphProps) {
         const result = [];
 
         const numLines = 8;
-        const inc =
-            graphPlotter.upperBound / numLines -
-            ((graphPlotter.upperBound / numLines) % 500);
+        const amtPerLine = Math.abs(graphPlotter.boundDiff() / numLines);
+        const inc = Math.max(amtPerLine - (amtPerLine % snapTo), snapTo);
+
+        if (inc <= 0) console.error("inc <= 0");
 
         for (
             let i = graphPlotter.lowerBound;

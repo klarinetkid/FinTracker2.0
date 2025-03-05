@@ -49,11 +49,7 @@ function TrendGraphLine(props: TrendGraphLineProps) {
 
         function getPointCoords(p: TrendPoint, i: number) {
             if (p.total === null) return null;
-
-            return [
-                graphPlotter.plotX(i),
-                graphPlotter.plotY(Math.abs(p.total)),
-            ];
+            return [graphPlotter.plotX(i), graphPlotter.plotY(p.total)];
         }
     }
 }
