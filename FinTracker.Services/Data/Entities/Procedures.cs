@@ -23,5 +23,6 @@ namespace FinTracker.Services.Data.Entities
         public DateOnly Start { get; set; }
         public DateOnly End { get; set; }
         public int? Total { get; set; }
+        public int? PlotValue { get; set; }
     }
 }

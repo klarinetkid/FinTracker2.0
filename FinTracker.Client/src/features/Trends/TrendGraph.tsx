@@ -115,6 +115,17 @@ function TrendGraph(props: TrendGraphProps) {
                     stroke="black"
                     strokeWidth={3}
                 />
+                {graphPlotter.lowerBound <= 0 &&
+                    graphPlotter.upperBound >= 0 && (
+                        <line
+                            x1={sizing.yAxis}
+                            x2={sizing.width}
+                            y1={graphPlotter.plotY(0)}
+                            y2={graphPlotter.plotY(0)}
+                            stroke="#444"
+                            strokeWidth={1}
+                        />
+                    )}
             </>
         );
     }
@@ -181,7 +192,7 @@ function TrendGraph(props: TrendGraphProps) {
                         fontSize="12px"
                         fill="#666666"
                     >
-                        {formatCurrency(i)}
+                        {formatCurrency(i, false, true)}
                     </text>
                     <line
                         key={i}

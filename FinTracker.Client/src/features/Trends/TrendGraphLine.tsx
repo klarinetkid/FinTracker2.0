@@ -22,10 +22,13 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                 strokeLinejoin="round"
                 fill="#00000000"
                 d={coords
-                    .map((c, i, arr) =>
-                        c === null
-                            ? null
-                            : (i === 0 || !arr[i - 1] ? "M" : "") + c.join(" ")
+                    .map(
+                        (c, i, arr) =>
+                            c !== null &&
+                            (i === 0 || !arr[i - 1] ? "M" : "") +
+                                c.x +
+                                " " +
+                                c.y
                     )
                     .join(" ")}
             />
@@ -35,21 +38,25 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                     <circle
                         key={i}
                         r={6}
-                        cx={p[0]}
-                        cy={p[1]}
-                        stroke="black"
+                        cx={p.x}
+                        cy={p.y}
+                        stroke={p.plotValue === p.total ? "black" : "#880000"}
                         strokeWidth={2}
-                        fill="#fff"
+                        fill={p.plotValue === p.total ? "white" : "white"}
                     />
                 ))}
         </g>
     );
-    function getCoords(line: TrendLine): (number[] | null)[] {
+    function getCoords(line: TrendLine) {
         return line.points.map(getPointCoords);
 
-        function getPointCoords(p: TrendPoint, i: number) {
-            if (p.total === null) return null;
-            return [graphPlotter.plotX(i), graphPlotter.plotY(p.total)];
+        function getPointCoords(point: TrendPoint, i: number) {
+            if (point.plotValue === null) return null;
+            return {
+                ...point,
+                x: graphPlotter.plotX(i),
+                y: graphPlotter.plotY(point.plotValue),
+            };
         }
     }
 }
