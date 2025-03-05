@@ -40,8 +40,8 @@ function TransactionTable(props: TransactionTableProps) {
             before: formatDateOnly(query?.before),
             moreThan: dollarsToCents(query?.moreThan),
             lessThan: dollarsToCents(query?.lessThan),
-            order: orderQuery.order ?? query?.order,
-            orderBy: orderQuery.orderBy ?? query?.orderBy,
+            order: orderQuery.order,
+            orderBy: orderQuery.orderBy,
             pageNumber: currentPage,
         };
         TransactionService.getTransactions(combinedQuery).then((result) => {

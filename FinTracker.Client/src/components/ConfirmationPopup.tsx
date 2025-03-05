@@ -1,23 +1,19 @@
 import styles from "../styles/ConfirmationPopup.module.css";
-import { classList } from "../utils/HtmlHelper";
 import Button from "./Button";
 import ButtonFill from "./ButtonFill";
 
 interface ConfirmationPopupProps {
     title: string;
     body: string;
-    active: boolean;
     onConfirm: () => void;
     onCancel: () => void;
 }
 
 function ConfirmationPopup(props: ConfirmationPopupProps) {
-    const { title, body, active, onConfirm, onCancel } = props;
+    const { title, body, onConfirm, onCancel } = props;
 
     return (
-        <div
-            className={classList(styles.container, active ? styles.active : "")}
-        >
+        <div className={styles.container}>
             <div className={styles.overlay} onClick={onCancel}></div>
             <div className={styles.popup}>
                 <div className={styles.title}>

@@ -10,7 +10,9 @@ import useRefresh from "../../hooks/useRefresh";
 import CategoryService from "../../services/CategoryService";
 import { CategoryTransactionCount } from "../../types/Category";
 import CategoryViewModel from "../../types/CategoryViewModel";
+import { blurActiveElement } from "../../utils/HtmlHelper";
 import { AddCategoryIcon } from "../../utils/Icons";
+import ToastManager from "../../utils/ToastManager";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
 
@@ -72,15 +74,27 @@ function CategoriesPage() {
             ? CategoryService.putCategory(model)
             : CategoryService.createCategory(model)
         ).then(() => {
+            blurActiveElement();
             refresh();
             setIsDrawerOpen(false);
+            ToastManager.addToast({
+                type: "success",
+                title: "Success",
+                body: "The category was successfully saved.",
+            });
         });
     }
     async function deleteCategory() {
         if (!editingValues?.id) return;
         await CategoryService.deleteCategory(editingValues.id);
+        blurActiveElement();
         refresh();
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The category was successfully deleted.",
+        });
     }
 }
 

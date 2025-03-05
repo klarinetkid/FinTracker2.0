@@ -77,9 +77,6 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
                                 value={globalDataCache.getCategoryById(value)}
                             />
                         )}
-                        rules={{
-                            required: true,
-                        }}
                     />
                 </FormGroup>
             </div>

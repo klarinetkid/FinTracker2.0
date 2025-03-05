@@ -38,7 +38,7 @@ function TransactionTableRow(props: TransactionTableRowProps) {
                 onClick={_onClick}
                 className={classList(
                     styles.ellipsis,
-                    onChange ? "selectable" : ""
+                    onRowSelect ? "selectable" : ""
                 )}
             >
                 <span

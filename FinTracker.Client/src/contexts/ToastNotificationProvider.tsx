@@ -1,9 +1,7 @@
-import { useState } from "react";
-import {
-    ToastNotificationContext,
-    ToastNotificationManager,
-} from "./ToastNotificationContext";
+import React, { useEffect, useState } from "react";
+import ToastManager from "../utils/ToastManager";
 import { ToastNotificationProps } from "../components/ToastNotification";
+import ToastNotification from "../components/ToastNotification";
 import styles from "../styles/ToastNotification.module.css";
 
 function ToastNotificationProvider({
@@ -11,15 +9,32 @@ function ToastNotificationProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const notifs = useState<ToastNotificationProps[]>([]);
+    const [notifs, setNotifs] = useState<ToastNotificationProps[]>([]);
 
-    const notifMgr = new ToastNotificationManager(notifs);
+    useEffect(() => {
+        const handleToastAdd = (notif: ToastNotificationProps) => {
+            setNotifs((prevNotifs) => [...prevNotifs, notif]);
+        };
+
+        const handleToastExpire = (id: string) => {
+            setNotifs((prevNotifs) => prevNotifs.filter(n => n.id !== id));
+        };
+
+        ToastManager.on(handleToastAdd, handleToastExpire);
+        return () => {
+            ToastManager.off(handleToastAdd, handleToastExpire);
+        };
+    }, []);
 
     return (
-        <ToastNotificationContext.Provider value={notifMgr}>
+        <>
             {children}
-            <div className={styles.holder}>{notifMgr.Render()}</div>
-        </ToastNotificationContext.Provider>
+            <div className={styles.holder}>
+                {notifs.map((n, i) => (
+                    <ToastNotification key={i} {...n} />
+                ))}
+            </div>
+        </>
     );
 }
 

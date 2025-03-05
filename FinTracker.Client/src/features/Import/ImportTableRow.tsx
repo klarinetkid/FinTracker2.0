@@ -4,6 +4,7 @@ import Checkbox from "../../components/Checkbox";
 import IconButton from "../../components/IconButton";
 import Input from "../../components/Input";
 import Row from "../../components/Row";
+import Tooltip from "../../components/Tooltip";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
 import styles from "../../styles/ImportTableRow.module.css";
@@ -47,10 +48,12 @@ function ImportTableRow(props: ImportTableRowProps) {
             <td className={styles.memoCell}>
                 <Input readOnly value={trx.memo} />
                 {trx.isAlreadyImported && (
-                    <div
-                        className={styles.alreadyImportedIndicator}
-                        title="A transaction already exists with the same date, memo, and amount."
-                    ></div>
+                    <div className={styles.alreadyImportedIndicator}>
+                        <Tooltip>
+                            A transaction already exists with the same date,
+                            memo, and amount.
+                        </Tooltip>
+                    </div>
                 )}
             </td>
             <td>

@@ -9,6 +9,7 @@ import Spacer from "../../components/Spacer";
 import { Total } from "../../types/Category";
 import CategoryViewModel from "../../types/CategoryViewModel";
 import FormProps from "../../types/FormProps";
+import Tooltip from "../../components/Tooltip";
 
 function CategoryForm(props: FormProps<CategoryViewModel>) {
     const { onSubmit, onCancel, onDelete, values } = props;
@@ -72,13 +73,14 @@ function CategoryForm(props: FormProps<CategoryViewModel>) {
                             type="button"
                             disabled={values?.transactionCount !== 0}
                             onClick={onDelete}
-                            title={
-                                values?.transactionCount === 0
-                                    ? ""
-                                    : "Cannot be deleted as category has linked transactions."
-                            }
                         >
                             Delete
+
+                            {values?.transactionCount !== 0 && (
+                                <Tooltip>
+                                    Categories with linked transactions cannot be deleted.
+                                </Tooltip>
+                            )}
                         </Button>
                     )}
                 </div>

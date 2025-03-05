@@ -40,7 +40,7 @@ namespace FinTracker.Api.Services
                         case "cash":
                             trxs = trxs.Where(t => t.IsCashTransaction);
                             break;
-                        case "credit":
+                        case "digital":
                             trxs = trxs.Where(t => !t.IsCashTransaction);
                             break;
                     }

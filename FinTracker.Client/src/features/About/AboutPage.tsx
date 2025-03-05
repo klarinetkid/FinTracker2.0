@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AppSettings from "../../appsettings.json";
+import appsettings from "../../appsettings.json";
 import Page from "../../components/Page";
 import StatusIndicator from "../../components/StatusIndicator";
 import Table from "../../components/Table";
@@ -23,7 +23,7 @@ function AboutPage() {
                 <tbody>
                     <tr>
                         <td>Client version</td>
-                        <td>{AppSettings.appVersion}</td>
+                        <td>{appsettings.appVersion}</td>
                     </tr>
                     {info && (
                         <>

@@ -13,10 +13,13 @@ import BudgetViewModel from "../../types/BudgetViewModel";
 import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import { formatDateOnly } from "../../utils/DateHelper";
+import { blurActiveElement } from "../../utils/HtmlHelper";
 import { AddBudgetIcon } from "../../utils/Icons";
 import { dollarsToCents } from "../../utils/NumberHelper";
+import ToastManager from "../../utils/ToastManager";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 
 function BudgetPage() {
     const [groupedBudgets, setGroupedBudgets] =
@@ -24,6 +27,7 @@ function BudgetPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [editingValues, setEditingValues] = useState<BudgetViewModel>();
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
     useEffect(() => {
         BudgetService.getGrouped().then(setGroupedBudgets);
@@ -52,11 +56,20 @@ function BudgetPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <BudgetForm
                     onCancel={() => setIsDrawerOpen(false)}
-                    onDelete={deleteFormat}
+                    onDelete={() => setIsConfirmingDelete(true)}
                     onSubmit={submitBudget}
                     values={editingValues}
                 />
             </Drawer>
+
+            {isConfirmingDelete && (
+                <ConfirmationPopup
+                    onCancel={() => setIsConfirmingDelete(false)}
+                    title={"Are you sure?"}
+                    body={"Deleting a budget cannot be undone."}
+                    onConfirm={deleteBudget}
+                />
+            )}
         </Page>
     );
 
@@ -85,15 +98,28 @@ function BudgetPage() {
             ? BudgetService.putBudget(model)
             : BudgetService.createBudget(model)
         ).then(() => {
+            blurActiveElement();
             refresh();
             setIsDrawerOpen(false);
+            ToastManager.addToast({
+                type: "success",
+                title: "Success",
+                body: "The budget was successfully saved.",
+            });
         });
     }
-    async function deleteFormat() {
+    async function deleteBudget() {
         if (!editingValues?.id) return;
         await BudgetService.deleteBudget(editingValues.id);
+        blurActiveElement();
+        setIsConfirmingDelete(false);
         refresh();
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The budget was successfully deleted.",
+        });
     }
 }
 

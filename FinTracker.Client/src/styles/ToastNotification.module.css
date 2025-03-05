@@ -12,16 +12,16 @@
     color: white;
     border-radius: 6px;
     overflow: hidden;
-    animation-name: fadein;
-    animation-duration: 0.5s;
+    /* total animation time same as toast expiry */
+    animation: fadein linear 6.5s forwards;
 }
 
 @keyframes fadein {
-    from {
+    0%, 100% {
         opacity: 0;
     }
 
-    to {
+    5%, 95% {
         opacity: 1;
     }
 }

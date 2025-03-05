@@ -1,4 +1,16 @@
-.container.active .overlay {
+@keyframes slidedown {
+    from {
+        top: 0;
+    }
+
+    to {
+        top: 20%;
+    }
+}
+
+
+
+.container .overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -26,11 +38,15 @@
     height: 150px;
 
     z-index: 100;
+    top: 20%;
+
+    animation: slidedown;
+    animation-duration: 0.5s;
 }
 
-.container.active .popup {
+/*.container.active .popup {
     top: 20%;
-}
+}*/
 
 .title h2 {
     margin: 0;

@@ -34,16 +34,15 @@ export class TransactionImportManager {
         this.setTransactions = setTransactions ?? (() => undefined);
     }
 
-    public async PrepareImport(params: ImportParams): Promise<void> {
+    public async PrepareImport(params: ImportParams): Promise<number> {
         const { format, filesContent } = params;
 
-        if (!format || !filesContent) return;
+        if (!format || !filesContent) return 0;
 
         //const prepared = await chunkedPrepareImport(format, filesContent, 100);
         const prepared = await parseCsvToTransactions(format, filesContent);
 
         const transactions = await TransactionService.prepareImport(prepared);
-        //const transactionModels = transactions
         const transactionModels = transactions.map(
             (trx, i): TransactionViewModel => ({
                 ...trx,
@@ -53,7 +52,9 @@ export class TransactionImportManager {
                     (trx.savedMemo?.isImported ?? true),
             })
         );
+
         this.setTransactions(transactionModels);
+        return transactionModels.length;
     }
 
     public UpdateTransactionCategory(
@@ -134,8 +135,6 @@ export class TransactionImportManager {
         if (newTransactions.length === 0) return;
 
         const newMemos: MemoViewModel[] = this.getMemosToSubmit();
-
-        // TODO: catch these
 
         const results = {
             transactionsInserted:

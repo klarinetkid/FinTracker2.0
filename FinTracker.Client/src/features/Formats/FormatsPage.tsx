@@ -9,7 +9,9 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormatService from "../../services/ImportFormatService";
 import ImportFormat from "../../types/ImportFormat";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";
+import { blurActiveElement } from "../../utils/HtmlHelper";
 import { AddFormatIcon } from "../../utils/Icons";
+import ToastManager from "../../utils/ToastManager";
 import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
 
@@ -78,15 +80,27 @@ function FormatsPage() {
             ? ImportFormatService.putFormat(model)
             : ImportFormatService.createFormat(model)
         ).then(() => {
+            blurActiveElement();
             globalDataCache.importFormats.refresh();
             setIsDrawerOpen(false);
+            ToastManager.addToast({
+                type: "success",
+                title: "Success",
+                body: "The import format was successfully saved.",
+            });
         });
     }
     async function deleteFormat() {
         if (!editingValues?.id) return;
         await ImportFormatService.deleteFormat(editingValues.id);
+        blurActiveElement();
         globalDataCache.importFormats.refresh();
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The import format was successfully deleted.",
+        });
     }
 }
 

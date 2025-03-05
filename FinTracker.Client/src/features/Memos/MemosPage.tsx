@@ -10,6 +10,8 @@ import Category from "../../types/Category";
 import Grouping from "../../types/Grouping";
 import Memo from "../../types/Memo";
 import MemoViewModel from "../../types/MemoViewModel";
+import { blurActiveElement } from "../../utils/HtmlHelper";
+import ToastManager from "../../utils/ToastManager";
 import MemoForm from "./MemoForm";
 import MemoTable from "./MemoTable";
 
@@ -54,14 +56,26 @@ function MemosPage() {
     }
     async function submitMemo(model: FieldValues) {
         await MemoService.patchCategorization(model);
+        blurActiveElement();
         refresh();
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The memo was successfully saved.",
+        });
     }
     async function deleteMemo() {
         if (!editingValues?.id) return;
         await MemoService.deleteMemo(editingValues.id);
+        blurActiveElement();
         refresh();
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The memo was successfully deleted.",
+        });
     }
 }
 

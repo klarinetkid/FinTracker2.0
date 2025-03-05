@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import Category, { CategoryOrUncategorized } from "../types/Category";
 
-// TODO rename transactioncategory to category
 export class CategorySelectionManager {
     selectedCategories: CategoryOrUncategorized[];
     setSelectedCategories: React.Dispatch<

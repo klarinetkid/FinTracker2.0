@@ -1,10 +1,10 @@
+import { parse } from "csv-parse/browser/esm";
+import moment from "moment";
 import { FileContent } from "use-file-picker/types";
 import ImportFormat from "../types/ImportFormat";
 import TransactionViewModel from "../types/TransactionViewModel";
-import moment from "moment";
-import { isEmpty } from "./StringHelper";
 import { formatDateOnly } from "./DateHelper";
-import { parse } from "csv-parse/browser/esm";
+import { isEmpty } from "./StringHelper";
 
 type CsvRow = { [x: string]: string };
 

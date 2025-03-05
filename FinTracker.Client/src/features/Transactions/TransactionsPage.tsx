@@ -1,39 +1,45 @@
 import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import appsettings from "../../appsettings.json";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import TransactionTable from "../../components/TransactionTable";
+import useDebounce from "../../hooks/useDebounce";
 import useRefresh from "../../hooks/useRefresh";
 import TransactionService from "../../services/TransactionService";
 import Transaction from "../../types/Transaction";
 import TransactionQuery from "../../types/TransactionQuery";
 import TransactionViewModel from "../../types/TransactionViewModel";
+import { blurActiveElement } from "../../utils/HtmlHelper";
 import { AddTransactionIcon, FilterRemoveIcon } from "../../utils/Icons";
+import ToastManager from "../../utils/ToastManager";
 import TransactionFilters from "./TransactionFilters";
 import TransactionForm from "./TransactionForm";
 
-const defaultFilters: TransactionQuery = {
-    after: "",
-    before: "",
-    categoryId: undefined,
-    lessThan: "",
-    moreThan: "",
-    search: "",
-    type: "",
-    orderBy: "date",
-    order: "desc",
-};
-
 function TransactionsPage() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [editingValues, setEditingValues] = useState<TransactionViewModel>();
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
-    const [filterQuery, setFilterQuery] =
-        useState<TransactionQuery>(defaultFilters);
-    const [editingValues, setEditingValues] = useState<TransactionViewModel>();
+
+    const [filterQuery, setFilterQuery] = useState<TransactionQuery>({});
+    const [debouncedQuery, setDebouncedQuery] = useState({});
+    const debouncedResult = useDebounce(
+        debouncedQuery,
+        appsettings.transactionSearchDebounceMs
+    );
+
+    useEffect(() => {
+        setFilterQuery({
+            ...debouncedResult,
+            ...filterQuery,
+        });
+    }, [debouncedResult]);
 
     useEffect(() => {
         const searchCategory =
@@ -51,12 +57,14 @@ function TransactionsPage() {
             <Row justifyContent="space-between">
                 <h1>Transactions</h1>
                 <div className="flex">
-                    {JSON.stringify(filterQuery) !==
-                        JSON.stringify(defaultFilters) && (
+                    {anyFiltersSelected() && (
                         <IconButton
                             icon={FilterRemoveIcon}
                             title="Reset filters"
-                            onClick={() => setFilterQuery(defaultFilters)}
+                            onClick={() => {
+                                setFilterQuery({});
+                                setDebouncedQuery({});
+                            }}
                         />
                     )}
                     <IconButton
@@ -70,6 +78,8 @@ function TransactionsPage() {
             <TransactionFilters
                 filterQuery={filterQuery}
                 setFilterQuery={setFilterQuery}
+                debouncedQuery={debouncedQuery}
+                setDebouncedQuery={setDebouncedQuery}
             />
 
             <TransactionTable
@@ -84,10 +94,19 @@ function TransactionsPage() {
                 <TransactionForm
                     onSubmit={submitTransaction}
                     onCancel={() => setIsDrawerOpen(false)}
-                    onDelete={deleteTransaction}
+                    onDelete={() => setIsConfirmingDelete(true)}
                     values={editingValues}
                 />
             </Drawer>
+
+            {isConfirmingDelete && (
+                <ConfirmationPopup
+                    onCancel={() => setIsConfirmingDelete(false)}
+                    title={"Are you sure?"}
+                    body={"Deleting a transaction cannot be undone."}
+                    onConfirm={deleteTransaction}
+                />
+            )}
         </Page>
     );
 
@@ -122,16 +141,37 @@ function TransactionsPage() {
             ? TransactionService.patchTransaction(model)
             : TransactionService.createTransaction(model)
         ).then(() => {
+            blurActiveElement();
             refresh();
             setIsDrawerOpen(false);
+            ToastManager.addToast({
+                type: "success",
+                title: "Success",
+                body: "The transaction was successfully saved.",
+            });
         });
     }
 
     async function deleteTransaction() {
         if (!editingValues?.id) return;
         await TransactionService.deleteTransaction(editingValues.id);
+        blurActiveElement();
         refresh();
+        setIsConfirmingDelete(false);
         setIsDrawerOpen(false);
+        ToastManager.addToast({
+            type: "success",
+            title: "Success",
+            body: "The transaction was successfully deleted.",
+        });
+    }
+
+    function anyFiltersSelected() {
+        return (
+            Object.values({ ...filterQuery, ...debouncedQuery }).filter(
+                (v) => v !== undefined
+            ).length > 0
+        );
     }
 }
 

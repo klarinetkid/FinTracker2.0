@@ -58,8 +58,8 @@ function ImportPage() {
 
             const params = importParams as ImportParams;
             minimumTime(1200, () => transactionImport.PrepareImport(params))
-                .then(() => {
-                    if (transactionImport.Transcations.length > 0) {
+                .then((numRows: number) => {
+                    if (numRows > 0) {
                         setFlowStep("editing");
                     } else {
                         setFlowStep("no rows");
@@ -101,15 +101,17 @@ function ImportPage() {
 
             {getPageBody()}
 
-            <ConfirmationPopup
-                title="Are you sure you want to leave?"
-                body="Unsaved changes will be discarded."
-                active={blocker.state === "blocked"}
-                onCancel={() => blocker.reset && blocker.reset()}
-                onConfirm={() =>
-                    blocker.proceed && blocker.proceed() && blocker.reset()
-                }
-            />
+            {blocker.state === "blocked" && (
+                <ConfirmationPopup
+                    title="Are you sure you want to leave?"
+                    body="Unsaved changes will be discarded."
+                    onCancel={() => blocker.reset()}
+                    onConfirm={() => {
+                        blocker.proceed();
+                        blocker.reset();
+                    }}
+                />
+            )}
         </Page>
     );
 

@@ -9,10 +9,14 @@ import TransactionQuery from "../../types/TransactionQuery";
 interface TransactionFiltersProps {
     filterQuery: TransactionQuery;
     setFilterQuery: React.Dispatch<React.SetStateAction<TransactionQuery>>;
+    debouncedQuery: TransactionQuery;
+    setDebouncedQuery: React.Dispatch<React.SetStateAction<TransactionQuery>>;
 }
 
 function TransactionFilters(props: TransactionFiltersProps) {
-    const { filterQuery, setFilterQuery } = props;
+    const { filterQuery, setFilterQuery, debouncedQuery, setDebouncedQuery } =
+        props;
+
     const globalDataCache = useGlobalDataCache();
 
     return (
@@ -20,9 +24,13 @@ function TransactionFilters(props: TransactionFiltersProps) {
             <FormGroup fieldName="Search">
                 <Input
                     placeholder="Keyword"
-                    name="search"
-                    value={filterQuery.search ?? ""}
-                    onChange={updateQuery}
+                    value={debouncedQuery.search ?? ""}
+                    onChange={(e) =>
+                        setDebouncedQuery({
+                            ...debouncedQuery,
+                            search: e.target.value,
+                        })
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="Category">
@@ -43,63 +51,68 @@ function TransactionFilters(props: TransactionFiltersProps) {
             </FormGroup>
             <FormGroup fieldName="After">
                 <Input
-                    name="after"
                     placeholder="yyyy-mm-dd"
-                    value={filterQuery.after ?? ""}
-                    onChange={updateQuery}
+                    value={debouncedQuery.after ?? ""}
+                    onChange={(e) =>
+                        setDebouncedQuery({
+                            ...debouncedQuery,
+                            after: e.target.value,
+                        })
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="Before">
                 <Input
-                    name="before"
                     placeholder="yyyy-mm-dd"
-                    value={filterQuery.before ?? ""}
-                    onChange={updateQuery}
+                    value={debouncedQuery.before ?? ""}
+                    onChange={(e) =>
+                        setDebouncedQuery({
+                            ...debouncedQuery,
+                            before: e.target.value,
+                        })
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="More Than">
                 <Input
                     className="ralign"
                     placeholder="$0.00"
-                    name="moreThan"
-                    value={filterQuery.moreThan ?? ""}
-                    onChange={updateQuery}
+                    value={debouncedQuery.moreThan ?? ""}
+                    onChange={(e) =>
+                        setDebouncedQuery({
+                            ...debouncedQuery,
+                            moreThan: e.target.value,
+                        })
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="Less Than">
                 <Input
                     className="ralign"
                     placeholder="$0.00"
-                    name="lessThan"
-                    value={filterQuery.lessThan ?? ""}
-                    onChange={updateQuery}
+                    value={debouncedQuery.lessThan ?? ""}
+                    onChange={(e) =>
+                        setDebouncedQuery({
+                            ...debouncedQuery,
+                            lessThan: e.target.value,
+                        })
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="Type">
                 <Select
-                    name="type"
                     value={filterQuery.type ?? ""}
-                    onChange={updateQuery}
+                    onChange={(e) =>
+                        setFilterQuery({ ...filterQuery, type: e.target.value })
+                    }
                 >
                     <option value="">All</option>
                     <option value="cash">Cash</option>
-                    <option value="credit">Digital</option>
+                    <option value="digital">Digital</option>
                 </Select>
             </FormGroup>
         </Row>
     );
-
-    function updateQuery(
-        event:
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<HTMLSelectElement>
-    ): void {
-        const { name, value } = event.target;
-        setFilterQuery({
-            ...filterQuery,
-            [name]: value,
-        });
-    }
 }
 
 export default TransactionFilters;

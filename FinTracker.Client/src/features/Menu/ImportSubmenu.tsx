@@ -29,14 +29,17 @@ function ImportSubmenu() {
     // need to use block scoped variable for this
     let selectedFormat: ImportFormat | undefined;
 
-    return globalDataCache.importFormats.value.map((f, i) => (
-        <MenuTile
-            key={i}
-            title={f.importFormatName}
-            iconPath={f.image ? "/format-icons/" + f.image : undefined}
-            onClick={() => selectFormat(f)}
-        />
-    ));
+    return (
+        globalDataCache.importFormats.value &&
+        globalDataCache.importFormats.value.map((f, i) => (
+            <MenuTile
+                key={i}
+                title={f.importFormatName}
+                iconPath={f.image ? "/format-icons/" + f.image : undefined}
+                onClick={() => selectFormat(f)}
+            />
+        ))
+    );
 
     function selectFormat(format: ImportFormat) {
         selectedFormat = format;
