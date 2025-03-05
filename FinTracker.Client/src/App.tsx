@@ -15,6 +15,7 @@ import TransactionsPage from "./features/Transactions/TransactionsPage";
 import "./styles/_global.css";
 import "./styles/_variables.css";
 import Pages from "./types/Pages";
+import TrendsPage from "./features/Trends/TrendsPage";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
             { path: Pages.Memos, element: <MemosPage /> },
             { path: Pages.Transactions, element: <TransactionsPage /> },
             { path: Pages.About, element: <AboutPage /> },
+            { path: Pages.Trends, element: <TrendsPage /> },
             { path: "*", element: <NotFoundPage /> },
         ],
     },

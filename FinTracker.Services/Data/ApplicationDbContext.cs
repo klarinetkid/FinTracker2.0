@@ -36,6 +36,12 @@ namespace FinTracker.Services.Data
             return totals;
         }
 
+        public TrendPoint[] GetTrendPoints(DateOnly start, DateOnly end, string interval, int intervalNum, int categoryId)
+        {
+            return Database.SqlQuery<TrendPoint>($"SpGetTrendPoints {start}, {end}, {interval}, {intervalNum}, {categoryId}")
+                .ToArray();
+        }
+
         public IQueryable<TblTransaction> TransactionsInRange(DateOnly rangeStart, DateOnly rangeEnd)
         {
             return TblTransactions.Where(t => t.Date >= rangeStart && t.Date < rangeEnd);

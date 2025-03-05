@@ -17,4 +17,11 @@ namespace FinTracker.Services.Data.Entities
         public Int64? Budget { get; set; }
         public Int64? BudgetDeviation { get; set; }
     }
+
+    public class TrendPoint
+    {
+        public DateOnly Start { get; set; }
+        public DateOnly End { get; set; }
+        public int? Total { get; set; }
+    }
 }

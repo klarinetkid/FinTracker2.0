@@ -1,0 +1,13 @@
+
+.leftcol {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.datarow {
+    height: 820px;
+    align-items: start;
+}

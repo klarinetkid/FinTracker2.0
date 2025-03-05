@@ -8,6 +8,7 @@ enum Pages {
     Memos = "/memos",
     Transactions = "/transactions",
     About = "/about",
+    Trends = "/trends",
 }
 
 export default Pages;

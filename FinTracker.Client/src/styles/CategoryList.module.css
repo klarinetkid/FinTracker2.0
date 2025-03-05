@@ -1,0 +1,30 @@
+.holder {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding-right: 10px;
+    flex-grow: 1;
+    /*gap: 12px;*/
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding-top: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    cursor: pointer;
+}
+    .row:not(:last-child) {
+        border-bottom: solid 1px var(--border-100)
+    }
+
+    .row:hover {
+        background-color: var(--light-bg)
+    }
+
+    .row:active {
+        background-color: var(--border-200)
+    }
