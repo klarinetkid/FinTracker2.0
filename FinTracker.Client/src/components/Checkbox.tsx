@@ -20,6 +20,7 @@ function Checkbox(props: CheckboxProps) {
         <button
             className={classList(styles.cbox, value ? styles.active : "")}
             onClick={toggleCheckboxState}
+            type="button"
         >
             <Icon className="themed" />
         </button>

@@ -15,7 +15,6 @@ function MemoForm(props: FormProps<MemoViewModel>) {
     const { onSubmit, onDelete, onCancel, values } = props;
 
     const {
-        register,
         formState: { errors },
         handleSubmit,
         reset,
@@ -33,8 +32,6 @@ function MemoForm(props: FormProps<MemoViewModel>) {
     const catSelectorValue = values?.isImported
         ? globalDataCache.getCategoryById(watch("categoryId"))
         : NeverImport;
-
-    console.log(values);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -55,7 +52,7 @@ function MemoForm(props: FormProps<MemoViewModel>) {
                     <Controller
                         control={control}
                         name="categoryId"
-                        render={({ field: { value } }) => (
+                        render={() => (
                             <CategorySelector
                                 disabled={!values?.isImported}
                                 categories={globalDataCache.categories.value}
