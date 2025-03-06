@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import appsettings from "../../appsettings.json";
@@ -26,6 +26,10 @@ function TransactionsPage() {
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
+    const searchCategory = useMemo(
+        () => Number(searchParams.get("category")) || undefined,
+        [searchParams]
+    );
 
     const [filterQuery, setFilterQuery] = useState<TransactionQuery>({});
     const [debouncedQuery, setDebouncedQuery] = useState({});
@@ -36,21 +40,19 @@ function TransactionsPage() {
 
     useEffect(() => {
         setFilterQuery({
-            ...debouncedResult,
             ...filterQuery,
+            ...debouncedResult,
         });
     }, [debouncedResult]);
 
     useEffect(() => {
-        const searchCategory =
-            Number(searchParams.get("category")) || undefined;
         if (searchCategory) {
             setFilterQuery({
                 ...filterQuery,
                 categoryId: searchCategory,
             });
         }
-    }, []);
+    }, [searchCategory]);
 
     return (
         <Page>

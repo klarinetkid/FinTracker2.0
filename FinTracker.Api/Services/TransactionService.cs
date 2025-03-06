@@ -97,6 +97,7 @@ namespace FinTracker.Api.Services
                 {
                     tblTransaction.Date = model.Date ?? tblTransaction.Date;
                     tblTransaction.Memo = model.Memo ?? tblTransaction.Memo;
+                    tblTransaction.Amount = model.Amount ?? tblTransaction.Amount;
                 }
                 
                 db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
