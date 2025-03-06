@@ -10,13 +10,14 @@ export default function TransactionImportProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [transactions, setTransactions] = useState<TransactionViewModel[]>(
-        []
-    );
+    const [trxs, setTrxs] = useState<TransactionViewModel[]>([]);
+    const [isDirty, setIsDirty] = useState(false);
 
     return (
         <TransactionImportContext.Provider
-            value={new TransactionImportManager(transactions, setTransactions)}
+            value={
+                new TransactionImportManager(trxs, setTrxs, isDirty, setIsDirty)
+            }
         >
             {children}
         </TransactionImportContext.Provider>

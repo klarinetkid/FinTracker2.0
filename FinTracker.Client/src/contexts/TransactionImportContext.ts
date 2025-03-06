@@ -23,15 +23,24 @@ export class TransactionImportManager {
     private setTransactions: React.Dispatch<
         React.SetStateAction<TransactionViewModel[]>
     >;
+    public IsDirty: boolean;
+    private setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
+
+    private _setTransactions(trxs: TransactionViewModel[], isDirty = true) {
+        this.setTransactions(trxs);
+        this.setIsDirty(isDirty);
+    }
 
     constructor(
         transactions?: TransactionViewModel[],
-        setTransactions?: React.Dispatch<
-            React.SetStateAction<TransactionViewModel[]>
-        >
+        setTransactions?: typeof this.setTransactions,
+        isDirty?: boolean,
+        setIsDirty?: typeof this.setIsDirty
     ) {
         this.Transcations = transactions ?? [];
         this.setTransactions = setTransactions ?? (() => undefined);
+        this.IsDirty = isDirty ?? false;
+        this.setIsDirty = setIsDirty ?? (() => undefined);
     }
 
     public async PrepareImport(params: ImportParams): Promise<number> {
@@ -53,7 +62,7 @@ export class TransactionImportManager {
             })
         );
 
-        this.setTransactions(transactionModels);
+        this._setTransactions(transactionModels, false);
         return transactionModels.length;
     }
 
@@ -70,7 +79,7 @@ export class TransactionImportManager {
             if (newTransactions[id].isToSaveMemo && newTransactions[id].memo)
                 this.AddMemo(newTransactions[id]);
 
-            this.setTransactions(newTransactions);
+            this._setTransactions(newTransactions);
         }
     }
 
@@ -87,7 +96,7 @@ export class TransactionImportManager {
             if (newTransactions[id].isToSaveMemo)
                 this.RemoveMemo(newTransactions[id]);
 
-            this.setTransactions(newTransactions);
+            this._setTransactions(newTransactions);
         }
     }
 
@@ -115,7 +124,7 @@ export class TransactionImportManager {
                 trx.isSelectedForImport = transaction.isSelectedForImport;
             }
         }
-        this.setTransactions(newTransactions);
+        this._setTransactions(newTransactions);
     }
     public RemoveMemo(transaction: TransactionViewModel): void {
         if (!transaction.memo) return;
@@ -126,7 +135,7 @@ export class TransactionImportManager {
                 t.isToSaveMemo = false;
             }
         }
-        this.setTransactions(newTransactions);
+        this._setTransactions(newTransactions);
     }
 
     public async Submit(): Promise<ImportResult | undefined> {

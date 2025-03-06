@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useBlocker, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
 import StatusIndicator from "../../components/StatusIndicator";
@@ -9,14 +10,13 @@ import {
     ImportParams,
     ImportResult,
 } from "../../contexts/TransactionImportContext";
+import useConfirmLeave from "../../hooks/useConfirmLeave";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
 import Pages from "../../types/Pages";
 import { minimumTime } from "../../utils/PromiseHelper";
 import { pluralize } from "../../utils/StringHelper";
 import ImportTable from "./ImportTable";
-import ConfirmationPopup from "../../components/ConfirmationPopup";
-import useConfirmLeave from "../../hooks/useConfirmLeave";
 
 type ImportFlowStep =
     | "loading" // initial processing and loading of data into form
@@ -38,17 +38,16 @@ function ImportPage() {
         importResult ? "complete" : "loading"
     );
 
-    const flowStepRef = useRef<ImportFlowStep>();
-    flowStepRef.current = flowStep;
-
-    useConfirmLeave(
+    const shouldBlockNav = useCallback(
         () =>
-            flowStepRef.current === "editing" ||
-            flowStepRef.current === "submitting"
+            transactionImport.IsDirty &&
+            (flowStep === "editing" || flowStep === "submitting"),
+        [flowStep, transactionImport.IsDirty]
     );
+    useConfirmLeave(shouldBlockNav);
     const blocker = useBlocker(
         ({ currentLocation, nextLocation }) =>
-            (flowStep === "editing" || flowStep === "submitting") &&
+            shouldBlockNav() &&
             currentLocation.pathname !== nextLocation.pathname
     );
 
@@ -84,7 +83,10 @@ function ImportPage() {
                 <div>
                     {flowStep === "editing" && (
                         <>
-                            <Button type="button" onClick={cancelImport}>
+                            <Button
+                                type="button"
+                                onClick={() => navigate(Pages.Dashboard)}
+                            >
                                 Cancel
                             </Button>
                             <ButtonFill
@@ -155,10 +157,6 @@ function ImportPage() {
                     />
                 );
         }
-    }
-
-    function cancelImport() {
-        navigate(Pages.Dashboard);
     }
 
     function submitImport() {
