@@ -30,8 +30,8 @@ function ToastNotificationProvider({
         <>
             {children}
             <div className={styles.holder}>
-                {notifs.map((n, i) => (
-                    <ToastNotification key={i} {...n} />
+                {notifs.map((n) => (
+                    <ToastNotification key={n.id} {...n} />
                 ))}
             </div>
         </>
