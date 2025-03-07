@@ -1,6 +1,7 @@
 ﻿using FinTracker.Api.Common;
 using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace FinTracker.Api.Services
@@ -11,7 +12,7 @@ namespace FinTracker.Api.Services
         {
             if (!query.IsValid()) throw new ArgumentException();
 
-            IEnumerable<TblTransaction> transactions = db.TransactionsInRange(query.Start!.Value, query.End!.Value);
+            IEnumerable<TblTransaction> transactions = db.TransactionsInRange(query.Start.Value, query.End.Value);
             CategoryTotal[] categoryTotals = db.GetCategoryTotals(query.Start.Value, query.End.Value);
 
             return new BreakdownViewModel(query.Start.Value, query.End.Value, transactions, categoryTotals);
@@ -49,10 +50,13 @@ namespace FinTracker.Api.Services
     {
         public DateOnly? Start { get; set; }
         public DateOnly? End { get; set; }
-        
+
+        [MemberNotNullWhen(true, nameof(Start), nameof(End))]
         public bool IsValid()
         {
-            return Start.HasValue && End.HasValue && End.Value > Start.Value;
+            return Start != null
+                && End != null
+                && End.Value > Start.Value;
         }
     }
 }
