@@ -48,11 +48,22 @@
         --icon: #D1D1D1;
         --light-bg: #666666;
         /* borders */
-        --border-300: #ccc;
+        --border-100: #363636;
+        --border-200: #666;
+        --border-300: #aaa;
+        --border-400: #c9c9c9;
         /* misc */
         --highlight: #e69900;
         --box-shadow: #020202;
         /* colours */
+        /*--green: #198754;
+        --yellow: #ffc107;
+        --red: #dc3545;
+        --blue: #4da6ff;
+        --brown: #1a1100;*/
+        --deep-yellow: #c9980f;
+        --deep-green: #003a00;
+        --deep-red: #600000;
         --tan: #805500;
         --purple: #402060;
         --light-blue: #004f99;

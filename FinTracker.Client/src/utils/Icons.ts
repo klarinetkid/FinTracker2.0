@@ -7,6 +7,7 @@ import ArrowRightSquareIcon from "../assets/ArrowRightSquare.svg?react";
 import BackIcon from "../assets/Back.svg?react";
 import CategoryIcon from "../assets/Category.svg?react";
 import CategoryRefreshIcon from "../assets/CategoryRefresh.svg?react";
+import ChartAltIcon from "../assets/ChartAlt.svg?react";
 import ChartFillIcon from "../assets/ChartFill.svg?react";
 import CheckRingIcon from "../assets/CheckRing.svg?react";
 import CheckRingCircleIcon from "../assets/CheckRingCircle.svg?react";
@@ -44,6 +45,7 @@ export {
     BackIcon,
     CategoryIcon,
     CategoryRefreshIcon,
+    ChartAltIcon,
     ChartFillIcon,
     CheckRingIcon,
     CheckRingCircleIcon,

@@ -1,3 +1,10 @@
+.bodyContainer {
+    width: 820px;
+    height: 820px;
+    position: relative;
+    border: solid 1px var(--border-400);
+}
+
 
 .leftcol {
     display: flex;
@@ -5,6 +12,7 @@
     gap: 6px;
     height: 100%;
     flex-grow: 1;
+    max-width: 200px;
 }
 
 .datarow {

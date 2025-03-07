@@ -59,6 +59,12 @@ function MainMenu(props: MainMenuProps) {
                 disabled={!yearsExist}
             />
             <MenuTile
+                title="Trends"
+                icon={Icons.ChartAltIcon}
+                onClick={() => navigate(Pages.Trends)}
+                disabled={!yearsExist}
+            />
+            <MenuTile
                 title="System"
                 icon={Icons.SettingsFillIcon}
                 onClick={() => setSubMenu("system")}

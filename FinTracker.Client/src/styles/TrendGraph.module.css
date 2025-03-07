@@ -1,0 +1,26 @@
+.graph {
+    width: 100%;
+    height: 100%;
+}
+
+.axis {
+    stroke: var(--border-100);
+}
+
+.zeroLine {
+    stroke: var(--border-400);
+}
+
+.verticalGuide {
+    stroke: var(--border-100);
+}
+
+.horizontalGuide {
+    stroke: var(--light-bg);
+    stroke-width: 2;
+}
+
+.legendTxt {
+    fill: var(--placeholder-text);
+    font-size: 12px;
+}

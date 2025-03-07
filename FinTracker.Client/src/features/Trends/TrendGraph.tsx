@@ -1,52 +1,9 @@
+import styles from "../../styles/TrendGraph.module.css";
+import TrendGraphSizing from "../../types/TrendGraphSizing";
 import TrendLineCollection from "../../types/TrendLineCollection";
 import { formatCurrency } from "../../utils/NumberHelper";
+import TrendGraphPlotter from "../../utils/TrendGraphPlotter";
 import TrendGraphLine from "./TrendGraphLine";
-
-export type TrendGraphSizing = {
-    width: number;
-    height: number;
-    xAxis: number;
-    yAxis: number;
-};
-
-export class TrendGraphPlotter {
-    public sizing: TrendGraphSizing;
-    public lowerBound: number;
-    public upperBound: number;
-    public numPoints: number;
-
-    public boundDiff() {
-        return this.upperBound - this.lowerBound;
-    }
-    constructor(
-        sizing: TrendGraphSizing,
-        lowerBound: number,
-        upperBound: number,
-        numPoints: number
-    ) {
-        this.sizing = sizing;
-        this.lowerBound = lowerBound;
-        this.upperBound = upperBound;
-        this.numPoints = numPoints;
-
-        if (this.lowerBound > this.upperBound)
-            console.error("lowerBound is more than upperBound");
-    }
-
-    public plotY(value: number): number {
-        const yAxisHeight = this.sizing.height - this.sizing.xAxis;
-        const ratio =
-            (value - this.lowerBound) / (this.upperBound - this.lowerBound);
-
-        return yAxisHeight - ratio * yAxisHeight;
-    }
-
-    public plotX(value: number): number {
-        const xAxisWidth = this.sizing.width - this.sizing.yAxis;
-
-        return (xAxisWidth / this.numPoints) * value + this.sizing.yAxis;
-    }
-}
 
 interface TrendGraphProps {
     trend: TrendLineCollection;
@@ -56,14 +13,15 @@ interface TrendGraphProps {
 function TrendGraph(props: TrendGraphProps) {
     const { trend, sizing } = props;
 
-    const snapTo = 500;
+    const snapTo = 25_00;
 
     const lbound =
         trend.lowerBound -
         (trend.lowerBound < 0 ? snapTo : 0) -
         (trend.lowerBound % snapTo);
 
-    const ubound = trend.upperBound + snapTo - (trend.upperBound % snapTo);
+    const maxUbound = (trend.upperBound + snapTo) * 1.25;
+    const ubound = maxUbound - (maxUbound % snapTo);
 
     const numPoints = trend.lines[0].points.length - 1;
 
@@ -79,8 +37,8 @@ function TrendGraph(props: TrendGraphProps) {
             width={sizing.width}
             height={sizing.height}
             viewBox={`0 0 ${sizing.width} ${sizing.height}`}
-            style={{ border: "solid black 1px" }}
-            preserveAspectRatio="meet"
+            className={styles.graph}
+            preserveAspectRatio="none"
         >
             {verticalLines()}
             {horizontalLines()}
@@ -104,7 +62,7 @@ function TrendGraph(props: TrendGraphProps) {
                     x2={sizing.yAxis}
                     y1={0}
                     y2={sizing.height - sizing.xAxis}
-                    stroke="black"
+                    className={styles.axis}
                     strokeWidth={3}
                 />
                 <line
@@ -112,7 +70,7 @@ function TrendGraph(props: TrendGraphProps) {
                     x2={sizing.width}
                     y1={sizing.height - sizing.xAxis}
                     y2={sizing.height - sizing.xAxis}
-                    stroke="black"
+                    className={styles.axis}
                     strokeWidth={3}
                 />
                 {graphPlotter.lowerBound <= 0 &&
@@ -122,7 +80,7 @@ function TrendGraph(props: TrendGraphProps) {
                             x2={sizing.width}
                             y1={graphPlotter.plotY(0)}
                             y2={graphPlotter.plotY(0)}
-                            stroke="#444"
+                            className={styles.zeroLine}
                             strokeWidth={1}
                         />
                     )}
@@ -135,10 +93,10 @@ function TrendGraph(props: TrendGraphProps) {
 
         const yBottom = sizing.height - sizing.xAxis;
 
-        for (const i in trend.lines[0].points) {
+        for (let i = 0; i < trend.lines[0].points.length; i++) {
             const x = graphPlotter.plotX(i);
             result.push(
-                <g>
+                <g key={x}>
                     <text
                         x={x}
                         y={yBottom + 6}
@@ -146,8 +104,7 @@ function TrendGraph(props: TrendGraphProps) {
                         alignmentBaseline="text-before-edge"
                         transform-origin={`${x} ${yBottom + 6}`}
                         transform="rotate(-45)"
-                        fontSize="12px"
-                        fill="#666666"
+                        className={styles.legendTxt}
                     >
                         {trend.lines[0].points[i].start}
                     </text>
@@ -157,8 +114,8 @@ function TrendGraph(props: TrendGraphProps) {
                         x2={x}
                         y1={0}
                         y2={yBottom}
-                        stroke="#eeeeee"
-                        strokeWidth={2}
+                        className={styles.verticalGuide}
+                        strokeWidth={0.75}
                     />
                 </g>
             );
@@ -182,15 +139,19 @@ function TrendGraph(props: TrendGraphProps) {
             i += inc
         ) {
             const y = graphPlotter.plotY(i);
+
+            if (isNaN(y)) {
+                console.log("nan");
+            }
+
             result.push(
-                <g>
+                <g key={y}>
                     <text
                         x={sizing.yAxis - 10}
                         y={y}
                         textAnchor="end"
                         alignmentBaseline="middle"
-                        fontSize="12px"
-                        fill="#666666"
+                        className={styles.legendTxt}
                     >
                         {formatCurrency(i, false, true)}
                     </text>
@@ -200,8 +161,7 @@ function TrendGraph(props: TrendGraphProps) {
                         x2={sizing.width}
                         y1={y}
                         y2={y}
-                        stroke="#eeeeee"
-                        strokeWidth={2}
+                        className={styles.horizontalGuide}
                     />
                 </g>
             );

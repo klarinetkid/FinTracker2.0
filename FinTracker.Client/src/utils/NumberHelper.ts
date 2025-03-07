@@ -4,7 +4,7 @@ const USDollar = new Intl.NumberFormat("en-US", {
 });
 
 export function formatCurrency(
-    cents: number | undefined,
+    cents: number | undefined | null,
     abs = false,
     showZero = false
 ): string {

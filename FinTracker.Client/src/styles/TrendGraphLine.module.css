@@ -1,0 +1,44 @@
+.valuePath, .inferredPath {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.valuePath {
+    stroke-width: 4;
+}
+
+.inferredPath {
+    stroke-width: 3;
+    stroke-dasharray: 8 24;
+}
+
+.pointValueGroup circle {
+    cursor: pointer;
+    fill: white;
+    stroke: var(--fg);
+    stroke-width: 2;
+}
+
+.pointValueGroup.inverted circle, .pointValueGroup.inverted rect {
+    stroke: var(--deep-red);
+}
+
+.pointValueGroup:hover .valueLabel {
+    visibility: visible;
+}
+
+.valueLabel {
+    visibility: hidden;
+    cursor: pointer;
+}
+
+    .valueLabel rect {
+        fill: var(--bg);
+        stroke: var(--fg);
+    }
+
+    .valueLabel text {
+        fill: var(--fg);
+        text-anchor: middle;
+    }

@@ -17,5 +17,6 @@
     color: var(--red);
     font-weight: bold;
     font-size: 80%;
-    float: right;
+    position: absolute;
+    right: 0;
 }
