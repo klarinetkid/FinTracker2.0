@@ -31,8 +31,8 @@ namespace FinTracker.Api.Models
                     return "Day";
 
                 // if spans one week and start lines up with week from start of year
-                int weekNum = ISOWeek.GetWeekOfYear(Start.ToDateTime(new TimeOnly(0, 0, 0)));
-                int weekYear = ISOWeek.GetYear(Start.ToDateTime(new TimeOnly(0, 0, 0)));
+                int weekNum = ISOWeek.GetWeekOfYear(Start.ToDateTime());
+                int weekYear = ISOWeek.GetYear(Start.ToDateTime());
                 DateOnly firstDayOfWeek = DateOnly.FromDateTime(ISOWeek.GetYearStart(weekYear)).AddDays((weekNum-1) * 7); // Helper.FirstDateOfWeekISO8601(weekYear, weekNum);
                 if (Start.AddDays(7) == End && Start == firstDayOfWeek)
                     return "Week";
@@ -74,7 +74,7 @@ namespace FinTracker.Api.Models
                     case "Day":
                         return Start.ToString($"MMMM d'{Helper.GetDateOrdinalIndication(Start.Day)}' yyyy");
                     case "Week":
-                        return Start.ToString("yyyy") + " Week " + ISOWeek.GetWeekOfYear(Start.ToDateTime(new TimeOnly(0, 0, 0)));
+                        return Start.ToString("yyyy") + " Week " + ISOWeek.GetWeekOfYear(Start.ToDateTime());
                     case "Month":
                         return Start.ToString("MMMM yyyy");
                     case "Year":
@@ -101,7 +101,7 @@ namespace FinTracker.Api.Models
         {
             get
             {
-                TimeSpan Diff = (End.ToDateTime(new TimeOnly(0, 0, 0)) - Start.ToDateTime(new TimeOnly(0, 0, 0)));
+                TimeSpan Diff = (End.ToDateTime() - Start.ToDateTime());
                 switch (Type)
                 {
                     case "Week":
