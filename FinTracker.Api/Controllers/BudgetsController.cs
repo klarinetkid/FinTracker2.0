@@ -24,7 +24,7 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpPut("{id?}")]
-        public TblBudget? Patch(int? id, BudgetViewModel? model)
+        public TblBudget? Patch(int? id, BudgetViewModel model)
         {
             if (id == null) throw new Exception("Id is null");
             return service.PutBudgetItem(id.Value, model);

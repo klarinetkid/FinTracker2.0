@@ -13,7 +13,7 @@ namespace FinTracker.Api.Controllers
         [HttpGet]
         public TrendLineCollection Get([FromQuery] TrendQuery query)
         {
-            return service.GetTrend(query);
+            return service.GetTrends(query);
         }
     }
 }
