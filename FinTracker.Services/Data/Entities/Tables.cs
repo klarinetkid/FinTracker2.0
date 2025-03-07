@@ -4,8 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinTracker.Services.Data.Entities
 {
+    public class BaseEntity
+    {
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+    }
+
+
     [Table("TblCategory")]
-    public class TblCategory
+    public class TblCategory : BaseEntity
     {
         [Key]
         public int Id { get; set; }
@@ -14,7 +21,7 @@ namespace FinTracker.Services.Data.Entities
     }
 
     [Table("TblBudget")]
-    public class TblBudget
+    public class TblBudget : BaseEntity
     {
         [Key]
         public int Id { get; set; }
@@ -25,7 +32,7 @@ namespace FinTracker.Services.Data.Entities
     }
 
     [Table("TblTransaction")]
-    public class TblTransaction
+    public class TblTransaction : BaseEntity
     {
         [Key]
         public int Id { get; set; }
@@ -38,7 +45,7 @@ namespace FinTracker.Services.Data.Entities
     }
 
     [Table("TblImportFormat")]
-    public class TblImportFormat
+    public class TblImportFormat : BaseEntity
     {
         [Key]
         public int Id { get; set; }
@@ -53,7 +60,7 @@ namespace FinTracker.Services.Data.Entities
     }
 
     [Table("TblMemo")]
-    public class TblMemo
+    public class TblMemo : BaseEntity
     {
         [Key]
         public int Id { get; set; }

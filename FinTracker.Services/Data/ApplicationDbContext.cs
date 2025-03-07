@@ -24,6 +24,41 @@ namespace FinTracker.Services.Data
             return new DbContextOptionsBuilder().UseSqlServer(connectionString).Options;
         }
 
+        public override int SaveChanges()
+        {
+            UpdateTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateTimestamps();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateTimestamps()
+        {
+            var entries = ChangeTracker.Entries<BaseEntity>();
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedOn = DateTime.UtcNow;
+                    entry.Entity.ModifiedOn = DateTime.UtcNow;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.ModifiedOn = DateTime.UtcNow;
+                    entry.Property(e => e.CreatedOn).IsModified = false;
+                }
+            }
+        }
+
+
+        #region procedures
+
         public CategoryTotal[] GetCategoryTotals(DateOnly start, DateOnly end)
         {
             CategoryTotal[] totals = Database.SqlQuery<CategoryTotal>($"SpGetCategoryTotals {start}, {end}").ToArray();
@@ -52,5 +87,7 @@ namespace FinTracker.Services.Data
             // columns in this order to take advantage of index on date, memo, amount
             return TblTransactions.Any(t => t.Date == date && t.Memo == memo && t.Amount == amount);
         }
+
+        #endregion
     }
 }

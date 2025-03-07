@@ -5,7 +5,9 @@ drop table if exists TblCategory;
 create table TblCategory (
 	[Id] int primary key clustered identity(1,1) not null,
 	[CategoryName] varchar(40) not null,
-	[Colour] varchar(25) not null
+	[Colour] varchar(25) not null,
+	[CreatedOn] datetime,
+	[ModifiedOn] datetime
 );
 
 ----------------------------------
@@ -16,7 +18,9 @@ create table TblBudget (
 	[Id] int primary key clustered identity(1,1) not null,
 	[CategoryId] int references TblCategory(Id) not null,
 	[Amount] int not null,
-	[EffectiveDate] date not null
+	[EffectiveDate] date not null,
+	[CreatedOn] datetime,
+	[ModifiedOn] datetime
 );
 
 ----------------------------------
@@ -30,6 +34,9 @@ create table TblTransaction (
 	[Memo] varchar(200),
 	[CategoryId] int references TblCategory(id),
 	[IsCashTransaction] bit not null DEFAULT 0,
+	[CreatedOn] datetime,
+	[ModifiedOn] datetime,
+
 	index IX_TblTransaction_Date_Memo_Amount ([Date], [Memo], [Amount])
 );
 
@@ -46,7 +53,9 @@ create table TblImportFormat (
 	[InvertAmounts] bit not null,
 	[HeaderLines] int not null,
 	[Delimiter] varchar(1) not null,
-	[Image] varchar(25)
+	[Image] varchar(25),
+	[CreatedOn] datetime,
+	[ModifiedOn] datetime
 );
 
 ----------------------------------
@@ -58,6 +67,9 @@ create table TblMemo (
 	[Memo] varchar(200) not null,
 	[CategoryId] int references TblCategory(id) NULL,
 	[IsImported] bit not null default 1,
+	[CreatedOn] datetime,
+	[ModifiedOn] datetime,
+
 	constraint AK_TblMemo_Memo unique([Memo]),
 	constraint CK_TblMemo_IsImported_CategoryId check (
 		(
