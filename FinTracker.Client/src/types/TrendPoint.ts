@@ -1,8 +1,8 @@
 type TrendPoint = {
     start: string;
     end: string;
-    total: number | null;
-    plotValue: number | null;
+    total: number;
+    plotValue: number;
 };
 
 export default TrendPoint;

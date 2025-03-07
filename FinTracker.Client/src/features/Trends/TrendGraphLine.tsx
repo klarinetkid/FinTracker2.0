@@ -30,17 +30,11 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                 className={styles.valuePath}
                 d={getPathValue(coords)}
             />
-            <path
-                stroke={lineColour}
-                className={styles.inferredPath}
-                d={getInferredPathValue(coords)}
-            />
-            {coords.filter((c) => c !== null).map(drawValuePoint)}
+            {coords.filter((c) => c.total !== 0).map(drawValuePoint)}
         </g>
     );
 
     function getPointCoord(point: TrendPoint, i: number) {
-        if (point.plotValue === null) return null;
         return {
             ...point,
             x: graphPlotter.plotX(i),
@@ -49,50 +43,14 @@ function TrendGraphLine(props: TrendGraphLineProps) {
         } as PointCoordinate;
     }
 
-    function getPathValue(coords: (PointCoordinate | null)[]) {
-        const result = [];
-
-        for (let i = 0; i < coords.length; i++) {
-            const coord = coords[i];
-
-            if (coord === null) continue;
-
-            const move = i === 0 || coords[i - 1] === null ? "M" : "";
-            result.push(move + coord.x + " " + coord.y);
-        }
-
-        return result.join(" ");
-    }
-
-    function getInferredPathValue(coords: (PointCoordinate | null)[]) {
-        // start with first point where next value is null
-        // find next non null point after that to connect them
-        // if no point after, die
-        const result = [];
-
-        for (let i = 0; i < coords.length; i++) {
-            const nextBeforeNull = coords.findIndex(
-                (p, i2) => i2 >= i && p && !coords[i2 + 1]
-            );
-
-            if (nextBeforeNull < -1) break;
-
-            const nextNullAfter = coords.findIndex(
-                (p, i) => i > nextBeforeNull && p
-            );
-
-            if (nextNullAfter < -1) break;
-
-            const from = coords[nextBeforeNull];
-            const to = coords[nextNullAfter];
-            if (!from || !to) continue;
-
-            result.push("M" + from.x + " " + from.y + " " + to.x + " " + to.y);
-
-            i = nextBeforeNull;
-        }
-
-        return result.join(" ");
+    function getPathValue(coords: PointCoordinate[]) {
+        return (
+            "M" +
+            coords
+                .map((c) => [c.x, c.y])
+                .flat()
+                .join(" ")
+        );
     }
 
     function drawValuePoint(point: PointCoordinate, i: number) {

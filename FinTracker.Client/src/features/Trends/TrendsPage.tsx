@@ -113,7 +113,7 @@ function TrendsPage() {
         })
             .then((trends) => {
                 form.reset({}, { keepValues: true });
-                if (trends.lowerBound === null && trends.upperBound === null) {
+                if (trends.lowerBound === trends.upperBound) {
                     setTrends(undefined);
                     setPageState("no data");
                 } else {

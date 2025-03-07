@@ -1,3 +1,4 @@
+import moment from "moment";
 import { UseFormReturn } from "react-hook-form";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
@@ -31,6 +32,13 @@ function TrendInputs({ form }: TrendInputsProps) {
                     registration={form.register("end", {
                         required: true,
                         pattern: DatePattern,
+                        validate: (end, query) => {
+                            return moment(end).isSameOrBefore(
+                                moment(query.start)
+                            )
+                                ? "End must be after start."
+                                : true;
+                        },
                     })}
                 />
             </FormGroup>

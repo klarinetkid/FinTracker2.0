@@ -24,7 +24,7 @@ from
 			[End],
 			(
 				select
-					sum([Amount])
+					coalesce(sum([Amount]), 0)
 				from
 					dbo.TblTransaction
 				where

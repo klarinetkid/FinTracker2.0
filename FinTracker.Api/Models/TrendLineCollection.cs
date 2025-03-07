@@ -4,10 +4,10 @@
     {
         public TrendLine[] Lines { get; set; }
         
-        public int? LowerBound => allPts.Min();
-        public int? UpperBound => allPts.Max();
+        public int LowerBound => allPts.Min();
+        public int UpperBound => allPts.Max();
         
-        private IEnumerable<int?> allPts => 
+        private IEnumerable<int> allPts => 
             Lines.SelectMany(l => 
                 l.Points.Select(p => p.PlotValue));
 
