@@ -36,15 +36,9 @@ namespace FinTracker.Api.Services
 
         public void DeleteBudgetItem(int id)
         {
-            TblBudget? budgetItem = db.TblBudgets.Find(id);
-            if (budgetItem != null)
-            {
-                db.TblBudgets.Entry(budgetItem).State = EntityState.Deleted;
-                db.SaveChanges();
-            } else
-            {
-                throw new EntityNotFoundException();
-            }
+            TblBudget budgetItem = db.TblBudgets.FindEntity(id);
+            db.TblBudgets.Entry(budgetItem).State = EntityState.Deleted;
+            db.SaveChanges();
         }
     }
 }

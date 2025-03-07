@@ -40,16 +40,9 @@ namespace FinTracker.Api.Services
 
         public void DeleteCategory(int id)
         {
-            TblCategory? category = db.TblCategories.Find(id);
-            if (category != null)
-            {
-                db.TblCategories.Entry(category).State = EntityState.Deleted;
-                db.SaveChanges();
-            }
-            else
-            {
-                throw new EntityNotFoundException();
-            }
+            TblCategory category = db.TblCategories.FindEntity(id);
+            db.TblCategories.Entry(category).State = EntityState.Deleted;
+            db.SaveChanges();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace FinTracker.Api.Services
 
             TrendLine[] lines = query.CategoryId.Select(cId => new TrendLine()
             {
-                Category = db.TblCategories.Find(cId) ?? throw new EntityNotFoundException(),
+                Category = db.TblCategories.FindEntity(cId),
                 Points = db.GetTrendPoints(query.Start.Value, query.End.Value, query.Interval, query.IntervalNum.Value, cId)
             }).ToArray();
 

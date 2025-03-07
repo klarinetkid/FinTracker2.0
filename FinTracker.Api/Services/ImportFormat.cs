@@ -30,16 +30,9 @@ namespace FinTracker.Api.Services
         
         public void DeleteImportFormat(int id)
         {
-            TblImportFormat? importFileFormat = db.TblImportFormats.Find(id);
-            if (importFileFormat != null)
-            {
-                db.TblImportFormats.Entry(importFileFormat).State = EntityState.Deleted;
-                db.SaveChanges();
-            }
-            else
-            {
-                throw new EntityNotFoundException();
-            }
+            TblImportFormat importFileFormat = db.TblImportFormats.FindEntity(id);
+            db.TblImportFormats.Entry(importFileFormat).State = EntityState.Deleted;
+            db.SaveChanges();
         }
     }
 }

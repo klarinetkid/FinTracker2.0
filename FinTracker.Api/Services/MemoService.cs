@@ -27,18 +27,11 @@ namespace FinTracker.Api.Services
 
         public TblMemo? PatchMemo(int id, MemoViewModel model)
         {
-            TblMemo? tblMemo = db.TblMemos.Find(id);
-            if (tblMemo != null)
-            {
-                tblMemo.CategoryId = model.CategoryId ?? null;
-                tblMemo.IsImported = model.IsImported ?? false;
-                db.TblMemos.Entry(tblMemo).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-            else
-            {
-                throw new EntityNotFoundException();
-            }
+            TblMemo tblMemo = db.TblMemos.FindEntity(id);
+            tblMemo.CategoryId = model.CategoryId ?? null;
+            tblMemo.IsImported = model.IsImported ?? false;
+            db.TblMemos.Entry(tblMemo).State = EntityState.Modified;
+            db.SaveChanges();
 
             return db.TblMemos.Include(e => e.Category)
                 .FirstOrDefault(e => e.Id == id);
@@ -46,16 +39,9 @@ namespace FinTracker.Api.Services
 
         public void DeleteMemo(int id)
         {
-            TblMemo? memo = db.TblMemos.Find(id);
-            if (memo != null)
-            {
-                db.TblMemos.Entry(memo).State = EntityState.Deleted;
-                db.SaveChanges();
-            }
-            else
-            {
-                throw new EntityNotFoundException();
-            }
+            TblMemo memo = db.TblMemos.FindEntity(id);
+            db.TblMemos.Entry(memo).State = EntityState.Deleted;
+            db.SaveChanges();
         }
 
         public IEnumerable<Grouping<TblCategory?, TblMemo>> GetGrouped()
