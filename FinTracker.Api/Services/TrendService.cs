@@ -35,7 +35,7 @@ namespace FinTracker.Api.Services
         {
             return Start != null
                 && End != null
-                && Start.Value > End.Value
+                && End.Value > Start.Value
 
                 && Interval != null
                 && TrendService.Intervals.Contains(Interval.ToLower())
