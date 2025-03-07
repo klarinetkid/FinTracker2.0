@@ -5,34 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class ImportFormat : BaseService
+    public class ImportFormat : BaseEntityService<TblImportFormat>
     {
         public TblImportFormat[] GetImportFormats()
         {
             return db.TblImportFormats.OrderBy(e => e.ImportFormatName).ToArray();
         }
 
-        public TblImportFormat CreateImportFormat(ImportFormatViewModel model)
-        {
-            TblImportFormat tblImportFileFormat = model.ToTblImportFormat();
-            db.TblImportFormats.Entry(tblImportFileFormat).State = EntityState.Added;
-            db.SaveChanges();
-            return tblImportFileFormat;
-        }
-
-        public TblImportFormat PutImportFormat(int importFileFormatId, ImportFormatViewModel model)
-        {
-            TblImportFormat importFileFormat = model.ToTblImportFormat(importFileFormatId);
-            db.TblImportFormats.Entry(importFileFormat).State = EntityState.Modified;
-            db.SaveChanges();
-            return importFileFormat;
-        }
-        
-        public void DeleteImportFormat(int id)
-        {
-            TblImportFormat importFileFormat = db.TblImportFormats.FindEntity(id);
-            db.TblImportFormats.Entry(importFileFormat).State = EntityState.Deleted;
-            db.SaveChanges();
-        }
+        public TblImportFormat CreateImportFormat(ImportFormatViewModel model) => addEntityAndSave(model);
+        public TblImportFormat PutImportFormat(int id, ImportFormatViewModel model) => putEntityAndSave(id, model);
+        public void DeleteImportFormat(int id) => deleteEntityAndSave(id);
     }
 }

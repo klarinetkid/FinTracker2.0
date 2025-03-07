@@ -6,8 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class TransactionService : BaseService
+    public class TransactionService : BaseEntityService<TblTransaction>
     {
+        public TblTransaction CreateCashTransaction(TransactionViewModel model) => addEntityAndSave(model);
+        public void DeleteTransaction(int id) => deleteEntityAndSave(id);
+
         public PaginatedResponse<TblTransaction> GetTransactions(TransactionQuery? query)
         {
             IQueryable<TblTransaction> trxs = db.TblTransactions
@@ -87,9 +90,9 @@ namespace FinTracker.Api.Services
             };
         }
 
-        public TblTransaction? PatchTransaction(int transactionId, TransactionViewModel model)
+        public TblTransaction PatchTransaction(int id, TransactionViewModel model)
         {
-            TblTransaction tblTransaction = db.TblTransactions.FindEntity(transactionId);
+            TblTransaction tblTransaction = db.TblTransactions.FindEntity(id);
             
             tblTransaction.CategoryId = model.CategoryId;
             
@@ -103,10 +106,10 @@ namespace FinTracker.Api.Services
             db.TblTransactions.Entry(tblTransaction).State = EntityState.Modified;
             db.SaveChanges();
 
-            return db.TblTransactions.Include(e => e.Category).FirstOrDefault(e => e.Id == transactionId);
+            return db.TblTransactions.Include(e => e.Category).First(e => e.Id == id);
         }
 
-        public TransactionViewModel[] PrepareImport(TransactionViewModel?[] transactions)
+        public TransactionViewModel[] PrepareImport(TransactionViewModel?[] models)
         {
             MemoService memoService = new();
 
@@ -117,47 +120,32 @@ namespace FinTracker.Api.Services
             }
 
             List<TransactionViewModel> results = new ();
-            foreach (TransactionViewModel? transaction in transactions)
+            foreach (TransactionViewModel? trx in models)
             {
-                if (transaction == null || transaction.Memo == null) continue;
+                if (trx == null || trx.Memo == null) continue;
 
-                transaction.IsAlreadyImported = transaction.Date.HasValue && transaction.Amount.HasValue
-                    ? db.DoesTransactionExist(transaction.Date.Value, transaction.Memo, transaction.Amount.Value)
+                trx.IsAlreadyImported = trx.Date.HasValue && trx.Amount.HasValue
+                    ? db.DoesTransactionExist(trx.Date.Value, trx.Memo, trx.Amount.Value)
                     : false;
                 
-                if (cachedMemos.ContainsKey(transaction.Memo))
+                if (cachedMemos.ContainsKey(trx.Memo))
                 {
-                    transaction.SavedMemo = cachedMemos[transaction.Memo];
-                    transaction.CategoryId = transaction.SavedMemo?.CategoryId;
-                    transaction.Category = transaction.SavedMemo?.Category;
+                    trx.SavedMemo = cachedMemos[trx.Memo];
+                    trx.CategoryId = trx.SavedMemo?.CategoryId;
+                    trx.Category = trx.SavedMemo?.Category;
                 }
 
-                results.Add(transaction);
+                results.Add(trx);
             }
 
             return results.OrderBy(e => e.Date).ToArray();
         }
 
-        public TblTransaction CreateCashTransaction(TransactionViewModel transaction)
-        {
-            TblTransaction tblTransaction = transaction.ToTblTransaction();
-            tblTransaction.IsCashTransaction = true;
-            db.TblTransactions.Entry(tblTransaction).State = EntityState.Added;
-            db.SaveChanges();
-            return tblTransaction;
-        }
 
         public int BatchCreate(TransactionViewModel[] transactions)
         {
-            db.TblTransactions.AddRange(transactions.Select(t => t.ToTblTransaction()));
+            db.TblTransactions.AddRange(transactions.Select(t => t.ToTblEntity()));
             return db.SaveChanges();
-        }
-
-        public void DeleteTransaction(int id)
-        {
-            TblTransaction transaction = db.TblTransactions.FindEntity(id);
-            db.TblTransactions.Entry(transaction).State = EntityState.Deleted;
-            db.SaveChanges();
         }
     }
 

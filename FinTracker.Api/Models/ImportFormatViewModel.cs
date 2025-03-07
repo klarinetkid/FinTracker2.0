@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace FinTracker.Api.Models
 {
-    public class ImportFormatViewModel
+    public class ImportFormatViewModel : IEntityViewModel<TblImportFormat>
     {
         [Required]
         [MaxLength(50, ErrorMessage = Strings.ErrorMaxLength)]
@@ -42,7 +42,7 @@ namespace FinTracker.Api.Models
         [MaxLength(25, ErrorMessage = Strings.ErrorMaxLength)]
         public string? Image { get; set; }
 
-        public TblImportFormat ToTblImportFormat(int id = 0)
+        public TblImportFormat ToTblEntity(int id = 0)
         {
             return new TblImportFormat()
             {

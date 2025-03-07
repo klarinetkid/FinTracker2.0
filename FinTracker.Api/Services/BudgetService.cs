@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class BudgetService : BaseService
+    public class BudgetService : BaseEntityService<TblBudget>
     {
         public IEnumerable<Grouping<TblCategory, TblBudget>> GetBudgetItemGroups()
         {
@@ -18,27 +18,8 @@ namespace FinTracker.Api.Services
                 .OrderBy(g => g.Group.CategoryName);
         }
 
-        public TblBudget CreateBudgetItem(BudgetViewModel model)
-        {
-            TblBudget tblBudget = model.ToTblBudget();
-            db.TblBudgets.Entry(tblBudget).State = EntityState.Added;
-            db.SaveChanges();
-            return tblBudget;
-        }
-
-        public TblBudget PutBudgetItem(int budgetItemId, BudgetViewModel model)
-        {
-            TblBudget budget = model.ToTblBudget(budgetItemId);
-            db.TblBudgets.Entry(budget).State = EntityState.Modified;
-            db.SaveChanges();
-            return budget;
-        }
-
-        public void DeleteBudgetItem(int id)
-        {
-            TblBudget budgetItem = db.TblBudgets.FindEntity(id);
-            db.TblBudgets.Entry(budgetItem).State = EntityState.Deleted;
-            db.SaveChanges();
-        }
+        public TblBudget CreateBudgetItem(BudgetViewModel model) => addEntityAndSave(model);
+        public TblBudget PutBudgetItem(int id, BudgetViewModel model) => putEntityAndSave(id, model);
+        public void DeleteBudgetItem(int id) => deleteEntityAndSave(id);
     }
 }

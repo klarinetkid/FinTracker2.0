@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Models
 {
-    public class MemoViewModel
+    public class MemoViewModel : IEntityViewModel<TblMemo>
     {
         [Required]
         [MaxLength(200)]
@@ -11,7 +11,7 @@ namespace FinTracker.Api.Models
         public int? CategoryId { get; set; }
         public bool? IsImported { get; set; }
 
-        public TblMemo ToTblMemo(int id = 0)
+        public TblMemo ToTblEntity(int id = 0)
         {
             return new TblMemo()
             {

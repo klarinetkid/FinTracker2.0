@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class MemoService : BaseService
+    public class MemoService : BaseEntityService<TblMemo>
     {
         public TblMemo? GetMemo(string? memo)
         {
@@ -15,14 +15,6 @@ namespace FinTracker.Api.Services
                 .Where(e => e.Memo == memo)
                 .Include(e => e.Category)
                 .FirstOrDefault();
-        }
-
-        public TblMemo CreateMemo(MemoViewModel model)
-        {
-            TblMemo tblMemo = model.ToTblMemo();
-            db.TblMemos.Entry(tblMemo).State = EntityState.Added;
-            db.SaveChanges();
-            return tblMemo;
         }
 
         public TblMemo? PatchMemo(int id, MemoViewModel model)
@@ -37,12 +29,7 @@ namespace FinTracker.Api.Services
                 .FirstOrDefault(e => e.Id == id);
         }
 
-        public void DeleteMemo(int id)
-        {
-            TblMemo memo = db.TblMemos.FindEntity(id);
-            db.TblMemos.Entry(memo).State = EntityState.Deleted;
-            db.SaveChanges();
-        }
+        public void DeleteMemo(int id) => deleteEntityAndSave(id);
 
         public IEnumerable<Grouping<TblCategory?, TblMemo>> GetGrouped()
         {
@@ -71,7 +58,7 @@ namespace FinTracker.Api.Services
 
                 if (existing == null)
                 {
-                    db.TblMemos.Add(memo.ToTblMemo());
+                    db.TblMemos.Add(memo.ToTblEntity());
                 }
                 else
                 {

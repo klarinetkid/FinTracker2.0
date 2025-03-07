@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinTracker.Api.Services
 {
-    public class CategoryService : BaseService
+    public class CategoryService : BaseEntityService<TblCategory>
     {
         public TblCategory? GetCategory(int id)
         {
@@ -22,27 +22,8 @@ namespace FinTracker.Api.Services
             return db.VwCategoryTransactionCount.OrderBy(e => e.CategoryName).ToArray();
         }
 
-        public TblCategory CreateCategory(CategoryViewModel model)
-        {
-            TblCategory tblCategory = model.ToTblCategory();
-            db.TblCategories.Entry(tblCategory).State = EntityState.Added;
-            db.SaveChanges();
-            return tblCategory;
-        }
-
-        public TblCategory? PutCategory(int categoryId, CategoryViewModel model)
-        {
-            TblCategory category = model.ToTblCategory(categoryId);
-            db.TblCategories.Entry(category).State = EntityState.Modified;
-            db.SaveChanges();
-            return category;
-        }
-
-        public void DeleteCategory(int id)
-        {
-            TblCategory category = db.TblCategories.FindEntity(id);
-            db.TblCategories.Entry(category).State = EntityState.Deleted;
-            db.SaveChanges();
-        }
+        public TblCategory CreateCategory(CategoryViewModel model) => addEntityAndSave(model);
+        public TblCategory PutCategory(int id, CategoryViewModel model) => putEntityAndSave(id, model);
+        public void DeleteCategory(int id) => deleteEntityAndSave(id);
     }
 }

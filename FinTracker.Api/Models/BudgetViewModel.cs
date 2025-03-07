@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Models
 {
-    public class BudgetViewModel
+    public class BudgetViewModel : IEntityViewModel<TblBudget>
     {
         [Required]
         [Display(Name = "Category")]
@@ -16,7 +16,7 @@ namespace FinTracker.Api.Models
         [Display(Name = "Effective Date")]
         public DateOnly? EffectiveDate { get; set; }
 
-        public TblBudget ToTblBudget(int id = 0)
+        public TblBudget ToTblEntity(int id = 0)
         {
             return new TblBudget()
             {

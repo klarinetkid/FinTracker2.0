@@ -2,7 +2,7 @@
 
 namespace FinTracker.Api.Models
 {
-    public class TransactionViewModel
+    public class TransactionViewModel : IEntityViewModel<TblTransaction>
     {
         public DateOnly? Date { get; set; }
         public int? Amount { get; set; }
@@ -15,7 +15,7 @@ namespace FinTracker.Api.Models
         public TblMemo? SavedMemo { get; set; }
 
 
-        public TblTransaction ToTblTransaction(int id = 0)
+        public TblTransaction ToTblEntity(int id = 0)
         {
             return new TblTransaction
             {
