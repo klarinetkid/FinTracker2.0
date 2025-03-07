@@ -31,7 +31,9 @@ function TransactionsPage() {
         [searchParams]
     );
 
-    const [filterQuery, setFilterQuery] = useState<TransactionQuery>({});
+    const [filterQuery, setFilterQuery] = useState<TransactionQuery>({
+        orderBy: "date",
+    });
     const [debouncedQuery, setDebouncedQuery] = useState({});
     const debouncedResult = useDebounce(
         debouncedQuery,
