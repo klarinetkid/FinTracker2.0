@@ -1,5 +1,7 @@
+import { createSearchParams } from "react-router-dom";
 import tinycolor from "tinycolor2";
 import styles from "../../styles/TrendGraphLine.module.css";
+import Pages from "../../types/Pages";
 import TrendLine from "../../types/TrendLine";
 import TrendPoint from "../../types/TrendPoint";
 import { classList } from "../../utils/HtmlHelper";
@@ -70,7 +72,12 @@ function TrendGraphLine(props: TrendGraphLineProps) {
 
         return (
             <g key={i} className={grpClass}>
-                <circle r={6} cx={point.x} cy={point.y} />
+                <circle
+                    r={6}
+                    cx={point.x}
+                    cy={point.y}
+                    onClick={() => pointClick(point)}
+                />
                 <g transform={labelTransform} className={styles.valueLabel}>
                     <rect
                         className={styles.valueTxtBg}
@@ -88,6 +95,16 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                 </g>
             </g>
         );
+    }
+
+    function pointClick(point: TrendPoint) {
+        const search = createSearchParams({
+            category: line.category.id.toString(),
+            after: point.start,
+            before: point.end,
+        }).toString();
+
+        window.open(Pages.Transactions + "?" + search);
     }
 }
 

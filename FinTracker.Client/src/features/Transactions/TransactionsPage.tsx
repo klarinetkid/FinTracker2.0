@@ -26,15 +26,15 @@ function TransactionsPage() {
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [searchParams] = useSearchParams();
-    const searchCategory = useMemo(
-        () => Number(searchParams.get("category")) || undefined,
-        [searchParams]
-    );
 
     const [filterQuery, setFilterQuery] = useState<TransactionQuery>({
+        categoryId: Number(searchParams.get("category")) || undefined,
+        after: searchParams.get("after") || undefined,
+        before: searchParams.get("before") || undefined,
         orderBy: "date",
+        order: "desc",
     });
-    const [debouncedQuery, setDebouncedQuery] = useState({});
+    const [debouncedQuery, setDebouncedQuery] = useState<TransactionQuery>(filterQuery);
     const debouncedResult = useDebounce(
         debouncedQuery,
         appsettings.transactionSearchDebounceMs
@@ -46,15 +46,6 @@ function TransactionsPage() {
             ...debouncedResult,
         });
     }, [debouncedResult]);
-
-    useEffect(() => {
-        if (searchCategory) {
-            setFilterQuery({
-                ...filterQuery,
-                categoryId: searchCategory,
-            });
-        }
-    }, [searchCategory]);
 
     return (
         <Page>
