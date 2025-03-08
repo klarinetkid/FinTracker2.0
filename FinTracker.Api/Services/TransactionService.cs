@@ -1,5 +1,4 @@
 ﻿using FinTracker.Api.Common;
-using FinTracker.Api.Controllers;
 using FinTracker.Api.Models;
 using FinTracker.Services.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +24,7 @@ namespace FinTracker.Api.Services
                 if (query.Before.HasValue)
                     trxs = trxs.Where(t => t.Date < query.Before);
 
-                if (query.Search != null)
+                if (!string.IsNullOrWhiteSpace(query.Search))
                     trxs = trxs.Where(t => t.Memo != null && t.Memo.Contains(query.Search));
 
                 if (query.CategoryId != null)

@@ -29,7 +29,10 @@ function TransactionTable(props: TransactionTableProps) {
     const [page, setPage] = useState<PaginatedResponse<Transaction>>();
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [orderQuery, setOrderQuery] = useState<TransactionQuery>(query ?? {});
+    const [orderQuery, setOrderQuery] = useState<TransactionQuery>({
+        order: query?.order,
+        orderBy: query?.orderBy,
+    });
 
     useEffect(() => {
         setIsLoading(true);

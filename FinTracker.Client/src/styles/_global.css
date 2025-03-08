@@ -2,7 +2,7 @@
     Page setup
 */
 :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, Segoe UI, sans-serif;
+    font-family: system-ui, Segoe UI, sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -11,7 +11,6 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--bg);
     color: var(--fg);
-    
 }
 
 html {
@@ -35,7 +34,6 @@ body {
 */
 a {
     font-weight: 500;
-    /*color: #646cff;*/
     color: var(--blue);
     text-decoration: inherit;
 }
