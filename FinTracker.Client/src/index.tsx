@@ -9,7 +9,7 @@ if (document.cookie.split("; ").indexOf("darkmode=1") > -1) {
 const root = document.getElementById("root");
 if (!root) throw new Error("#root not found");
 createRoot(root).render(
-    //<StrictMode>
+    <StrictMode>
         <App />
-    //</StrictMode>
+    </StrictMode>
 );

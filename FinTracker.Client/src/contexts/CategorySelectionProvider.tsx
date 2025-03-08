@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Category from "../types/Category";
+import { CategoryOrUncategorized } from "../types/Category";
 import {
     CategorySelectionContext,
     CategorySelectionManager,
@@ -10,7 +10,7 @@ export default function CategorySelectionProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const state = useState<Category[]>([]);
+    const state = useState<CategoryOrUncategorized[]>([]);
     const contextValue = new CategorySelectionManager(state);
 
     return (

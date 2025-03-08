@@ -75,10 +75,10 @@ function CategoryForm(props: FormProps<CategoryViewModel>) {
                             onClick={onDelete}
                         >
                             Delete
-
                             {values?.transactionCount !== 0 && (
                                 <Tooltip>
-                                    Categories with linked transactions cannot be deleted.
+                                    Categories with linked transactions cannot
+                                    be deleted.
                                 </Tooltip>
                             )}
                         </Button>

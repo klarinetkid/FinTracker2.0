@@ -98,7 +98,7 @@ function SpendingTable(props: SpendingTableProps) {
     }
 
     function getCombinedBudget(categoryTotals: CategoryTotal[]) {
-        if (categoryTotals.filter(c => !c.budget).length > 0) return {};
+        if (categoryTotals.filter((c) => !c.budget).length > 0) return {};
 
         const totalSpent = sum(categoryTotals.map((c) => c.total));
         const totalBudget = sum(categoryTotals.map((c) => c.budget));

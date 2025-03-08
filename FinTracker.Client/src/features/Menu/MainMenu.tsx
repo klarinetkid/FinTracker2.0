@@ -15,10 +15,12 @@ function MainMenu(props: MainMenuProps) {
     const globalDataCache = useGlobalDataCache();
     const navigate = useNavigate();
 
-    const yearsExist = globalDataCache.availableYears.value &&
+    const yearsExist =
+        globalDataCache.availableYears.value &&
         globalDataCache.availableYears.value.length > 0;
 
-    const formatsExist = globalDataCache.importFormats.value &&
+    const formatsExist =
+        globalDataCache.importFormats.value &&
         globalDataCache.importFormats.value.length > 0;
 
     return (

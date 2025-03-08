@@ -1,11 +1,4 @@
-import axios, {
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-} from "axios";
-import useToast from "../hooks/useToast";
-import { ToastNotificationManager } from "../contexts/ToastNotificationManager";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import ToastManager from "../utils/ToastManager";
 
 export const ApiBaseURL = "/api";
@@ -32,11 +25,6 @@ class BaseService {
     }
 
     private handleError(error: unknown) {
-        //ToastNotificationManager.getInstance().AddToast({
-        //    title: "Remote Error",
-        //    type: "error",
-        //    body: "An unexpected error has occurred on the remote server.",
-        //});
         ToastManager.addToast({
             title: "Remote Error",
             type: "error",

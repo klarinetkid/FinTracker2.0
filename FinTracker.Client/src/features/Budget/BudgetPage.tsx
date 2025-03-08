@@ -88,7 +88,6 @@ function BudgetPage() {
         setIsDrawerOpen(true);
     }
     function submitBudget(values: FieldValues) {
-
         const model: BudgetViewModel = {
             ...values,
             amount: dollarsToCents(values.amount),

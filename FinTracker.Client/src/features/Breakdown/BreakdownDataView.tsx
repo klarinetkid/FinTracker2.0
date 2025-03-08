@@ -19,7 +19,6 @@ interface BreakdownDataViewProps {
 }
 
 function BreakdownDataView({ breakdown, refresh }: BreakdownDataViewProps) {
-
     const spendingCategories = getSpendingCategories(breakdown?.categoryTotals);
     const incomeCategories = getIncomeCategories(breakdown?.categoryTotals);
 

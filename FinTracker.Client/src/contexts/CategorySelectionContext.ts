@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import Category, { CategoryOrUncategorized } from "../types/Category";
+import { CategoryOrUncategorized } from "../types/Category";
 
 export class CategorySelectionManager {
     selectedCategories: CategoryOrUncategorized[];
@@ -9,7 +9,7 @@ export class CategorySelectionManager {
 
     constructor(
         state?: [
-            Category[],
+            CategoryOrUncategorized[],
             React.Dispatch<React.SetStateAction<CategoryOrUncategorized[]>>,
         ]
     ) {

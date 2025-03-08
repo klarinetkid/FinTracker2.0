@@ -22,7 +22,6 @@ function MemosPage() {
     const { refreshed, refresh } = useRefresh();
     const [editingValues, setEditingValues] = useState<MemoViewModel>();
 
-
     useEffect(() => {
         MemoService.getGrouped().then(setGroupedMemos);
     }, [refreshed]);

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import appsettings from "../../appsettings.json";
@@ -34,7 +34,8 @@ function TransactionsPage() {
         orderBy: "date",
         order: "desc",
     });
-    const [debouncedQuery, setDebouncedQuery] = useState<TransactionQuery>(filterQuery);
+    const [debouncedQuery, setDebouncedQuery] =
+        useState<TransactionQuery>(filterQuery);
     const debouncedResult = useDebounce(
         debouncedQuery,
         appsettings.transactionSearchDebounceMs

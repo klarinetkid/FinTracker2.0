@@ -22,7 +22,6 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
         reset,
         control,
         setValue,
-        watch,
     } = useForm<TransactionViewModel>({ defaultValues: values });
 
     useEffect(() => {

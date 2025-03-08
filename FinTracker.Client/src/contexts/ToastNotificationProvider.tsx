@@ -17,7 +17,7 @@ function ToastNotificationProvider({
         };
 
         const handleToastExpire = (id: string) => {
-            setNotifs((prevNotifs) => prevNotifs.filter(n => n.id !== id));
+            setNotifs((prevNotifs) => prevNotifs.filter((n) => n.id !== id));
         };
 
         ToastManager.on(handleToastAdd, handleToastExpire);
