@@ -94,7 +94,10 @@ function TrendGraph(props: TrendGraphProps) {
 
         const yBottom = sizing.height - sizing.xAxis;
 
-        for (let i = 0; i < trend.lines[0].points.length; i++) {
+        const numpts = trend.lines[0].points.length
+
+        const inc = Math.max(Math.floor(numpts / 26), 1);
+        for (let i = 0; i < trend.lines[0].points.length; i += inc) {
             const x = graphPlotter.plotX(i);
             result.push(
                 <g key={x}>
