@@ -54,7 +54,7 @@ function FormatsPage() {
         setEditingValues({
             importFormatName: "",
             dateKey: "",
-            memoFormat: "",
+            memoKeys: "",
             amountKey: "",
             invertAmounts: "false",
             headerLines: "0",

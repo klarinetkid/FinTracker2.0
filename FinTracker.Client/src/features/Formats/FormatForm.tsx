@@ -45,9 +45,9 @@ function FormatForm(props: FormProps<ImportFormatViewModel>) {
                         registration={register("dateKey", { required: true })}
                     />
                 </FormGroup>
-                <FormGroup fieldName="Memo Format" error={errors.memoFormat}>
+                <FormGroup fieldName="Memo Keys" error={errors.memoKeys}>
                     <Input
-                        registration={register("memoFormat", {
+                        registration={register("memoKeys", {
                             required: true,
                         })}
                     />

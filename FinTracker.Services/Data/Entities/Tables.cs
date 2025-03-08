@@ -51,7 +51,7 @@ namespace FinTracker.Services.Data.Entities
         public int Id { get; set; }
         public required string ImportFormatName { get; set; }
         public required string DateKey { get; set; }
-        public required string MemoFormat { get; set; }
+        public required string MemoKeys { get; set; }
         public required string AmountKey { get; set; }
         public required bool InvertAmounts { get; set; }
         public required int HeaderLines { get; set; }

@@ -2,7 +2,7 @@ type ImportFormat = {
     id: number;
     importFormatName: string;
     dateKey: string;
-    memoFormat: string;
+    memoKeys: string;
     amountKey: string;
     invertAmounts: boolean;
     headerLines: number;

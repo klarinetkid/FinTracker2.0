@@ -19,8 +19,8 @@ namespace FinTracker.Api.Models
 
         [Required]
         [MaxLength(50, ErrorMessage = Strings.ErrorMaxLength)]
-        [Display(Name = "Memo Format")]
-        public string? MemoFormat { get; set; }
+        [Display(Name = "Memo Keys")]
+        public string? MemoKeys { get; set; }
 
         [Required]
         [MaxLength(25, ErrorMessage = Strings.ErrorMaxLength)]
@@ -49,7 +49,7 @@ namespace FinTracker.Api.Models
                 Id = id,
                 ImportFormatName = ImportFormatName ?? throw new Exception("ImportFormatName is required"),
                 DateKey = DateKey ?? throw new Exception("DateKey is required"),
-                MemoFormat = MemoFormat ?? throw new Exception("MemoFormat is required"),
+                MemoKeys = MemoKeys ?? throw new Exception("MemoKeys is required"),
                 AmountKey = AmountKey ?? throw new Exception("AmountKey is required"),
                 InvertAmounts = InvertAmounts.HasValue ? InvertAmounts.Value : throw new Exception("InvertAmounts is required"),
                 HeaderLines = HeaderLines.HasValue ? HeaderLines.Value : throw new Exception("HeaderLines is required"),

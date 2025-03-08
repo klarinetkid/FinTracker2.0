@@ -62,13 +62,13 @@ function csvRowToTransaction(
 ): TransactionViewModel | null {
     const date = row[format.dateKey];
     const amount = row[format.amountKey];
-    const memo = getTransactionMemo(format.memoFormat, row);
+    const memo = getTransactionMemo(format.memoKeys, row);
 
     if (!areCsvValuesValid(date, memo, amount)) return null;
 
     return {
         date: formatDateOnly(date),
-        amount: Math.floor(
+        amount: Math.round(
             Number(amount) * (format.invertAmounts ? -1 : 1) * 100
         ),
         memo,
@@ -76,17 +76,11 @@ function csvRowToTransaction(
 }
 
 function getTransactionMemo(memoFormat: string, row: CsvRow) {
-    const placeholders = memoFormat.match(/{\w+}/);
-    if (!placeholders) return memoFormat;
-
-    for (const placeholder of placeholders) {
-        memoFormat = memoFormat.replaceAll(
-            placeholder,
-            row[placeholder.substring(1, placeholder.length - 1)]
-        );
-    }
-
-    return memoFormat;
+    return memoFormat
+        .split(",")
+        .map((k) => row[k] || "")
+        .filter((v) => !isEmpty(v))
+        .join(" | ");
 }
 
 function areCsvValuesValid(

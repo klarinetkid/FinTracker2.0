@@ -2,7 +2,7 @@ type ImportFormatViewModel = {
     id?: number;
     importFormatName?: string;
     dateKey?: string;
-    memoFormat?: string;
+    memoKeys?: string;
     amountKey?: string;
     invertAmounts?: boolean | string;
     headerLines?: number | string;

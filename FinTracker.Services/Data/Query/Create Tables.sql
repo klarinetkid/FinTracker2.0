@@ -48,7 +48,7 @@ create table TblImportFormat (
 	[Id] int primary key clustered identity(1,1) not null,
 	[ImportFormatName] varchar(50) not null,
 	[DateKey] varchar(25) not null,
-	[MemoFormat] varchar(50) not null,
+	[MemoKeys] varchar(50) not null,
 	[AmountKey] varchar(25) not null,
 	[InvertAmounts] bit not null,
 	[HeaderLines] int not null,
