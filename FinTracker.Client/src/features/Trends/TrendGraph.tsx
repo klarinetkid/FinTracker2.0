@@ -1,3 +1,4 @@
+import appsettings from "../../appsettings.json";
 import styles from "../../styles/TrendGraph.module.css";
 import TrendGraphSizing from "../../types/TrendGraphSizing";
 import TrendLineCollection from "../../types/TrendLineCollection";
@@ -13,7 +14,7 @@ interface TrendGraphProps {
 function TrendGraph(props: TrendGraphProps) {
     const { trend, sizing } = props;
 
-    const snapTo = 25_00;
+    const snapTo = appsettings.trendGraph.verticalGridlineInc;
 
     const lbound =
         trend.lowerBound -
@@ -127,8 +128,10 @@ function TrendGraph(props: TrendGraphProps) {
     function horizontalLines() {
         const result = [];
 
-        const numLines = 8;
-        const amtPerLine = Math.abs(graphPlotter.boundDiff() / numLines);
+        const amtPerLine =
+            Math.abs(graphPlotter.boundDiff()) /
+            appsettings.trendGraph.verticalGridlineCount;
+
         const inc = Math.max(amtPerLine - (amtPerLine % snapTo), snapTo);
 
         if (inc <= 0) console.error("inc <= 0");
