@@ -1,6 +1,6 @@
 import axios from "axios";
 import CountsViewModel from "../types/CountsViewModel";
-import BaseService, { ApiBaseURL } from "./BaseService";
+import BaseService from "./BaseService";
 
 class MetadataService extends BaseService {
     constructor() {
@@ -15,7 +15,7 @@ class MetadataService extends BaseService {
         //return this.get("/Counts");
         const response = await axios
             .create()
-            .get<CountsViewModel>(`${ApiBaseURL}/Metadata/Counts`);
+            .get<CountsViewModel>(`${window.env.API_BASE_URL}/Metadata/Counts`);
         return {
             counts: response.data,
             apiVersion: response.headers["x-api-version"],

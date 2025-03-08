@@ -21,6 +21,16 @@ namespace FinTracker.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins(Helper.AppConfig.ClientURL)
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,6 +42,7 @@ namespace FinTracker.Api
 
             app.UseMiddleware<ApiVersionMiddleware>();
 
+            app.UseCors();
             app.MapControllers();
 
             app.Run();
