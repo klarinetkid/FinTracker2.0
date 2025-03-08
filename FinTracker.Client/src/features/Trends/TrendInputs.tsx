@@ -23,6 +23,7 @@ function TrendInputs({ form }: TrendInputsProps) {
                     registration={form.register("start", {
                         required: true,
                         pattern: DatePattern,
+                        validate: additionalValidation,
                     })}
                 />
             </FormGroup>
@@ -32,13 +33,6 @@ function TrendInputs({ form }: TrendInputsProps) {
                     registration={form.register("end", {
                         required: true,
                         pattern: DatePattern,
-                        validate: (end, query) => {
-                            return moment(end).isSameOrBefore(
-                                moment(query.start)
-                            )
-                                ? "End must be after start."
-                                : true;
-                        },
                     })}
                 />
             </FormGroup>
@@ -62,6 +56,19 @@ function TrendInputs({ form }: TrendInputsProps) {
             </FormGroup>
         </Row>
     );
+
+    function additionalValidation(_: string | undefined, query: TrendQuery) {
+        const start = moment(query.start);
+        const end = moment(query.end);
+
+        if (end.isSameOrBefore(start)) {
+            return "End must be after start.";
+        } else if (Math.abs(end.diff(start, "d")) > 36500) {
+            return `Query cannot span more than 36,500 days.`;
+        } else {
+            return true;
+        }
+    }
 }
 
 export default TrendInputs;
