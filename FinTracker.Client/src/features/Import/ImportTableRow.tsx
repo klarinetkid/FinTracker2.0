@@ -60,7 +60,7 @@ function ImportTableRow(props: ImportTableRowProps) {
                 <Input
                     className="ralign"
                     readOnly
-                    value={formatCurrency(Number(trx.amount))}
+                    value={formatCurrency(Number(trx.amount), false, true)}
                 />
             </td>
             <td className="centre">

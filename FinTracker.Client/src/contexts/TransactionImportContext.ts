@@ -57,6 +57,7 @@ export class TransactionImportManager {
                 ...trx,
                 id: i + 1,
                 isSelectedForImport:
+                    trx.amount !== 0 &&
                     !trx.isAlreadyImported &&
                     (trx.savedMemo?.isImported ?? true),
             })
