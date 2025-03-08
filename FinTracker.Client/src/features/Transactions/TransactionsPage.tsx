@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import appsettings from "../../appsettings.json";
@@ -29,24 +29,26 @@ function TransactionsPage() {
 
     const [filterQuery, setFilterQuery] = useState<TransactionQuery>({
         categoryId: Number(searchParams.get("category")) || undefined,
+    });
+    const [debouncedQuery, setDebouncedQuery] = useState<TransactionQuery>({
         after: searchParams.get("after") || undefined,
         before: searchParams.get("before") || undefined,
-        orderBy: "date",
-        order: "desc",
     });
-    const [debouncedQuery, setDebouncedQuery] =
-        useState<TransactionQuery>(filterQuery);
-    const debouncedResult = useDebounce(
+    const [debouncedResult, setDebouncedResult] = useDebounce(
         debouncedQuery,
         appsettings.transactionSearchDebounceMs
     );
 
-    useEffect(() => {
-        setFilterQuery({
+    const combinedQuery = useMemo(
+        () => ({
             ...filterQuery,
             ...debouncedResult,
-        });
-    }, [debouncedResult]);
+            // default order
+            orderBy: "date",
+            order: "desc",
+        }),
+        [filterQuery, debouncedResult]
+    );
 
     return (
         <Page>
@@ -60,6 +62,7 @@ function TransactionsPage() {
                             onClick={() => {
                                 setFilterQuery({});
                                 setDebouncedQuery({});
+                                setDebouncedResult({});
                             }}
                         />
                     )}
@@ -79,7 +82,7 @@ function TransactionsPage() {
             />
 
             <TransactionTable
-                query={filterQuery}
+                query={combinedQuery}
                 onRowSelect={editTransaction}
                 refreshed={refreshed}
                 onChange={refresh}
@@ -165,7 +168,7 @@ function TransactionsPage() {
     function anyFiltersSelected() {
         return (
             Object.values({ ...filterQuery, ...debouncedQuery }).filter(
-                (v) => v !== undefined
+                (v) => v !== undefined && v !== ""
             ).length > 0
         );
     }

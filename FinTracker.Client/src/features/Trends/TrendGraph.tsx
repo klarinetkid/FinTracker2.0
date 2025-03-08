@@ -143,10 +143,6 @@ function TrendGraph(props: TrendGraphProps) {
         ) {
             const y = graphPlotter.plotY(i);
 
-            if (isNaN(y)) {
-                console.log("nan");
-            }
-
             result.push(
                 <g key={y}>
                     <text
