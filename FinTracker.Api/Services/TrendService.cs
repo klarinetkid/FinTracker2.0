@@ -37,7 +37,8 @@ namespace FinTracker.Api.Services
             return Start != null
                 && End != null
                 && End.Value > Start.Value
-                && (End.Value.ToDateTime() - Start.Value.ToDateTime()).TotalDays <= 36500
+                && (End.Value.ToDateTime() - Start.Value.ToDateTime()).TotalDays 
+                    <= Helper.AppConfig.MaxTrendQueryDaySpan
 
                 && Interval != null
                 && TrendService.Intervals.Contains(Interval.ToLower())

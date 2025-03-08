@@ -2,6 +2,7 @@
 ---- create VwCategoryTransactionCount
 ----------------------------------
 drop view if exists VwCategoryTransactionCount
+go
 create view VwCategoryTransactionCount as
 
 select 

@@ -7,6 +7,7 @@ import Select from "../../components/Select";
 import styles from "../../styles/TrendInputs.module.css";
 import TrendQuery from "../../types/TrendQuery";
 import { DatePattern } from "../../utils/ValidationHelper";
+import appsettings from "../../appsettings.json";
 
 interface TrendInputsProps {
     form: UseFormReturn<TrendQuery>;
@@ -63,8 +64,10 @@ function TrendInputs({ form }: TrendInputsProps) {
 
         if (end.isSameOrBefore(start)) {
             return "End must be after start.";
-        } else if (Math.abs(end.diff(start, "d")) > 36500) {
-            return `Query cannot span more than 36,500 days.`;
+        } else if (
+            Math.abs(end.diff(start, "d")) > appsettings.maxTrendQueryDaySpan
+        ) {
+            return `Query cannot span more than ${appsettings.maxTrendQueryDaySpan.toLocaleString()} days.`;
         } else {
             return true;
         }
