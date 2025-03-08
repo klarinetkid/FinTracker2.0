@@ -8,3 +8,4 @@ create login FinTracker_DevUser with password = 'abcd1234', default_database = F
 create user FinTracker_DevUser from login FinTracker_DevUser
 alter role db_datareader add member FinTracker_DevUser
 alter role db_datawriter add member FinTracker_DevUser
+grant execute on schema::dbo to FinTracker_DevUser

@@ -2,7 +2,7 @@
 ---- create SpGetCategoryTotals
 ----------------------------------
 --drop procedure SpGetCategoryTotals
-create procedure SpGetCategoryTotals @start Date, @end Date as
+create procedure [dbo].[SpGetCategoryTotals] @start Date, @end Date as
 
 -- for testing
 --declare @start as Date = '2025-01-01'
@@ -28,7 +28,7 @@ from (
 			c.Id as CategoryId,
 			CategoryName,
 			Colour,
-			sum(t.Amount) as Total
+			sum(cast(t.Amount as bigint)) as Total
 		from
 			dbo.TblTransaction t
 			left join dbo.TblCategory c on c.Id = t.CategoryId
