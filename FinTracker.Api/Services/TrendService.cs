@@ -30,7 +30,8 @@ namespace FinTracker.Api.Services
         public int? IntervalNum { get; set; }
         public int[]? CategoryId { get; set; }
 
-        [MemberNotNullWhen(true, nameof(Start), nameof(End), nameof(Interval), nameof(IntervalNum), nameof(CategoryId))]
+        [MemberNotNullWhen(true, nameof(Start), nameof(End), 
+            nameof(Interval), nameof(IntervalNum), nameof(CategoryId))]
         public bool IsValid()
         {
             return Start != null

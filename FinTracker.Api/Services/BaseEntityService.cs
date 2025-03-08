@@ -10,7 +10,7 @@ namespace FinTracker.Api.Services
         internal TblClass addEntityAndSave(IEntityViewModel<TblClass> model)
         {
             TblClass tblEntity = model.ToTblEntity();
-            db.Add(tblEntity);
+            db.Entry(tblEntity).State = EntityState.Added;
             db.SaveChanges();
             return tblEntity;
         }
@@ -18,7 +18,7 @@ namespace FinTracker.Api.Services
         internal TblClass putEntityAndSave(int id, IEntityViewModel<TblClass> model)
         {
             TblClass tblEntity = model.ToTblEntity(id);
-            db.Update(tblEntity);
+            db.Entry(tblEntity).State = EntityState.Modified;
             db.SaveChanges();
             return tblEntity;
         }
@@ -26,7 +26,7 @@ namespace FinTracker.Api.Services
         internal void deleteEntityAndSave(int id)
         {
             TblClass tblEntity = db.FindEntity<TblClass>(id);
-            db.Remove(tblEntity);
+            db.Entry(tblEntity).State = EntityState.Deleted;
             db.SaveChanges();
         }
     }

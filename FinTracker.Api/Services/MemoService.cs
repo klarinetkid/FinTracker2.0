@@ -58,7 +58,7 @@ namespace FinTracker.Api.Services
 
                 if (existing == null)
                 {
-                    db.TblMemos.Add(memo.ToTblEntity());
+                    db.TblMemos.Entry(memo.ToTblEntity()).State = EntityState.Added;
                 }
                 else
                 {

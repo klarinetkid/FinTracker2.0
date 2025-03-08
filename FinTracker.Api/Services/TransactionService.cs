@@ -109,20 +109,17 @@ namespace FinTracker.Api.Services
             return db.TblTransactions.Include(e => e.Category).First(e => e.Id == id);
         }
 
-        public TransactionViewModel[] PrepareImport(TransactionViewModel?[] models)
+        public TransactionViewModel[] PrepareImport(TransactionViewModel[] models)
         {
             MemoService memoService = new();
-
             Dictionary<string, TblMemo> cachedMemos = new ();
             foreach (TblMemo memo in db.TblMemos.Include(m => m.Category))
-            {
                 cachedMemos.Add(memo.Memo, memo);
-            }
 
             List<TransactionViewModel> results = new ();
-            foreach (TransactionViewModel? trx in models)
+            foreach (TransactionViewModel trx in models)
             {
-                if (trx == null || trx.Memo == null) continue;
+                if (trx.Memo == null) continue;
 
                 trx.IsAlreadyImported = trx.Date.HasValue && trx.Amount.HasValue
                     ? db.DoesTransactionExist(trx.Date.Value, trx.Memo, trx.Amount.Value)
