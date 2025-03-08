@@ -36,7 +36,7 @@ function FormatTable(props: FormatTableProps) {
                         <td className="centre">
                             {format.image && (
                                 <img
-                                    src={`/public/format-icons/${format.image}`}
+                                    src={`/format-icons/${format.image}`}
                                     height={30}
                                 />
                             )}
