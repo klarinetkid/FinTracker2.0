@@ -1,14 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import ToastManager from "../utils/ToastManager";
 
-export const ApiBaseURL = "/api";
-
 class BaseService {
     protected axiosInstance: AxiosInstance;
 
     constructor(area: string) {
         this.axiosInstance = axios.create({
-            baseURL: ApiBaseURL + area,
+            baseURL: window.env.API_BASE_URL + area,
             headers: {
                 "Content-Type": "application/json",
             },
