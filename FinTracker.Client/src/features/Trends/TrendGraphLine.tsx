@@ -86,10 +86,10 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                         width={labelWidth}
                         height={labelHeight}
                     />
-                    <text x={0} y={0} alignmentBaseline="after-edge">
+                    <text x={0} y={-4}>
                         {line.category.categoryName}
                     </text>
-                    <text x={0} y={0} alignmentBaseline="before-edge">
+                    <text x={0} y={labelHeight/2-6}>
                         {formatCurrency(point.total, false, true)}
                     </text>
                 </g>
