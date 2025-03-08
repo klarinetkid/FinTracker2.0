@@ -7,6 +7,7 @@ import TrendPoint from "../../types/TrendPoint";
 import { classList } from "../../utils/HtmlHelper";
 import { formatCurrency } from "../../utils/NumberHelper";
 import TrendGraphPlotter from "../../utils/TrendGraphPlotter";
+import { formatDateOnly } from "../../utils/DateHelper";
 
 interface TrendGraphLineProps {
     line: TrendLine;
@@ -61,14 +62,17 @@ function TrendGraphLine(props: TrendGraphLineProps) {
             point.isInverted ? styles.inverted : ""
         );
 
-        const labelTransform = `translate(${point.x} ${point.y - 30})`;
-        const amtLabel = formatCurrency(point.total, false, true);
-        const widthChars = Math.max(
-            amtLabel.length,
-            line.category.categoryName.length
-        );
+        const txtLines = [
+            line.category.categoryName,
+            formatCurrency(point.total, false, true),
+            formatDateOnly(point.start),
+        ];
+
+        const widthChars = Math.max(...txtLines.map((l) => l.length));
         const labelWidth = widthChars * 8 + 12;
-        const labelHeight = 44;
+        const labelHeight = txtLines.length * 30;
+
+        const labelTransform = `translate(${point.x} ${point.y - labelHeight - 12})`;
 
         return (
             <g key={i} className={grpClass}>
@@ -82,16 +86,18 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                     <rect
                         className={styles.valueTxtBg}
                         x={-labelWidth / 2}
-                        y={-labelHeight / 2}
+                        y={0}
                         width={labelWidth}
                         height={labelHeight}
                     />
-                    <text x={0} y={-4}>
-                        {line.category.categoryName}
-                    </text>
-                    <text x={0} y={labelHeight/2-6}>
-                        {formatCurrency(point.total, false, true)}
-                    </text>
+                    {txtLines.map((txt, i) => (
+                        <text
+                            x={0}
+                            y={(labelHeight / txtLines.length) * (i + 1) - 9}
+                        >
+                            {txt}
+                        </text>
+                    ))}
                 </g>
             </g>
         );
