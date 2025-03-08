@@ -8,9 +8,8 @@
     }
 }
 
-
-
-.container .overlay {
+.overlay {
+    z-index: 30;
     position: fixed;
     top: 0;
     left: 0;
@@ -20,6 +19,7 @@
 }
 
 .popup {
+    z-index: 31;
     position: fixed;
     top: 0;
     left: 50%;
