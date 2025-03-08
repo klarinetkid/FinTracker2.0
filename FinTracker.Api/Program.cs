@@ -26,8 +26,9 @@ namespace FinTracker.Api
                 options.AddDefaultPolicy(policy =>
                 {
                     policy.WithOrigins(Helper.AppConfig.ClientURL)
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("X-API-Version");
                 });
             });
 
