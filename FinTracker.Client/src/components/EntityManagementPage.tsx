@@ -138,7 +138,7 @@ function EntityManagementPage<
                                         canBeDeleted &&
                                         !(canBeDeleted(editingValues) === true)
                                     }
-                                    onClick={deleteEntityClick}
+                                    onClick={() => setIsConfirmingDelete(true)}
                                 >
                                     Delete
                                     {canBeDeleted &&
@@ -194,7 +194,7 @@ function EntityManagementPage<
             ToastManager.addToast({
                 type: "success",
                 title: "Success",
-                body: "The category was successfully saved.",
+                body: `The ${entityName.toLowerCase()} was successfully saved.`,
             });
         });
     }
@@ -207,7 +207,7 @@ function EntityManagementPage<
         ToastManager.addToast({
             type: "success",
             title: "Success",
-            body: "The category was successfully deleted.",
+            body: `The ${entityName.toLowerCase()} was successfully deleted.`,
         });
     }
 
