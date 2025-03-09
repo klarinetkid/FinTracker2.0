@@ -60,13 +60,13 @@ function CustomReportForm(props: CustomReportFormProps) {
                 </div>
                 <div>
                     <div>
+                        <ButtonFill type="submit">Submit</ButtonFill>
                         <Button
                             type="button"
                             onClick={() => setIsDrawerOpen(false)}
                         >
                             Cancel
                         </Button>
-                        <ButtonFill type="submit">Submit</ButtonFill>
                     </div>
                 </div>
             </form>
