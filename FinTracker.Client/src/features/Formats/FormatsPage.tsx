@@ -64,7 +64,7 @@ function FormatsPage() {
         setIsDrawerOpen(true);
     }
     function editFormat(format: ImportFormat) {
-        setEditingValues(format);
+        setEditingValues({ ...format });
         setIsDrawerOpen(true);
     }
     function submitFormat(values: FieldValues) {

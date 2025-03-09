@@ -66,7 +66,7 @@ function CategoriesPage() {
         setIsDrawerOpen(true);
     }
     function editCategory(category: CategoryViewModel) {
-        setEditingValues(category);
+        setEditingValues({ ...category });
         setIsDrawerOpen(true);
     }
     function submitCategory(model: FieldValues) {

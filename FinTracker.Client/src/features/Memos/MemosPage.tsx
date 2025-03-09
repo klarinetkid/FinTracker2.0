@@ -50,7 +50,7 @@ function MemosPage() {
     );
 
     function editMemo(memo: MemoViewModel) {
-        setEditingValues(memo);
+        setEditingValues({ ...memo });
         setIsDrawerOpen(true);
     }
     async function submitMemo(model: FieldValues) {
