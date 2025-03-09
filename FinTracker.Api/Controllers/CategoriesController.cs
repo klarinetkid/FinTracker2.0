@@ -19,7 +19,7 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpGet("WithCounts")]
-        public VwCategoryTransactionCount[] ListWithCounts()
+        public VwCategoryReferenceCounts[] ListWithCounts()
         {
             return service.GetCategoryTransactionCounts();
         }

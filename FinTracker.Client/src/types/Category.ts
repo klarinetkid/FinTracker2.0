@@ -4,13 +4,6 @@ type Category = {
     colour: string;
 };
 
-export type CategoryTransactionCount = {
-    id: number;
-    categoryName: string;
-    colour: string;
-    transactionCount: number;
-};
-
 export const Uncategorized = {
     id: undefined,
     categoryName: "uncategorized",

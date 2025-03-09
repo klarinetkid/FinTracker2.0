@@ -71,14 +71,14 @@ function CategoryForm(props: FormProps<CategoryViewModel>) {
                     {values?.id && (
                         <Button
                             type="button"
-                            disabled={values?.transactionCount !== 0}
+                            disabled={!canBeDeleted()}
                             onClick={onDelete}
                         >
                             Delete
-                            {values?.transactionCount !== 0 && (
+                            {!canBeDeleted() && (
                                 <Tooltip>
-                                    Categories with linked transactions cannot
-                                    be deleted.
+                                    Categories referenced by transactions,
+                                    budgets, or memos cannot be deleted.
                                 </Tooltip>
                             )}
                         </Button>
@@ -87,6 +87,11 @@ function CategoryForm(props: FormProps<CategoryViewModel>) {
             </div>
         </form>
     );
+    function canBeDeleted() {
+        return values?.transactionCount === 0
+            && values?.budgetCount === 0
+            && values?.memoCount === 0;
+    }
 }
 
 export default CategoryForm;

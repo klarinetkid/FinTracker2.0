@@ -17,9 +17,9 @@ namespace FinTracker.Api.Services
             return db.TblCategories.OrderBy(e => e.CategoryName).ToArray();
         }
 
-        public VwCategoryTransactionCount[] GetCategoryTransactionCounts()
+        public VwCategoryReferenceCounts[] GetCategoryTransactionCounts()
         {
-            return db.VwCategoryTransactionCount.OrderBy(e => e.CategoryName).ToArray();
+            return db.VwCategoryReferenceCounts.OrderBy(e => e.CategoryName).ToArray();
         }
 
         public TblCategory CreateCategory(CategoryViewModel model) => addEntityAndSave(model);

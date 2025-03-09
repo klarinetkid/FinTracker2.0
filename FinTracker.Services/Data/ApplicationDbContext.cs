@@ -13,7 +13,7 @@ namespace FinTracker.Services.Data
         public DbSet<TblMemo> TblMemos { get; set; }
 
         // views
-        public DbSet<VwCategoryTransactionCount> VwCategoryTransactionCount { get; set; }
+        public DbSet<VwCategoryReferenceCounts> VwCategoryReferenceCounts { get; set; }
 
         public ApplicationDbContext(string connectionString) : base(GetOptions(connectionString))
         {

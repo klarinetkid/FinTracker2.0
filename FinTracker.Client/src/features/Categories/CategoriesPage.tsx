@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 import Drawer from "../../components/Drawer";
 import IconButton from "../../components/IconButton";
 import Page from "../../components/Page";
@@ -8,21 +9,20 @@ import StatusIndicator from "../../components/StatusIndicator";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useRefresh from "../../hooks/useRefresh";
 import CategoryService from "../../services/CategoryService";
-import { CategoryTransactionCount } from "../../types/Category";
+import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
 import CategoryViewModel from "../../types/CategoryViewModel";
 import { blurActiveElement } from "../../utils/HtmlHelper";
 import { AddCategoryIcon } from "../../utils/Icons";
 import ToastManager from "../../utils/ToastManager";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
-import ConfirmationPopup from "../../components/ConfirmationPopup";
 
 function CategoriesPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
-    const [categories, setCategories] = useState<CategoryTransactionCount[]>();
+    const [categories, setCategories] = useState<CategoryReferenceCounts[]>();
     const [editingValues, setEditingValues] = useState<CategoryViewModel>();
 
     useEffect(() => {
