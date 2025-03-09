@@ -1,5 +1,4 @@
 import EntityManagementPage from "../../components/EntityManagementPage";
-import StatusIndicator from "../../components/StatusIndicator";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import CategoryService from "../../services/CategoryService";
 import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
@@ -18,7 +17,7 @@ function CategoriesPage() {
     return (
         <EntityManagementPage
             entityPluralName="Categories"
-            entitySingularName="category"
+            entitySingularName="Category"
             newEntityDefaults={newCategoryDefaults as CategoryReferenceCounts}
             newEntityIcon={AddCategoryIcon}
             getEntities={() => {
@@ -29,24 +28,15 @@ function CategoriesPage() {
             putEntity={CategoryService.putCategory.bind(CategoryService)}
             deleteEntity={CategoryService.deleteCategory.bind(CategoryService)}
             canBeDeleted={canBeDeleted}
-            renderTable={renderTable}
+            renderTableOrLoading={(categories, edit) => (
+                <CategoryTable
+                    categories={categories}
+                    editCategory={(c) => edit(c)}
+                />
+            )}
             renderForm={(form) => <CategoryForm form={form} />}
         />
     );
-
-    function renderTable(
-        categories: CategoryReferenceCounts[] | undefined,
-        edit: (c: CategoryReferenceCounts) => void
-    ) {
-        return categories ? (
-            <CategoryTable
-                categories={categories}
-                editCategory={(c) => edit(c)}
-            />
-        ) : (
-            <StatusIndicator status="loading" />
-        );
-    }
 
     function canBeDeleted(values: CategoryReferenceCounts) {
         return values.transactionCount === 0 &&

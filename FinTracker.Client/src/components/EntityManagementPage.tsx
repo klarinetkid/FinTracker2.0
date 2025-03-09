@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
 import useRefresh from "../hooks/useRefresh";
 import { blurActiveElement } from "../utils/HtmlHelper";
+import { getAnOrA } from "../utils/StringHelper";
 import ToastManager from "../utils/ToastManager";
 import Button from "./Button";
 import ButtonFill from "./ButtonFill";
@@ -10,6 +11,7 @@ import Drawer from "./Drawer";
 import IconButton from "./IconButton";
 import Page from "./Page";
 import Row from "./Row";
+import StatusIndicator from "./StatusIndicator";
 import Tooltip from "./Tooltip";
 
 export interface EntityManagementFormProps<T extends FieldValues> {
@@ -28,10 +30,11 @@ interface EntityManagementPageProps<
     newEntityDefaults?: TFormEntity;
     newEntityIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
-    renderTable: (
-        entities: TListEntity[] | undefined,
+    renderTableOrLoading?: (
+        entities: TListEntity[],
         editEntity: (e: TFormEntity) => void
     ) => React.ReactNode;
+    renderBody?: (editEntity: (e: TFormEntity) => void) => React.ReactNode;
     renderForm: (form: UseFormReturn<TFormEntity>) => React.ReactNode;
 
     getEntities?: () => Promise<TListEntity[] | undefined>;
@@ -55,7 +58,8 @@ function EntityManagementPage<
         entitySingularName,
         newEntityDefaults,
         newEntityIcon,
-        renderTable,
+        renderTableOrLoading,
+        renderBody,
         renderForm,
         getEntities,
         addEntity,
@@ -101,7 +105,14 @@ function EntityManagementPage<
                 </div>
             </Row>
 
-            {renderTable(entities, editEntityClick)}
+            {renderTableOrLoading &&
+                (entities ? (
+                    renderTableOrLoading(entities, editEntityClick)
+                ) : (
+                    <StatusIndicator status="loading" />
+                ))}
+
+            {renderBody && renderBody(editEntityClick)}
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <form onSubmit={form.handleSubmit(submitEntity)}>
@@ -183,7 +194,7 @@ function EntityManagementPage<
             ? putEntity(model)
             : addEntity
               ? addEntity(model)
-              : new Promise((resolve) => resolve({}))
+              : new Promise((_, reject) => reject({}))
         ).then(() => {
             closeAfterSuccess();
             ToastManager.addToast({
@@ -192,12 +203,6 @@ function EntityManagementPage<
                 body: `The ${entitySingularName.toLowerCase()} was successfully saved.`,
             });
         });
-    }
-
-    function getAnOrA(name: string) {
-        return ["a", "e", "i", "o", "u"].indexOf(name[0].toLowerCase()) > -1
-            ? "an"
-            : "a";
     }
 
     async function deleteEntityClick() {
