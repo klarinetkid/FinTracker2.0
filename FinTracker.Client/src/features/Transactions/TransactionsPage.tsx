@@ -50,8 +50,8 @@ function TransactionsPage() {
 
     return (
         <EntityManagementPage
-            title="Transactions"
-            entityName="Transaction"
+            entityPluralName="Transactions"
+            entitySingularName="Transaction"
             drawerTitle={(t) =>
                 (t.isCashTransaction ? "Cash " : "") + "Transaction"
             }

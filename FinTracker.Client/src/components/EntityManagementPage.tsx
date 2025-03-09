@@ -21,29 +21,24 @@ interface EntityManagementPageProps<
     TblEntity,
     TListEntity,
 > {
-    // titles
-    title: string;
-    entityName: string;
+    entityPluralName: string;
+    entitySingularName: string;
     drawerTitle?: (e: TFormEntity) => string;
 
-    // create new entity
     newEntityDefaults?: TFormEntity;
     newEntityIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
-    // render table, form in drawer
     renderTable: (
         entities: TListEntity[] | undefined,
         editEntity: (e: TFormEntity) => void
     ) => React.ReactNode;
     renderForm: (form: UseFormReturn<TFormEntity>) => React.ReactNode;
 
-    // service calls
-    getEntities?: () => Promise<TListEntity[]>;
+    getEntities?: () => Promise<TListEntity[] | undefined>;
     addEntity?: (entity: FieldValues) => Promise<void | TblEntity>;
     putEntity: (entity: FieldValues) => Promise<void | TblEntity>;
     deleteEntity: (id: number) => Promise<void>;
 
-    // misc
     canBeDeleted?: (entity: TFormEntity) => boolean | string;
     transformBeforeSubmit?: (values: FieldValues) => TFormEntity;
     refresh?: () => void;
@@ -56,8 +51,8 @@ function EntityManagementPage<
     TListEntity,
 >(props: EntityManagementPageProps<TFormEntity, TblEntity, TListEntity>) {
     const {
-        title,
-        entityName,
+        entityPluralName,
+        entitySingularName,
         newEntityDefaults,
         newEntityIcon,
         renderTable,
@@ -93,12 +88,12 @@ function EntityManagementPage<
     return (
         <Page>
             <Row justifyContent="space-between">
-                <h1>{title}</h1>
+                <h1>{entityPluralName}</h1>
                 <div className="flex">
                     {additionalHeaderButtons}
                     {newEntityDefaults && newEntityIcon && (
                         <IconButton
-                            title={`New ${entityName}`}
+                            title={`New ${entitySingularName}`}
                             icon={newEntityIcon}
                             onClick={newEntityClick}
                         />
@@ -115,7 +110,7 @@ function EntityManagementPage<
                             {editingValues?.id ? "Edit" : "New"}{" "}
                             {drawerTitle && editingValues
                                 ? drawerTitle(editingValues)
-                                : entityName}
+                                : entitySingularName}
                         </h2>
 
                         {renderForm(form)}
@@ -159,7 +154,7 @@ function EntityManagementPage<
             {isConfirmingDelete && (
                 <ConfirmationPopup
                     onCancel={() => setIsConfirmingDelete(false)}
-                    body={`Deleting a ${entityName.toLowerCase()} cannot be undone.`}
+                    body={`Deleting ${getAnOrA(entitySingularName)} ${entitySingularName.toLowerCase()} cannot be undone.`}
                     onConfirm={deleteEntityClick}
                 />
             )}
@@ -194,9 +189,15 @@ function EntityManagementPage<
             ToastManager.addToast({
                 type: "success",
                 title: "Success",
-                body: `The ${entityName.toLowerCase()} was successfully saved.`,
+                body: `The ${entitySingularName.toLowerCase()} was successfully saved.`,
             });
         });
+    }
+
+    function getAnOrA(name: string) {
+        return ["a", "e", "i", "o", "u"].indexOf(name[0].toLowerCase()) > -1
+            ? "an"
+            : "a";
     }
 
     async function deleteEntityClick() {
@@ -207,7 +208,7 @@ function EntityManagementPage<
         ToastManager.addToast({
             type: "success",
             title: "Success",
-            body: `The ${entityName.toLowerCase()} was successfully deleted.`,
+            body: `The ${entitySingularName.toLowerCase()} was successfully deleted.`,
         });
     }
 

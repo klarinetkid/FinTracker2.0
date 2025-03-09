@@ -1,6 +1,7 @@
 import moment from "moment";
 import { UseFormReturn } from "react-hook-form";
 import EntityManagementPage from "../../components/EntityManagementPage";
+import StatusIndicator from "../../components/StatusIndicator";
 import BudgetService from "../../services/BudgetService";
 import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
@@ -11,7 +12,6 @@ import { AddBudgetIcon } from "../../utils/Icons";
 import { dollarsToCents } from "../../utils/NumberHelper";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
-import StatusIndicator from "../../components/StatusIndicator";
 
 function BudgetPage() {
     const newBudgetDefaults = {
@@ -21,8 +21,8 @@ function BudgetPage() {
 
     return (
         <EntityManagementPage
-            title="Budgets"
-            entityName="Budget"
+            entityPluralName="Budgets"
+            entitySingularName="Budget"
             getEntities={BudgetService.getGrouped.bind(BudgetService)}
             newEntityDefaults={newBudgetDefaults as BudgetViewModel}
             newEntityIcon={AddBudgetIcon}
@@ -30,7 +30,7 @@ function BudgetPage() {
             putEntity={BudgetService.putBudget.bind(BudgetService)}
             deleteEntity={BudgetService.deleteBudget.bind(BudgetService)}
             renderTable={renderTable}
-            renderForm={renderForm}
+            renderForm={(form) => <BudgetForm form={form} />}
             transformBeforeSubmit={transformBeforeSubmit}
         />
     );
@@ -39,9 +39,7 @@ function BudgetPage() {
         groupedBugets: Grouping<Category, Budget>[] | undefined,
         edit: (c: BudgetViewModel) => void
     ): React.ReactNode {
-        return !groupedBugets ? (
-            <StatusIndicator status="loading" />
-        ) : (
+        return groupedBugets ? (
             <BudgetTable
                 groupedBudgets={groupedBugets}
                 editBudget={(b) =>
@@ -51,6 +49,8 @@ function BudgetPage() {
                     })
                 }
             />
+        ) : (
+            <StatusIndicator status="loading" />
         );
     }
 
@@ -59,10 +59,6 @@ function BudgetPage() {
             ...values,
             amount: dollarsToCents(values.amount),
         };
-    }
-
-    function renderForm(form: UseFormReturn<BudgetViewModel>) {
-        return <BudgetForm form={form} />;
     }
 }
 
