@@ -67,7 +67,7 @@ function TransactionsPage() {
             deleteEntity={TransactionService.deleteTransaction.bind(
                 TransactionService
             )}
-            renderTable={renderBody}
+            renderBody={renderBody}
             renderForm={(form) => <TransactionForm form={form} />}
             transformBeforeSubmit={(values) => ({
                 ...values,
@@ -89,7 +89,7 @@ function TransactionsPage() {
         />
     );
 
-    function renderBody(_: unknown, edit: (t: TransactionViewModel) => void) {
+    function renderBody(edit: (t: TransactionViewModel) => void) {
         return (
             <>
                 <TransactionFilters

@@ -1,7 +1,5 @@
 import moment from "moment";
-import { UseFormReturn } from "react-hook-form";
 import EntityManagementPage from "../../components/EntityManagementPage";
-import StatusIndicator from "../../components/StatusIndicator";
 import BudgetService from "../../services/BudgetService";
 import Budget from "../../types/Budget";
 import BudgetViewModel from "../../types/BudgetViewModel";
@@ -29,17 +27,17 @@ function BudgetPage() {
             addEntity={BudgetService.createBudget.bind(BudgetService)}
             putEntity={BudgetService.putBudget.bind(BudgetService)}
             deleteEntity={BudgetService.deleteBudget.bind(BudgetService)}
-            renderTable={renderTable}
             renderForm={(form) => <BudgetForm form={form} />}
             transformBeforeSubmit={transformBeforeSubmit}
+            renderTableOrLoading={renderTable}
         />
     );
 
     function renderTable(
-        groupedBugets: Grouping<Category, Budget>[] | undefined,
+        groupedBugets: Grouping<Category, Budget>[],
         edit: (c: BudgetViewModel) => void
     ): React.ReactNode {
-        return groupedBugets ? (
+        return (
             <BudgetTable
                 groupedBudgets={groupedBugets}
                 editBudget={(b) =>
@@ -49,8 +47,6 @@ function BudgetPage() {
                     })
                 }
             />
-        ) : (
-            <StatusIndicator status="loading" />
         );
     }
 

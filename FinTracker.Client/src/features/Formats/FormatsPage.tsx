@@ -1,8 +1,6 @@
 import EntityManagementPage from "../../components/EntityManagementPage";
-import StatusIndicator from "../../components/StatusIndicator";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormatService from "../../services/ImportFormatService";
-import ImportFormat from "../../types/ImportFormat";
 import ImportFormatViewModel from "../../types/ImportFormatViewModel";
 import { AddFormatIcon } from "../../utils/Icons";
 import FormatForm from "./FormatForm";
@@ -36,7 +34,10 @@ function FormatsPage() {
             deleteEntity={ImportFormatService.deleteFormat.bind(
                 ImportFormatService
             )}
-            renderTable={renderTable}
+            renderTableOrLoading={(_, edit) => (
+                <FormatTable editFormat={edit} />
+            )}
+            renderForm={(form) => <FormatForm form={form} />}
             transformBeforeSubmit={(values) => ({
                 ...values,
                 invertAmounts:
@@ -44,20 +45,8 @@ function FormatsPage() {
                 headerLines:
                     Number(values.headerLines?.toString() || NaN) ?? undefined,
             })}
-            renderForm={(form) => <FormatForm form={form} />}
         />
     );
-
-    function renderTable(
-        formats: ImportFormat[] | undefined,
-        edit: (f: ImportFormat) => void
-    ) {
-        return formats ? (
-            <FormatTable editFormat={edit} />
-        ) : (
-            <StatusIndicator status="loading" />
-        );
-    }
 }
 
 export default FormatsPage;
