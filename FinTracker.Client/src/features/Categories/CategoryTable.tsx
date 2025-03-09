@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import CategoryPill from "../../components/CategoryPill";
 import Table from "../../components/Table";
-import { CategoryTransactionCount } from "../../types/Category";
 import Pages from "../../types/Pages";
 import EmptyTableMessage from "../../components/EmptyTableMessage";
 import { classList } from "../../utils/HtmlHelper";
 import tinycolor from "tinycolor2";
 import styles from "../../styles/CategoryTable.module.css";
+import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
 
 interface CategoryTableProps {
-    categories: CategoryTransactionCount[];
-    editCategory: (category: CategoryTransactionCount) => void;
+    categories: CategoryReferenceCounts[];
+    editCategory: (category: CategoryReferenceCounts) => void;
 }
 
 function CategoryTable(props: CategoryTableProps) {

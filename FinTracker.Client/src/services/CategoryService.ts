@@ -1,4 +1,5 @@
-import Category, { CategoryTransactionCount } from "../types/Category";
+import Category from "../types/Category";
+import CategoryReferenceCounts from "../types/CategoryReferenceCounts";
 import CategoryViewModel from "../types/CategoryViewModel";
 import BaseService from "./BaseService";
 
@@ -11,8 +12,8 @@ class CategoryService extends BaseService {
         return this.get<Category[]>("");
     }
 
-    getCategoryTransactionCounts(): Promise<CategoryTransactionCount[]> {
-        return this.get<CategoryTransactionCount[]>("/WithCounts");
+    getCategoryTransactionCounts(): Promise<CategoryReferenceCounts[]> {
+        return this.get<CategoryReferenceCounts[]>("/WithCounts");
     }
 
     createCategory(model: CategoryViewModel): Promise<Category> {

@@ -1,14 +1,10 @@
 import tinycolor from "tinycolor2";
 import styles from "../styles/CategoryPill.module.css";
-import {
-    CategoryOrUncategorized,
-    CategoryTransactionCount,
-    Uncategorized,
-} from "../types/Category";
+import { CategoryOrUncategorized, Uncategorized } from "../types/Category";
 import { classList } from "../utils/HtmlHelper";
 
 interface CategoryPillProps {
-    category: CategoryOrUncategorized | CategoryTransactionCount | undefined;
+    category: CategoryOrUncategorized | undefined;
     onClick?: () => void;
     openTop?: boolean;
 }
