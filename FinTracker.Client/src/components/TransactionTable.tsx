@@ -103,7 +103,7 @@ function TransactionTable(props: TransactionTableProps) {
                 )}
 
                 {page && page.totalItems === 0 && (
-                    <EmptyTableMessage message="The selected filters returns no results." />
+                    <EmptyTableMessage message="The selected filters returned 0 results." />
                 )}
             </Table>
             {page && (

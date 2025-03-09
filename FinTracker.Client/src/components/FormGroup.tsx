@@ -5,7 +5,7 @@ import { classList } from "../utils/HtmlHelper";
 interface FormGroupProps {
     fieldName: string;
     children?: React.ReactNode;
-    error?: FieldError;
+    error?: FieldError | boolean;
 }
 
 function FormGroup(props: FormGroupProps) {
@@ -17,15 +17,15 @@ function FormGroup(props: FormGroupProps) {
             {children}
 
             {error && (
-                <div className={styles.errorMessage}>
-                    {error.message || getErrorMessage()}
-                </div>
+                <div className={styles.errorMessage}>{getErrorMessage()}</div>
             )}
         </div>
     );
 
     function getErrorMessage() {
-        if (!error) return "";
+        if (!error || typeof error !== "object") return "";
+        if (error.message) return error.message;
+
         switch (error.type) {
             case "required":
                 return `The ${fieldName} field is required.`;

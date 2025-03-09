@@ -1,5 +1,5 @@
-export function isEmpty(str: string): boolean {
-    return !str || str.length === 0;
+export function isEmpty(str: string | undefined | number): boolean {
+    return !str || str.toString().length === 0;
 }
 
 export function pluralize(num: number): string {
