@@ -6,6 +6,7 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import ImportFormat from "../../types/ImportFormat";
 import Pages from "../../types/Pages";
 import MenuTile from "./MenuTile";
+import { PaperFillIcon } from "../../utils/Icons";
 
 function ImportSubmenu() {
     const navigate = useNavigate();
@@ -36,6 +37,7 @@ function ImportSubmenu() {
                 key={i}
                 title={f.importFormatName}
                 iconPath={f.image ? "/format-icons/" + f.image : undefined}
+                icon={PaperFillIcon}
                 onClick={() => selectFormat(f)}
             />
         ))

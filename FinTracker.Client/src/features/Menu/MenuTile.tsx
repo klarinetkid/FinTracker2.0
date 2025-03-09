@@ -26,12 +26,12 @@ function MenuTile(props: MenuTileProps) {
     );
 
     function getIconOrImage() {
+        if (iconPath)
+            return <img src={iconPath} width={iconSize} height={iconSize} />;
         if (Icon)
             return (
                 <Icon width={iconSize} height={iconSize} className="themed" />
             );
-        if (iconPath)
-            return <img src={iconPath} width={iconSize} height={iconSize} />;
     }
 
     function onTileClick() {
