@@ -15,10 +15,12 @@ import { AddCategoryIcon } from "../../utils/Icons";
 import ToastManager from "../../utils/ToastManager";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 
 function CategoriesPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [categories, setCategories] = useState<CategoryTransactionCount[]>();
     const [editingValues, setEditingValues] = useState<CategoryViewModel>();
@@ -51,11 +53,19 @@ function CategoriesPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <CategoryForm
                     onCancel={() => setIsDrawerOpen(false)}
-                    onDelete={deleteCategory}
+                    onDelete={() => setIsConfirmingDelete(true)}
                     onSubmit={submitCategory}
                     values={editingValues}
                 />
             </Drawer>
+
+            {isConfirmingDelete && (
+                <ConfirmationPopup
+                    onCancel={() => setIsConfirmingDelete(false)}
+                    body={"Deleting a category cannot be undone."}
+                    onConfirm={deleteCategory}
+                />
+            )}
         </Page>
     );
     function newCategory() {
@@ -89,6 +99,7 @@ function CategoriesPage() {
         await CategoryService.deleteCategory(editingValues.id);
         blurActiveElement();
         refresh();
+        setIsConfirmingDelete(false);
         setIsDrawerOpen(false);
         ToastManager.addToast({
             type: "success",

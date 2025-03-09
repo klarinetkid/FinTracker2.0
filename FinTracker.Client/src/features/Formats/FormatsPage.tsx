@@ -14,10 +14,12 @@ import { AddFormatIcon } from "../../utils/Icons";
 import ToastManager from "../../utils/ToastManager";
 import FormatForm from "./FormatForm";
 import FormatTable from "./FormatTable";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 
 function FormatsPage() {
     const globalDataCache = useGlobalDataCache();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [editingValues, setEditingValues] = useState<ImportFormatViewModel>();
 
     return (
@@ -42,11 +44,19 @@ function FormatsPage() {
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <FormatForm
                     onCancel={() => setIsDrawerOpen(false)}
-                    onDelete={deleteFormat}
+                    onDelete={() => setIsConfirmingDelete(true)}
                     onSubmit={submitFormat}
                     values={editingValues}
                 />
             </Drawer>
+
+            {isConfirmingDelete && (
+                <ConfirmationPopup
+                    onCancel={() => setIsConfirmingDelete(false)}
+                    body={"Deleting an import format cannot be undone."}
+                    onConfirm={deleteFormat}
+                />
+            )}
         </Page>
     );
 
@@ -95,6 +105,7 @@ function FormatsPage() {
         await ImportFormatService.deleteFormat(editingValues.id);
         blurActiveElement();
         globalDataCache.importFormats.refresh();
+        setIsConfirmingDelete(false);
         setIsDrawerOpen(false);
         ToastManager.addToast({
             type: "success",

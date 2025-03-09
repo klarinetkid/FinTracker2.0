@@ -101,7 +101,6 @@ function TransactionsPage() {
             {isConfirmingDelete && (
                 <ConfirmationPopup
                     onCancel={() => setIsConfirmingDelete(false)}
-                    title={"Are you sure?"}
                     body={"Deleting a transaction cannot be undone."}
                     onConfirm={deleteTransaction}
                 />

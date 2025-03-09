@@ -65,7 +65,6 @@ function BudgetPage() {
             {isConfirmingDelete && (
                 <ConfirmationPopup
                     onCancel={() => setIsConfirmingDelete(false)}
-                    title={"Are you sure?"}
                     body={"Deleting a budget cannot be undone."}
                     onConfirm={deleteBudget}
                 />

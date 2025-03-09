@@ -14,11 +14,13 @@ import { blurActiveElement } from "../../utils/HtmlHelper";
 import ToastManager from "../../utils/ToastManager";
 import MemoForm from "./MemoForm";
 import MemoTable from "./MemoTable";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
 
 function MemosPage() {
     const [groupedMemos, setGroupedMemos] =
         useState<Grouping<Category | undefined, Memo>[]>();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
     const [editingValues, setEditingValues] = useState<MemoViewModel>();
 
@@ -42,10 +44,18 @@ function MemosPage() {
                 <MemoForm
                     onSubmit={submitMemo}
                     onCancel={() => setIsDrawerOpen(false)}
-                    onDelete={deleteMemo}
+                    onDelete={() => setIsConfirmingDelete(true)}
                     values={editingValues}
                 />
             </Drawer>
+
+            {isConfirmingDelete && (
+                <ConfirmationPopup
+                    onCancel={() => setIsConfirmingDelete(false)}
+                    body={"Deleting a memo cannot be undone."}
+                    onConfirm={deleteMemo}
+                />
+            )}
         </Page>
     );
 
@@ -69,6 +79,7 @@ function MemosPage() {
         await MemoService.deleteMemo(editingValues.id);
         blurActiveElement();
         refresh();
+        setIsConfirmingDelete(false);
         setIsDrawerOpen(false);
         ToastManager.addToast({
             type: "success",
