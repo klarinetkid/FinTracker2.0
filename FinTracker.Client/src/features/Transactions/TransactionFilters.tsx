@@ -4,6 +4,7 @@ import Input from "../../components/Input";
 import Row from "../../components/Row";
 import Select from "../../components/Select";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
+import { Uncategorized } from "../../types/Category";
 import TransactionQuery from "../../types/TransactionQuery";
 
 interface TransactionFiltersProps {
@@ -44,9 +45,13 @@ function TransactionFilters(props: TransactionFiltersProps) {
                             categoryId: categoryId,
                         });
                     }}
-                    value={globalDataCache.getCategoryById(
-                        filterQuery?.categoryId
-                    )}
+                    value={
+                        filterQuery.categoryId == -1
+                            ? Uncategorized
+                            : globalDataCache.getCategoryById(
+                                  filterQuery?.categoryId
+                              )
+                    }
                 />
             </FormGroup>
             <FormGroup fieldName="After">
