@@ -115,7 +115,7 @@ namespace FinTracker.Api.Models
                         return "";
                     case "MultiMonth":
                     case "MultiYearMonth":
-                        return (Diff.Days / 30) + " months";
+                        return Helper.GetMonthDiff(Start, End, true) + " months";
                     case "MultiYear":
                         return (Diff.Days / 365) + " years";
                 }

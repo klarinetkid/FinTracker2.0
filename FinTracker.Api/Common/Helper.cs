@@ -40,20 +40,31 @@ namespace FinTracker.Api.Common
             }
         }
         
+        public static int GetWholeYearDiff(DateOnly start, DateOnly end)
+        {
+            int years = end.Year - start.Year;
+            if (end < new DateOnly(end.Year, start.Month, start.Day)) years--;
+            return years;
+        }
+
+        public static int GetMonthDiff(DateOnly start, DateOnly end, bool addYears)
+        {
+            int months = end.Month - start.Month;
+            if (start.Day > end.Day) months--;
+            if (months < 0) months += 12;
+
+            if (addYears) months += GetWholeYearDiff(start, end) * 12;
+
+            return months;
+        }
+
         public static string GetTimeSpanValues(DateOnly start, DateOnly end)
         {
-            // if start month is greater than end, last year is not whole year
-            int years = end.Year - start.Year;
-            if (start.Month > end.Month) years--;
-
-            // get month difference
-            // add 12 if negative to wrap around year
-            int months = end.Month - start.Month;
-            if (months < 0) months += 12;
-            if (start.Day >= end.Day) months--;
+            int years = GetWholeYearDiff(start, end);
+            int months = GetMonthDiff(start, end, false);
 
             // if days is negative, add days in start month to wrap around month
-            int days = end.Day - start.Day - 1;
+            int days = end.Day - start.Day; // - 1;
             if (days < 0) days += DateTime.DaysInMonth(start.Year, start.Month);
 
             string[] values = [
