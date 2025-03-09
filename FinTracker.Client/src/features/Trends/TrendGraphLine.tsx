@@ -25,6 +25,7 @@ function TrendGraphLine(props: TrendGraphLineProps) {
 
     const lineColour = tinycolor(line.category.colour).toHexString();
     const coords = line.points.map(getPointCoord);
+    const nonZeroCoords = coords.filter((c) => c.total !== 0);
 
     return (
         <g>
@@ -33,12 +34,19 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                 className={styles.valuePath}
                 d={getPathValue(coords)}
             />
-            {coords
-                .filter((c) => c.total !== 0)
-                .map((p, i) => drawValuePoint(p, i, false))}
-            {coords
-                .filter((c) => c.total !== 0)
-                .map((p, i) => drawValuePoint(p, i, true))}
+            {nonZeroCoords.map((point, i) => (
+                <circle
+                    key={i}
+                    r={6}
+                    cx={point.x}
+                    cy={point.y}
+                    className={classList(
+                        styles.point,
+                        point.isInverted ? styles.inverted : ""
+                    )}
+                />
+            ))}
+            {nonZeroCoords.map(drawPointLabel)}
         </g>
     );
 
@@ -61,13 +69,9 @@ function TrendGraphLine(props: TrendGraphLineProps) {
         );
     }
 
-    function drawValuePoint(
-        point: PointCoordinate,
-        i: number,
-        isText: boolean
-    ) {
+    function drawPointLabel(point: PointCoordinate, i: number) {
         const grpClass = classList(
-            styles.pointValueGroup,
+            styles.pointLabel,
             point.isInverted ? styles.inverted : ""
         );
 
@@ -87,43 +91,34 @@ function TrendGraphLine(props: TrendGraphLineProps) {
         );
         const labelY = Math.max(point.y - labelHeight - 12, 0);
 
-        const labelTransform = `translate(${labelX} ${labelY})`;
-
         return (
             <g key={i} className={grpClass}>
                 <circle
-                    r={6}
+                    r={8}
                     cx={point.x}
                     cy={point.y}
                     onClick={() => pointClick(point)}
-                    className={isText ? styles.transparent : undefined}
                 />
-                {isText && (
-                    <g
-                        transform={labelTransform}
-                        className={styles.valueLabel}
-                        onClick={() => pointClick(point)}
-                    >
-                        <rect
-                            className={styles.valueTxtBg}
-                            x={-labelWidth / 2}
-                            y={0}
-                            width={labelWidth}
-                            height={labelHeight}
-                        />
-                        {txtLines.map((txt, i) => (
-                            <text
-                                x={0}
-                                y={
-                                    (labelHeight / txtLines.length) * (i + 1) -
-                                    9
-                                }
-                            >
-                                {txt}
-                            </text>
-                        ))}
-                    </g>
-                )}
+                <g
+                    transform={`translate(${labelX} ${labelY})`}
+                    className={styles.pointText}
+                    onClick={() => pointClick(point)}
+                >
+                    <rect
+                        x={-labelWidth / 2}
+                        y={0}
+                        width={labelWidth}
+                        height={labelHeight}
+                    />
+                    {txtLines.map((txt, i) => (
+                        <text
+                            x={0}
+                            y={(labelHeight / txtLines.length) * (i + 1) - 9}
+                        >
+                            {txt}
+                        </text>
+                    ))}
+                </g>
             </g>
         );
     }
