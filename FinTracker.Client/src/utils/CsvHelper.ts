@@ -19,7 +19,10 @@ export function parseCsvToTransactions(
             // parse all csv files
             for (const file of files) {
                 try {
-                    const rows = await parseFile(file.content.toString());
+                    const rows = await parseFile(
+                        file.content.toString(),
+                        format
+                    );
                     allRows = allRows.concat(rows);
                 } catch (err) {
                     reject(err);
@@ -37,13 +40,15 @@ export function parseCsvToTransactions(
     });
 }
 
-function parseFile(content: string): Promise<CsvRow[]> {
+function parseFile(content: string, format: ImportFormat): Promise<CsvRow[]> {
     return new Promise((resolve, reject) => {
         parse(
             content,
             {
                 columns: true,
                 trim: true,
+                delimiter: format.delimiter,
+                fromLine: format.headerLines + 1,
             },
             (err, records) => {
                 if (err) {
