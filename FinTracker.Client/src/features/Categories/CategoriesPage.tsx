@@ -49,11 +49,11 @@ function CategoriesPage() {
     }
 
     function canBeDeleted(values: CategoryReferenceCounts) {
-        return (
-            values.transactionCount === 0 &&
+        return values.transactionCount === 0 &&
             values.budgetCount === 0 &&
             values.memoCount === 0
-        );
+            ? true
+            : "Categories referenced by transactions, budgets, or memos cannot be deleted.";
     }
 }
 
