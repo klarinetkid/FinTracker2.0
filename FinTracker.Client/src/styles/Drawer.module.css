@@ -50,3 +50,9 @@
             flex-direction: row-reverse;
             justify-content: space-between;
         }
+
+        .content > form > div > div:first-child {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
