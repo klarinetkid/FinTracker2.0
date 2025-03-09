@@ -41,12 +41,7 @@ function MemoForm(props: FormProps<MemoViewModel>) {
                 <Spacer height={24} />
 
                 <FormGroup fieldName="Memo">
-                    <Input
-                        readOnly
-                        name="memo"
-                        className="ralign"
-                        value={values?.memo ?? ""}
-                    />
+                    <Input readOnly name="memo" value={values?.memo ?? ""} />
                 </FormGroup>
                 <FormGroup fieldName="Category" error={errors.categoryId}>
                     <Controller

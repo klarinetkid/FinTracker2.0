@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useBlocker, useLocation, useNavigate } from "react-router-dom";
+import { FileContent } from "use-file-picker/types";
 import Button from "../../components/Button";
 import ButtonFill from "../../components/ButtonFill";
 import ConfirmationPopup from "../../components/ConfirmationPopup";
 import Page from "../../components/Page";
 import Row from "../../components/Row";
+import Spacer from "../../components/Spacer";
 import StatusIndicator from "../../components/StatusIndicator";
+import Tooltip from "../../components/Tooltip";
 import {
     ImportParams,
     ImportResult,
@@ -13,6 +16,7 @@ import {
 import useConfirmLeave from "../../hooks/useConfirmLeave";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import useTransactionImport from "../../hooks/useTransactionImport";
+import styles from "../../styles/ImportPage.module.css";
 import Pages from "../../types/Pages";
 import { minimumTime } from "../../utils/PromiseHelper";
 import { pluralize } from "../../utils/StringHelper";
@@ -79,7 +83,21 @@ function ImportPage() {
     return (
         <Page>
             <Row justifyContent="space-between">
-                <h1>Import Transactions</h1>
+                <div className={styles.header} style={{ marginBottom: 34 }}>
+                    <h1>Import Transactions</h1>
+                    {importParams?.format?.importFormatName && (
+                        <div className={styles.subtitle}>
+                            From {importParams?.format?.importFormatName}
+                            <Tooltip>
+                                {importParams?.filesContent
+                                    ?.map(
+                                        (e: FileContent<ArrayBuffer>) => e.name
+                                    )
+                                    .join(", ")}
+                            </Tooltip>
+                        </div>
+                    )}
+                </div>
                 <div>
                     {flowStep === "editing" && (
                         <>
@@ -100,6 +118,7 @@ function ImportPage() {
                     )}
                 </div>
             </Row>
+            <Spacer height={4} />
 
             {getPageBody()}
 

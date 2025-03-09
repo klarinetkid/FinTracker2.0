@@ -1,0 +1,18 @@
+.header {
+    display: flex;
+    gap: 16px;
+    align-items: start;
+    margin: 34px 0;
+    position: relative;
+}
+
+    .header h1 {
+        margin: 0;
+    }
+
+    .header .subtitle {
+        position: absolute;
+        font-style: italic;
+        font-size: 90%;
+        top: calc(100% + 6px);
+    }

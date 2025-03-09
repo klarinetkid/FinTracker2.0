@@ -16,20 +16,21 @@ function TrendGraph(props: TrendGraphProps) {
 
     const snapTo = appsettings.trendGraph.verticalGridlineInc;
 
-    const lbound =
-        trend.lowerBound -
-        (trend.lowerBound < 0 ? snapTo : 0) -
-        (trend.lowerBound % snapTo);
+    const boundPadding = (trend.upperBound - trend.lowerBound) * 0.1;
 
-    const maxUbound = (trend.upperBound + snapTo) * 1.25;
-    const ubound = maxUbound - (maxUbound % snapTo);
+    const minLbound = trend.lowerBound - boundPadding - snapTo;
+    const snapLbound =
+        trend.lowerBound === 0 ? 0 : minLbound - (minLbound % snapTo);
+
+    const maxUbound = trend.upperBound + snapTo + boundPadding;
+    const snapUbound = maxUbound - (maxUbound % snapTo);
 
     const numPoints = trend.lines[0].points.length - 1;
 
     const graphPlotter = new TrendGraphPlotter(
         sizing,
-        lbound,
-        ubound,
+        snapLbound,
+        snapUbound,
         numPoints
     );
 
@@ -94,7 +95,7 @@ function TrendGraph(props: TrendGraphProps) {
 
         const yBottom = sizing.height - sizing.xAxis;
 
-        const numpts = trend.lines[0].points.length
+        const numpts = trend.lines[0].points.length;
 
         const inc = Math.max(Math.floor(numpts / 26), 1);
         for (let i = 0; i < trend.lines[0].points.length; i += inc) {
