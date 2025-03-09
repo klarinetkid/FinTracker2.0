@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
+import useRefresh from "../hooks/useRefresh";
 import { blurActiveElement } from "../utils/HtmlHelper";
 import ToastManager from "../utils/ToastManager";
 import Button from "./Button";
@@ -11,29 +12,38 @@ import Page from "./Page";
 import Row from "./Row";
 import StatusIndicator from "./StatusIndicator";
 import Tooltip from "./Tooltip";
-import useRefresh from "../hooks/useRefresh";
 
-interface EntityManagementPageProps<T extends FieldValues, TblEntity> {
+interface EntityManagementPageProps<
+    TFormEntity extends FieldValues,
+    TblEntity,
+    TListEntity,
+> {
     title: string;
     entityName: string;
 
-    newEntity?: () => T;
+    newEntity?: () => TFormEntity;
     newEntityIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
-    renderTable: (entities: T[], editEntity: (e: T) => void) => React.ReactNode;
-    renderForm: (form: UseFormReturn<T>) => React.ReactNode;
+    renderTable: (
+        entities: TListEntity[],
+        editEntity: (e: TFormEntity) => void
+    ) => React.ReactNode;
+    renderForm: (form: UseFormReturn<TFormEntity>) => React.ReactNode;
 
-    getEntities: () => Promise<T[]>;
+    getEntities: () => Promise<TListEntity[]>;
 
     addEntity?: (entity: FieldValues) => Promise<void | TblEntity>;
     putEntity: (entity: FieldValues) => Promise<void | TblEntity>;
     deleteEntity: (id: number) => Promise<void>;
-    canBeDeleted: (entity: T) => boolean | string;
+    canBeDeleted?: (entity: TFormEntity) => boolean | string;
+    transformBeforeSubmit?: (values: FieldValues) => TFormEntity;
 }
 
-function EntityManagementPage<TEntity extends FieldValues, TblEntity>(
-    props: EntityManagementPageProps<TEntity, TblEntity>
-) {
+function EntityManagementPage<
+    TFormEntity extends FieldValues,
+    TblEntity,
+    TListEntity,
+>(props: EntityManagementPageProps<TFormEntity, TblEntity, TListEntity>) {
     const {
         title,
         entityName,
@@ -46,16 +56,17 @@ function EntityManagementPage<TEntity extends FieldValues, TblEntity>(
         putEntity,
         deleteEntity,
         canBeDeleted,
+        transformBeforeSubmit,
     } = props;
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { refreshed, refresh } = useRefresh();
 
-    const [entities, setEntities] = useState<TEntity[]>();
-    const [editingValues, setEditingValues] = useState<TEntity>();
+    const [entities, setEntities] = useState<TListEntity[]>();
+    const [editingValues, setEditingValues] = useState<TFormEntity>();
 
-    const form = useForm<TEntity>(); // useMemo(() => useForm<TEntity>(), []);
+    const form = useForm<TFormEntity>(); // useMemo(() => useForm<TEntity>(), []);
 
     useEffect(() => {
         form.reset(editingValues);
@@ -68,9 +79,6 @@ function EntityManagementPage<TEntity extends FieldValues, TblEntity>(
     const renderedTable = useMemo(() => {
         if (entities) return renderTable(entities, editEntityClick);
     }, [entities]);
-
-    //const stableRenderForm = useCallback((form: UseFormReturn<TEntity>) => renderForm(form), []);
-    //const renderedForm = useMemo(() => stableRenderForm(form), [form]);
 
     return (
         <Page>
@@ -109,16 +117,20 @@ function EntityManagementPage<TEntity extends FieldValues, TblEntity>(
                                 <Button
                                     type="button"
                                     disabled={
+                                        canBeDeleted &&
                                         !(canBeDeleted(editingValues) === true)
                                     }
                                     onClick={deleteEntityClick}
                                 >
                                     Delete
-                                    {!(canBeDeleted(editingValues) === true) && (
-                                        <Tooltip>
-                                            {canBeDeleted(editingValues)}
-                                        </Tooltip>
-                                    )}
+                                    {canBeDeleted &&
+                                        !(
+                                            canBeDeleted(editingValues) === true
+                                        ) && (
+                                            <Tooltip>
+                                                {canBeDeleted(editingValues)}
+                                            </Tooltip>
+                                        )}
                                 </Button>
                             )}
                         </div>
@@ -140,14 +152,20 @@ function EntityManagementPage<TEntity extends FieldValues, TblEntity>(
         setEditingValues({ ...newEntity() });
         setIsDrawerOpen(true);
     }
-    function editEntityClick(entity: TEntity) {
+    function editEntityClick(entity: TFormEntity) {
         setEditingValues({ ...entity });
         setIsDrawerOpen(true);
     }
-    function submitEntity(model: FieldValues) {
-        if (model === undefined) return;
+    function submitEntity(values: FieldValues) {
+        if (values === undefined) return;
 
-        // clean this up
+        const model = transformBeforeSubmit
+            ? transformBeforeSubmit(values)
+            : values;
+
+        // compiler too dumb to know addEntity will have value
+        //if (!model.id && !addEntity) return;
+
         (model.id
             ? putEntity(model)
             : addEntity
