@@ -11,9 +11,10 @@ import { AddBudgetIcon } from "../../utils/Icons";
 import { dollarsToCents } from "../../utils/NumberHelper";
 import BudgetForm from "./BudgetForm";
 import BudgetTable from "./BudgetTable";
+import StatusIndicator from "../../components/StatusIndicator";
 
 function BudgetPage() {
-    const defaults = {
+    const newBudgetDefaults = {
         amount: "0.00",
         effectiveDate: formatDateOnly(moment()),
     };
@@ -21,9 +22,9 @@ function BudgetPage() {
     return (
         <EntityManagementPage
             title="Budgets"
-            entityName="budget"
+            entityName="Budget"
             getEntities={BudgetService.getGrouped.bind(BudgetService)}
-            newEntity={() => defaults as BudgetViewModel}
+            newEntityDefaults={newBudgetDefaults as BudgetViewModel}
             newEntityIcon={AddBudgetIcon}
             addEntity={BudgetService.createBudget.bind(BudgetService)}
             putEntity={BudgetService.putBudget.bind(BudgetService)}
@@ -35,10 +36,12 @@ function BudgetPage() {
     );
 
     function renderTable(
-        groupedBugets: Grouping<Category, Budget>[],
+        groupedBugets: Grouping<Category, Budget>[] | undefined,
         edit: (c: BudgetViewModel) => void
-    ) {
-        return (
+    ): React.ReactNode {
+        return !groupedBugets ? (
+            <StatusIndicator status="loading" />
+        ) : (
             <BudgetTable
                 groupedBudgets={groupedBugets}
                 editBudget={(b) =>

@@ -6,11 +6,12 @@ import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
 import { AddCategoryIcon } from "../../utils/Icons";
 import CategoryForm from "./CategoryForm";
 import CategoryTable from "./CategoryTable";
+import StatusIndicator from "../../components/StatusIndicator";
 
 function CategoriesPage() {
     const globalDataCache = useGlobalDataCache();
 
-    const defaults = {
+    const newCategoryDefaults = {
         categoryName: "",
         colour: "",
     };
@@ -20,7 +21,7 @@ function CategoriesPage() {
             title="Categories"
             entityName="category"
             getEntities={getCategories}
-            newEntity={() => defaults as CategoryReferenceCounts}
+            newEntityDefaults={newCategoryDefaults as CategoryReferenceCounts}
             newEntityIcon={AddCategoryIcon}
             addEntity={CategoryService.createCategory.bind(CategoryService)}
             putEntity={CategoryService.putCategory.bind(CategoryService)}
@@ -37,10 +38,12 @@ function CategoriesPage() {
     }
 
     function renderTable(
-        categories: CategoryReferenceCounts[],
+        categories: CategoryReferenceCounts[] | undefined,
         edit: (c: CategoryReferenceCounts) => void
     ) {
-        return (
+        return !categories ? (
+            <StatusIndicator status="loading" />
+        ) : (
             <CategoryTable
                 categories={categories}
                 editCategory={(c) => edit(c)}

@@ -10,7 +10,6 @@ import Drawer from "./Drawer";
 import IconButton from "./IconButton";
 import Page from "./Page";
 import Row from "./Row";
-import StatusIndicator from "./StatusIndicator";
 import Tooltip from "./Tooltip";
 
 interface EntityManagementPageProps<
@@ -18,25 +17,33 @@ interface EntityManagementPageProps<
     TblEntity,
     TListEntity,
 > {
+    // titles
     title: string;
     entityName: string;
+    drawerTitle?: (e: TFormEntity) => string;
 
-    newEntity?: () => TFormEntity;
+    // create new entity
+    newEntityDefaults?: TFormEntity;
     newEntityIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
+    // render table, form in drawer
     renderTable: (
-        entities: TListEntity[],
+        entities: TListEntity[] | undefined,
         editEntity: (e: TFormEntity) => void
     ) => React.ReactNode;
     renderForm: (form: UseFormReturn<TFormEntity>) => React.ReactNode;
 
-    getEntities: () => Promise<TListEntity[]>;
-
+    // service calls
+    getEntities?: () => Promise<TListEntity[]>;
     addEntity?: (entity: FieldValues) => Promise<void | TblEntity>;
     putEntity: (entity: FieldValues) => Promise<void | TblEntity>;
     deleteEntity: (id: number) => Promise<void>;
+
+    // misc
     canBeDeleted?: (entity: TFormEntity) => boolean | string;
     transformBeforeSubmit?: (values: FieldValues) => TFormEntity;
+    refresh?: () => void;
+    additionalHeaderButtons?: React.ReactNode;
 }
 
 function EntityManagementPage<
@@ -47,7 +54,7 @@ function EntityManagementPage<
     const {
         title,
         entityName,
-        newEntity,
+        newEntityDefaults,
         newEntityIcon,
         renderTable,
         renderForm,
@@ -57,48 +64,55 @@ function EntityManagementPage<
         deleteEntity,
         canBeDeleted,
         transformBeforeSubmit,
+        refresh: externalRefresh,
+        additionalHeaderButtons,
+        drawerTitle,
     } = props;
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-    const { refreshed, refresh } = useRefresh();
+    const { refreshed, refresh: internalRefresh } = useRefresh();
 
     const [entities, setEntities] = useState<TListEntity[]>();
     const [editingValues, setEditingValues] = useState<TFormEntity>();
 
-    const form = useForm<TFormEntity>(); // useMemo(() => useForm<TEntity>(), []);
+    const form = useForm<TFormEntity>();
 
     useEffect(() => {
         form.reset(editingValues);
     }, [editingValues]);
 
     useEffect(() => {
-        getEntities().then(setEntities);
+        if (getEntities) getEntities().then(setEntities);
     }, [refreshed]);
-
-    const renderedTable = useMemo(() => {
-        if (entities) return renderTable(entities, editEntityClick);
-    }, [entities]);
 
     return (
         <Page>
             <Row justifyContent="space-between">
                 <h1>{title}</h1>
-                {newEntity && newEntityIcon && (
-                    <IconButton
-                        title={`New ${entityName}`}
-                        icon={newEntityIcon}
-                        onClick={newEntityClick}
-                    />
-                )}
+                <div className="flex">
+                    {additionalHeaderButtons}
+                    {newEntityDefaults && newEntityIcon && (
+                        <IconButton
+                            title={`New ${entityName}`}
+                            icon={newEntityIcon}
+                            onClick={newEntityClick}
+                        />
+                    )}
+                </div>
             </Row>
 
-            {entities ? renderedTable : <StatusIndicator status="loading" />}
+            {renderTable(entities, editEntityClick)}
 
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
                 <form onSubmit={form.handleSubmit(submitEntity)}>
                     <div>
-                        <h2>{editingValues?.id ? "Edit" : "New"} Category</h2>
+                        <h2>
+                            {editingValues?.id ? "Edit" : "New"}{" "}
+                            {drawerTitle && editingValues
+                                ? drawerTitle(editingValues)
+                                : entityName}
+                        </h2>
 
                         {renderForm(form)}
                     </div>
@@ -141,15 +155,15 @@ function EntityManagementPage<
             {isConfirmingDelete && (
                 <ConfirmationPopup
                     onCancel={() => setIsConfirmingDelete(false)}
-                    body={`Deleting a ${entityName} cannot be undone.`}
+                    body={`Deleting a ${entityName.toLowerCase()} cannot be undone.`}
                     onConfirm={deleteEntityClick}
                 />
             )}
         </Page>
     );
     function newEntityClick() {
-        if (!newEntity) return;
-        setEditingValues({ ...newEntity() });
+        if (!newEntityDefaults) return;
+        setEditingValues({ ...newEntityDefaults });
         setIsDrawerOpen(true);
     }
     function editEntityClick(entity: TFormEntity) {
@@ -172,9 +186,7 @@ function EntityManagementPage<
               ? addEntity(model)
               : new Promise((resolve) => resolve({}))
         ).then(() => {
-            blurActiveElement();
-            refresh();
-            setIsDrawerOpen(false);
+            closeAfterSuccess();
             ToastManager.addToast({
                 type: "success",
                 title: "Success",
@@ -187,15 +199,20 @@ function EntityManagementPage<
         if (!editingValues || !editingValues.id) return;
         await deleteEntity(editingValues.id);
 
-        blurActiveElement();
-        refresh();
-        setIsConfirmingDelete(false);
-        setIsDrawerOpen(false);
+        closeAfterSuccess();
         ToastManager.addToast({
             type: "success",
             title: "Success",
             body: "The category was successfully deleted.",
         });
+    }
+
+    function closeAfterSuccess() {
+        blurActiveElement();
+        internalRefresh();
+        if (externalRefresh) externalRefresh();
+        setIsConfirmingDelete(false);
+        setIsDrawerOpen(false);
     }
 }
 
