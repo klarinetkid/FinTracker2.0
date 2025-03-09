@@ -1,16 +1,15 @@
-import { Controller, UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import CategorySelector from "../../components/CategorySelector";
+import { EntityManagementFormProps } from "../../components/EntityManagementPage";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import TransactionViewModel from "../../types/TransactionViewModel";
 import { AmountPattern, DatePattern } from "../../utils/ValidationHelper";
 
-interface TransactionFormProps {
-    form: UseFormReturn<TransactionViewModel>;
-}
-
-function TransactionForm(props: TransactionFormProps) {
+function TransactionForm(
+    props: EntityManagementFormProps<TransactionViewModel>
+) {
     const {
         form: {
             watch,

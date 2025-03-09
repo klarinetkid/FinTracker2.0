@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
 import useRefresh from "../hooks/useRefresh";
 import { blurActiveElement } from "../utils/HtmlHelper";
@@ -11,6 +11,10 @@ import IconButton from "./IconButton";
 import Page from "./Page";
 import Row from "./Row";
 import Tooltip from "./Tooltip";
+
+export interface EntityManagementFormProps<T extends FieldValues> {
+    form: UseFormReturn<T>;
+}
 
 interface EntityManagementPageProps<
     TFormEntity extends FieldValues,

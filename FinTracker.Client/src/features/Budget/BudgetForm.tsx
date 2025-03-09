@@ -1,5 +1,6 @@
-import { Controller, UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import CategorySelector from "../../components/CategorySelector";
+import { EntityManagementFormProps } from "../../components/EntityManagementPage";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import Spacer from "../../components/Spacer";
@@ -7,11 +8,7 @@ import useGlobalDataCache from "../../hooks/useGlobalDataCache";
 import BudgetViewModel from "../../types/BudgetViewModel";
 import { AmountPattern, DatePattern } from "../../utils/ValidationHelper";
 
-interface BudgetFormProps {
-    form: UseFormReturn<BudgetViewModel>;
-}
-
-function BudgetForm(props: BudgetFormProps) {
+function BudgetForm(props: EntityManagementFormProps<BudgetViewModel>) {
     const {
         form: {
             formState: { errors },

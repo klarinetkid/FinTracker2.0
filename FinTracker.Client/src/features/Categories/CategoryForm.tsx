@@ -1,16 +1,14 @@
-import { UseFormReturn } from "react-hook-form";
 import CategoryPill from "../../components/CategoryPill";
+import { EntityManagementFormProps } from "../../components/EntityManagementPage";
 import FormGroup from "../../components/FormGroup";
 import Input from "../../components/Input";
 import Spacer from "../../components/Spacer";
-import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
 import { Total } from "../../types/Category";
+import CategoryReferenceCounts from "../../types/CategoryReferenceCounts";
 
-interface CategoryFormProps {
-    form: UseFormReturn<CategoryReferenceCounts>;
-}
-
-function CategoryForm(props: CategoryFormProps) {
+function CategoryForm(
+    props: EntityManagementFormProps<CategoryReferenceCounts>
+) {
     const {
         form: {
             watch,
