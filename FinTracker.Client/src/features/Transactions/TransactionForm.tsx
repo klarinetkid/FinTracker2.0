@@ -39,6 +39,7 @@ function TransactionForm(props: FormProps<TransactionViewModel>) {
 
                 <FormGroup fieldName="Date" error={errors.date}>
                     <Input
+                        placeholder="yyyy-mm-dd"
                         registration={register("date", {
                             required: true,
                             disabled: !values?.isCashTransaction,
