@@ -39,8 +39,8 @@ function TransactionTable(props: TransactionTableProps) {
 
         const combinedQuery: TransactionQuery = {
             ...query,
-            after: formatDateOnly(query?.after),
-            before: formatDateOnly(query?.before),
+            after: queryDate(query?.after),
+            before: queryDate(query?.before),
             moreThan: dollarsToCents(query?.moreThan),
             lessThan: dollarsToCents(query?.lessThan),
             order: orderQuery.order,
@@ -116,6 +116,11 @@ function TransactionTable(props: TransactionTableProps) {
             {showLoading && isLoading && <StatusIndicator status="loading" />}
         </>
     );
+
+    function queryDate(date: string | undefined) {
+        if (date === undefined || date.trim().length === 0) return;
+        return formatDateOnly(new Date(date + "T00:00:00"));
+    }
 
     function onPageNav(page: number) {
         setCurrentPage(page);

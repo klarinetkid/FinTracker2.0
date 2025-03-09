@@ -112,6 +112,7 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                     />
                     {txtLines.map((txt, i) => (
                         <text
+                            key={i}
                             x={0}
                             y={(labelHeight / txtLines.length) * (i + 1) - 9}
                         >
