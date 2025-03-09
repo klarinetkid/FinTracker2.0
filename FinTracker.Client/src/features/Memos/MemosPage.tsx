@@ -11,8 +11,8 @@ import MemoTable from "./MemoTable";
 function MemosPage() {
     return (
         <EntityManagementPage
-            title="Memos"
-            entityName="Memo"
+            entityPluralName="Memos"
+            entitySingularName="Memo"
             getEntities={MemoService.getGrouped.bind(MemoService)}
             putEntity={MemoService.patchCategorization.bind(MemoService)}
             deleteEntity={MemoService.deleteMemo.bind(MemoService)}
