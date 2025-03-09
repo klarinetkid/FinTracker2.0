@@ -21,6 +21,7 @@ export class GlobalDataCacheItem<T> {
         if (this.getValue && this.setValue) {
             const value = await this.getValue();
             this.setValue(value);
+            return value;
         }
     }
 
