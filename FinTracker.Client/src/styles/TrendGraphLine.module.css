@@ -24,6 +24,11 @@
     stroke: var(--deep-red);
 }
 
+.pointValueGroup circle.transparent {
+    fill: transparent;
+    stroke: transparent;
+}
+
 .pointValueGroup:hover .valueLabel {
     visibility: visible;
 }

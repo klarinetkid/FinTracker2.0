@@ -4,7 +4,7 @@
     border: none;
     border-radius: 100%;
     padding: 2px;
-    background-color: var(--transparent);
+    background-color: transparent;
     opacity: 0.5;
 }
 

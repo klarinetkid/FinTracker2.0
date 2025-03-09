@@ -33,7 +33,12 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                 className={styles.valuePath}
                 d={getPathValue(coords)}
             />
-            {coords.filter((c) => c.total !== 0).map(drawValuePoint)}
+            {coords
+                .filter((c) => c.total !== 0)
+                .map((p, i) => drawValuePoint(p, i, false))}
+            {coords
+                .filter((c) => c.total !== 0)
+                .map((p, i) => drawValuePoint(p, i, true))}
         </g>
     );
 
@@ -56,7 +61,11 @@ function TrendGraphLine(props: TrendGraphLineProps) {
         );
     }
 
-    function drawValuePoint(point: PointCoordinate, i: number) {
+    function drawValuePoint(
+        point: PointCoordinate,
+        i: number,
+        isText: boolean
+    ) {
         const grpClass = classList(
             styles.pointValueGroup,
             point.isInverted ? styles.inverted : ""
@@ -72,7 +81,13 @@ function TrendGraphLine(props: TrendGraphLineProps) {
         const labelWidth = widthChars * 8 + 12;
         const labelHeight = txtLines.length * 30;
 
-        const labelTransform = `translate(${point.x} ${point.y - labelHeight - 12})`;
+        const labelX = Math.min(
+            point.x,
+            graphPlotter.sizing.width - labelWidth / 2
+        );
+        const labelY = Math.max(point.y - labelHeight - 12, 0);
+
+        const labelTransform = `translate(${labelX} ${labelY})`;
 
         return (
             <g key={i} className={grpClass}>
@@ -81,24 +96,34 @@ function TrendGraphLine(props: TrendGraphLineProps) {
                     cx={point.x}
                     cy={point.y}
                     onClick={() => pointClick(point)}
+                    className={isText ? styles.transparent : undefined}
                 />
-                <g transform={labelTransform} className={styles.valueLabel}>
-                    <rect
-                        className={styles.valueTxtBg}
-                        x={-labelWidth / 2}
-                        y={0}
-                        width={labelWidth}
-                        height={labelHeight}
-                    />
-                    {txtLines.map((txt, i) => (
-                        <text
-                            x={0}
-                            y={(labelHeight / txtLines.length) * (i + 1) - 9}
-                        >
-                            {txt}
-                        </text>
-                    ))}
-                </g>
+                {isText && (
+                    <g
+                        transform={labelTransform}
+                        className={styles.valueLabel}
+                        onClick={() => pointClick(point)}
+                    >
+                        <rect
+                            className={styles.valueTxtBg}
+                            x={-labelWidth / 2}
+                            y={0}
+                            width={labelWidth}
+                            height={labelHeight}
+                        />
+                        {txtLines.map((txt, i) => (
+                            <text
+                                x={0}
+                                y={
+                                    (labelHeight / txtLines.length) * (i + 1) -
+                                    9
+                                }
+                            >
+                                {txt}
+                            </text>
+                        ))}
+                    </g>
+                )}
             </g>
         );
     }

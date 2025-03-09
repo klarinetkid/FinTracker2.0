@@ -15,17 +15,17 @@
     }
 
     .table tr td:first-child {
-        border: solid 3px var(--transparent);
+        border: solid 3px transparent;
         border-right: none;
     }
 
     .table tr td:not(:first-child), .table tr:hover td:not(:last-child) {
-        border-top: solid 3px var(--transparent);
-        border-bottom: solid 3px var(--transparent);
+        border-top: solid 3px transparent;
+        border-bottom: solid 3px transparent;
     }
 
     .table tr td:last-child {
-        border: solid var(--transparent);
+        border: solid transparent;
         border-left: none;
     }
 
