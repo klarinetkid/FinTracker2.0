@@ -129,7 +129,10 @@ function BreakdownTable(props: BreakdownTableProps) {
                 return categoryTotal.percentOfSpend;
             case "percentOfYearlySpend":
                 return (
-                    ((categoryTotal.total * breakdowns.breakdowns.length) /
+                    ((categoryTotal.total *
+                        breakdowns.breakdowns.filter(
+                            (b) => b.categoryTotals.length > 0
+                        ).length) /
                         breakdowns.totalIncome) *
                     100
                 );
