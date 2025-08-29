@@ -30,18 +30,16 @@ namespace FinTracker.Api.Controllers
             return service.CreateCategory(model);
         }
 
-        [HttpPut("{id?}")]
-        public TblCategory? Put(int? id, CategoryViewModel model)
+        [HttpPut("{id}")]
+        public TblCategory? Put(int id, CategoryViewModel model)
         {
-            if (id == null) throw new Exception("Id is null");
-            return service.PutCategory(id.Value, model);
+            return service.PutCategory(id, model);
         }
 
-        [HttpDelete("{id?}")]
-        public IActionResult Delete(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id == null) return BadRequest();
-            service.DeleteCategory(id.Value);
+            service.DeleteCategory(id);
             return Ok();
         }
     }

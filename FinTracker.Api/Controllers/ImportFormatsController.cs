@@ -23,18 +23,16 @@ namespace FinTracker.Api.Controllers
             return service.CreateImportFormat(model);
         }
 
-        [HttpPut("{id?}")]
-        public TblImportFormat? PutImportFormat(int? id, ImportFormatViewModel model)
+        [HttpPut("{id}")]
+        public TblImportFormat? PutImportFormat(int id, ImportFormatViewModel model)
         {
-            if (id == null) throw new Exception("Id is null");
-            return service.PutImportFormat(id.Value, model);
+            return service.PutImportFormat(id, model);
         }
 
-        [HttpDelete("{id?}")]
-        public IActionResult DeleteImportFormat(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteImportFormat(int id)
         {
-            if (id == null) return BadRequest();
-            service.DeleteImportFormat(id.Value);
+            service.DeleteImportFormat(id);
             return Ok();
         }
     }

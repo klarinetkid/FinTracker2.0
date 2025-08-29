@@ -7,7 +7,7 @@ namespace FinTracker.Api.Services
 {
     public class TransactionService : BaseEntityService<TblTransaction>
     {
-        public TblTransaction CreateCashTransaction(TransactionViewModel model) => addEntityAndSave(model);
+        public TblTransaction CreateTransaction(TransactionViewModel model) => addEntityAndSave(model);
         public void DeleteTransaction(int id) => deleteEntityAndSave(id);
 
         public PaginatedResponse<TblTransaction> GetTransactions(TransactionQuery? query)
@@ -121,8 +121,7 @@ namespace FinTracker.Api.Services
                 if (trx.Memo == null) continue;
 
                 trx.IsAlreadyImported = trx.Date.HasValue && trx.Amount.HasValue
-                    ? db.DoesTransactionExist(trx.Date.Value, trx.Memo, trx.Amount.Value)
-                    : false;
+                    && db.DoesTransactionExist(trx.Date.Value, trx.Memo, trx.Amount.Value);
                 
                 if (cachedMemos.ContainsKey(trx.Memo))
                 {

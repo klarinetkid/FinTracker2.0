@@ -1,6 +1,7 @@
 
 using FinTracker.Api.Common;
 using FinTracker.Api.Middleware;
+using Serilog;
 
 namespace FinTracker.Api
 {
@@ -32,6 +33,9 @@ namespace FinTracker.Api
                 });
             });
 
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -40,6 +44,8 @@ namespace FinTracker.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseMiddleware<ApiVersionMiddleware>();
 

@@ -1,11 +1,15 @@
 ﻿using FinTracker.Services.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Models
 {
     public class TransactionViewModel : IEntityViewModel<TblTransaction>
     {
+        [Required]
         public DateOnly? Date { get; set; }
+        [Required]
         public int? Amount { get; set; }
+        [Required]
         public string? Memo { get; set; }
         public int? CategoryId { get; set; }
         public TblCategory? Category { get; set; }

@@ -18,18 +18,16 @@ namespace FinTracker.Api.Controllers
         }
 
 
-        [HttpPatch("{id?}")]
-        public TblMemo? Patch(int? id, MemoViewModel model)
+        [HttpPatch("{id}")]
+        public TblMemo? Patch(int id, MemoViewModel model)
         {
-            if (id == null) throw new Exception();
-            return service.PatchMemo(id.Value, model);
+            return service.PatchMemo(id, model);
         }
 
-        [HttpDelete("{id?}")]
-        public IActionResult Delete(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id == null) throw new Exception();
-            service.DeleteMemo(id.Value);
+            service.DeleteMemo(id);
             return Ok();
         }
 

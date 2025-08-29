@@ -23,18 +23,16 @@ namespace FinTracker.Api.Controllers
             return service.CreateBudgetItem(model);
         }
 
-        [HttpPut("{id?}")]
-        public TblBudget? Patch(int? id, BudgetViewModel model)
+        [HttpPut("{id}")]
+        public TblBudget? Patch(int id, BudgetViewModel model)
         {
-            if (id == null) throw new Exception("Id is null");
-            return service.PutBudgetItem(id.Value, model);
+            return service.PutBudgetItem(id, model);
         }
 
-        [HttpDelete("{id?}")]
-        public IActionResult Delete(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id == null) return BadRequest();
-            service.DeleteBudgetItem(id.Value);
+            service.DeleteBudgetItem(id);
             return Ok();
         }
     }

@@ -3,6 +3,7 @@ using FinTracker.Api.Models;
 using FinTracker.Api.Services;
 using FinTracker.Services.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinTracker.Api.Controllers
 {
@@ -19,35 +20,31 @@ namespace FinTracker.Api.Controllers
         }
 
         [HttpPost]
-        public TblTransaction CreateCashTransaction(TransactionViewModel model)
+        public TblTransaction CreateTransaction(TransactionViewModel model)
         {
-            return service.CreateCashTransaction(model);
+            return service.CreateTransaction(model);
         }
 
-        [HttpPatch("{id?}")]
-        public TblTransaction? PatchTransaction(int? id, TransactionViewModel model)
+        [HttpPatch("{id}")]
+        public TblTransaction? PatchTransaction(int id, TransactionViewModel model)
         {
-            if (id == null) throw new Exception("Id cannot be null");
-            return service.PatchTransaction(id.Value, model);
+            return service.PatchTransaction(id, model);
         }
 
-        [HttpDelete("{id?}")]
-        public IActionResult Delete(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id == null) throw new Exception();
-            service.DeleteTransaction(id.Value);
+            service.DeleteTransaction(id);
             return Ok();
         }
 
         [HttpPost("$batch")]
-        [RequestSizeLimit(100_000_000_000)]
         public int BatchCreate(TransactionViewModel[] transactions)
         {
             return service.BatchCreate(transactions);
         }
 
         [HttpPost("PrepareImport")]
-        [RequestSizeLimit(100_000_000_000)]
         public TransactionViewModel[] PrepareImport(TransactionViewModel[] transactions)
         {
             return service.PrepareImport(transactions);
